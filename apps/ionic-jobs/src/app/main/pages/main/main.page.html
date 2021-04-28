@@ -6,4 +6,8 @@
 
 <ion-content>
 
+  <div *ngIf="auth0Service.token$ | async as token">
+    Token: {{token}}
+  </div>
+
 </ion-content>

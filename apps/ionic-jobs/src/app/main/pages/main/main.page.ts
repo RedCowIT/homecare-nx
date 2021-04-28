@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Auth0Service} from "@homecare/auth0";
 
 @Component({
   selector: 'hc-main',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainPage implements OnInit {
 
-  constructor() { }
+  constructor(public auth0Service: Auth0Service) { }
 
   ngOnInit() {
   }
