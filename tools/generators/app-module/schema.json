@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "app-module",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Module name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "project": {
+      "type": "string",
+      "description": "App project to add the module to"
+    },
+    "skipStore": {
+      "type": "boolean",
+      "description": "Skip store generation"
+    }
+  },
+  "required": ["name", "project"]
+}

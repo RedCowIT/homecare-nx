@@ -14,7 +14,25 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@homecare-nx/xplat/core": ["libs/xplat/core/src/index.ts"],
+      "@homecare-nx/xplat/features": ["libs/xplat/features/src/index.ts"],
+      "@homecare-nx/xplat/utils": ["libs/xplat/utils/src/index.ts"],
+      "@homecare-nx/xplat/ionic/core": ["libs/xplat/ionic/core/src/index.ts"],
+      "@homecare-nx/xplat/ionic/features": [
+        "libs/xplat/ionic/features/src/index.ts"
+      ],
+      "@homecare-nx/xplat/web/core": ["libs/xplat/web/core/src/index.ts"],
+      "@homecare-nx/xplat/web/features": [
+        "libs/xplat/web/features/src/index.ts"
+      ],
+      "@homecare-nx/xplat/environments": [
+        "libs/xplat/core/src/lib/environments/base/index.ts"
+      ],
+      "@homecare/auth0": ["libs/auth0/src/index.ts"],
+      "@homecare/shared": ["libs/shared/src/index.ts"],
+      "@homecare/core": ["libs/core/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
