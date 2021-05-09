@@ -30,8 +30,6 @@ const auth0Reducer = createReducer(
       return {
         ...state,
         isInitialized: true,
-        isAuthenticated: action.isAuthenticated,
-        token: action.token,
         callState: LoadingState.LOADED
       }
     }
@@ -43,6 +41,15 @@ const auth0Reducer = createReducer(
       callState: action.error
     }
   }),
+
+  on(auth0Actions.setAuth, (state, action) => {
+      return {
+        ...state,
+        isAuthenticated: action.isAuthenticated,
+        token: action.token
+      }
+    }
+  ),
 
   on(auth0Actions.logout, state => ({
       ...state,

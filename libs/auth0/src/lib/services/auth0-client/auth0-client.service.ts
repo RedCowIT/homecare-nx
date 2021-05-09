@@ -1,13 +1,15 @@
 import {Inject, Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Auth0Config} from '../../models/auth0-config';
-import {BehaviorSubject, EMPTY, from, Observable, of, throwError} from 'rxjs';
+import {BehaviorSubject, defer, EMPTY, from, Observable, of, throwError} from 'rxjs';
 import createAuth0Client from '@auth0/auth0-spa-js';
 import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
-import {catchError, concatMap, map, shareReplay, tap} from 'rxjs/operators';
+import {catchError, concatMap, map, mergeMap, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {Auth0CallbackParams} from '../../models/auth0-callback-params';
 import {State} from '../../store/reducers';
 import {AUTH0_CONFIG} from '../../tokens/auth0.config';
+import {CacheKey} from "@auth0/auth0-spa-js/src/cache";
+import {environment} from "../../../../../../apps/ionic-jobs/src/environments/environment";
 
 /**
  * Ng Service wrapper for {@link https://auth0.com/docs/libraries/auth0-spa-js|auth0-spa-js}
@@ -27,8 +29,6 @@ export class Auth0ClientService {
   // concatMap: Using the client instance, call SDK method; SDK returns a promise
   // from: Convert that resulting promise into an observable
   private isAuthenticated$;
-
-  private handleRedirectCallback$;
 
   private isInitialised;
 
@@ -58,16 +58,16 @@ export class Auth0ClientService {
         audience: this.authConfig.audience
       })
     ) as Observable<Auth0Client>).pipe(
+      tap(client => {
+        console.log('created auth0client', client);
+      }),
       shareReplay(1), // Every subscription receives the same shared value
       catchError(err => throwError(err))
-    );
+    )
+    ;
 
     this.isAuthenticated$ = this.auth0Client$.pipe(
       concatMap((client: Auth0Client) => from(client.isAuthenticated()))
-    );
-
-    this.handleRedirectCallback$ = this.auth0Client$.pipe(
-      concatMap((client: Auth0Client) => from(client.handleRedirectCallback()))
     );
 
     const checkAuth$ = this.isAuthenticated$.pipe(
@@ -86,12 +86,20 @@ export class Auth0ClientService {
     this.isInitialised = true;
   }
 
-  handleCallback(): Observable<string> {
-    return this.handleRedirectCallback$.pipe(
+  handleCallback(url?: string): Observable<string> {
+
+    console.log('auth0clientService.handleCallback', url);
+
+    return this.auth0Client$.pipe(
+      mergeMap((client: Auth0Client) => {
+
+        return from(client.handleRedirectCallback(url));
+
+      }),
       map((cbRes: any) => {
         return cbRes.appState && cbRes.appState.target ? cbRes.appState.target : '/';
       })
-    )
+    );
   }
 
   isAuthenticated(): Observable<boolean> {
@@ -102,6 +110,7 @@ export class Auth0ClientService {
     // A desired redirect path can be passed to login method
     // (e.g., from a route guard)
     // Ensure Auth0 client instance exists
+
     this.auth0Client$.subscribe((client: Auth0Client) => {
       // Call method to log in
       client.loginWithRedirect({
@@ -111,7 +120,20 @@ export class Auth0ClientService {
     });
   }
 
-  logout(){
+  getAuthorizationUrl(targetPath = '/'): Observable<string> {
+    return this.auth0Client$.pipe(
+      mergeMap((client: Auth0Client) => {
+
+        // Test
+        return from(client.buildAuthorizeUrl({
+          redirect_uri: environment.auth.redirectUri,
+          appState: {target: targetPath}
+        }));
+      })
+    )
+  }
+
+  logout() {
     // Ensure Auth0 client instance exists
     this.auth0Client$.subscribe((client: Auth0Client) => {
 
@@ -125,15 +147,33 @@ export class Auth0ClientService {
     });
   }
 
+
   getToken(): Observable<string> {
+
+
     return this.auth0Client$.pipe(
-      concatMap((client: Auth0Client) => {
+      mergeMap((client: Auth0Client) => {
         return from(client.getTokenSilently());
       }),
       catchError(err => {
+        console.log('getToken err', err);
         return of('');
       })
     );
+
+    /*
+
+    return this.auth0Client$.pipe(
+      mergeMap((client: Auth0Client) => {
+        return from(client.getTokenSilently());
+      }),
+      catchError(err => {
+        console.log('getToken err', err);
+        return of('');
+      })
+    );
+
+     */
   }
 
   getUser$(options?): Observable<any> {

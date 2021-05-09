@@ -5,13 +5,22 @@ export const initAuth = createAction(
 );
 
 export const initAuthSuccess = createAction(
-  '[Auth0] Init Auth Success',
-  props<{ isAuthenticated: boolean, token?: string }>()
+  '[Auth0] Init Auth Success'
 );
 
 export const initAuthError = createAction(
   '[Auth0] Init Auth Error',
   props<{ error: any }>()
+);
+
+export const handleAuthCallback = createAction(
+  '[Auth0] Handle Auth Callback',
+  props<{url?: string}>()
+);
+
+export const setAuth = createAction(
+  '[Auth0] Set Auth',
+  props<{ isAuthenticated: boolean, token?: string }>()
 );
 
 export const login = createAction(

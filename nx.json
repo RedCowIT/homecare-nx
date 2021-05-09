@@ -25,6 +25,7 @@
     "ionic-jobs": { "tags": [] },
     "auth0": { "tags": [] },
     "shared": { "tags": [] },
-    "core": { "tags": [] }
+    "core": { "tags": [] },
+    "appointment": { "tags": [] }
   }
 }

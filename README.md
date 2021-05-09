@@ -1,5 +1,10 @@
 # HomecareNx
 
+## Build app
+
+Installing local capacitor-cli via npm for ionic-jobs causes rxjs incompatibility with shared node_modules.
+Use global capacitor-cli
+
 ## Generate a page
 
 Run `ng g @ionic/angular-toolkit:page module/pages/my-page --project my-project`
@@ -49,3 +54,17 @@ Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
 ## Understand your workspace
 
 Run `nx dep-graph` to see a diagram of the dependencies of your projects.
+
+## Auth0
+
+auth0-spa-js-1.15.0 does not work properly on native. Likely due to iframe security policies from non-https domain.
+
+Workaround is to build a custom version of the library that skips the silent iframe token handling. This means there's always a redirect.
+
+A future version of library will hopefully support native.
+
+To build library and replace node_modules script:
+ 
+    cd libs/auth0-spa-js-1.15.0/
+    npm run build
+    cp dist/auth0-spa-js.production.esm.js ../../node_modules/@auth0/auth0-spa-js/dist/

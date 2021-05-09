@@ -28,11 +28,7 @@ export class Auth0Guard implements CanActivate {
       tap(isAuthenticated => {
 
         if (!isAuthenticated) {
-          console.log('not authenticated, redirecting in 5');
-          setTimeout(() => {
-            this.auth0Service.login(state.url);
-          }, 3000);
-          // this.auth0Service.login(state.url);
+          this.auth0Service.login(state.url);
         } else {
           console.log('authenticated!');
         }

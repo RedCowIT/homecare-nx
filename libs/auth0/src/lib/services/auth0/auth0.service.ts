@@ -35,4 +35,23 @@ export class Auth0Service {
   logout(targetPath = '/'): void {
     this.store.dispatch(auth0Actions.logout({targetPath}));
   }
+
+  handleCallback(url?: string) {
+    this.store.dispatch(auth0Actions.handleAuthCallback({
+      url
+    }));
+  }
+
+  isCallback(url?: string) {
+    if (url){
+      console.log('SEARCH', new URL(url).search);
+      return this.containsCallbackParams(new URL(url).search);
+    } else {
+      return this.containsCallbackParams(window.location.search);
+    }
+  }
+
+  containsCallbackParams(queryStr: string){
+    return queryStr.includes('code=') && queryStr.includes('state=');
+  }
 }

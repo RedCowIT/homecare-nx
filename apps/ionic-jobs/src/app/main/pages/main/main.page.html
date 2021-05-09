@@ -6,8 +6,28 @@
 
 <ion-content>
 
+  Main Page.
   <div *ngIf="auth0Service.token$ | async as token">
+    Token: {{token}}
+
+    Token: {{token}}
+
+    Token: {{token}}
+
     Token: {{token}}
   </div>
 
+  <div *ngIf="platform.is('mobile'); else tablet">
+
+  </div>
+
+  <ng-template #tablet>
+    TABLET
+  </ng-template>
+
 </ion-content>
+
+<div *ngIf="platform.is('mobile');">
+  <hc-main-tabs></hc-main-tabs>
+</div>
+

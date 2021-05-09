@@ -13,5 +13,6 @@ module.exports = {
     '<rootDir>/libs/auth0',
     '<rootDir>/libs/shared',
     '<rootDir>/libs/core',
+    '<rootDir>/libs/appointment',
   ],
 };

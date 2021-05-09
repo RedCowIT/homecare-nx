@@ -31,7 +31,8 @@
       ],
       "@homecare/auth0": ["libs/auth0/src/index.ts"],
       "@homecare/shared": ["libs/shared/src/index.ts"],
-      "@homecare/core": ["libs/core/src/index.ts"]
+      "@homecare/core": ["libs/core/src/index.ts"],
+      "@homecare-nx/appointment": ["libs/appointment/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

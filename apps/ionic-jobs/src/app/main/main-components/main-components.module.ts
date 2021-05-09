@@ -1,12 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MainTabsComponent } from './main-tabs/main-tabs.component';
+import {IonicModule} from "@ionic/angular";
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    MainTabsComponent
+  ],
+  exports: [
+    MainTabsComponent
+  ],
   imports: [
-    CommonModule
+    CommonModule,
+    IonicModule
   ]
 })
 export class MainComponentsModule { }
