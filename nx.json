@@ -26,6 +26,12 @@
     "auth0": { "tags": [] },
     "shared": { "tags": [] },
     "core": { "tags": [] },
-    "appointment": { "tags": [] }
+    "appointment": { "tags": [] },
+    "storage": { "tags": [] },
+    "entity": { "tags": [] },
+    "product": { "tags": [] },
+    "billing": { "tags": [] },
+    "plan": { "tags": [] },
+    "customer": { "tags": [] }
   }
 }

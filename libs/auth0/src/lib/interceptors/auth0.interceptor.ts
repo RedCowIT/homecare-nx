@@ -20,10 +20,14 @@ export class Auth0Interceptor implements HttpInterceptor {
     //     .set('Content-Type', 'application/json')
     // });
 //
+//     console.log('intercept');
 
     return this.addAuthenticationToken(req).pipe(
       first(),
-      mergeMap(augmentedRequest => next.handle(augmentedRequest))
+      mergeMap(augmentedRequest => {
+        // console.log('aug request', augmentedRequest);
+        return next.handle(augmentedRequest);
+      })
     );
   }
 
@@ -38,6 +42,9 @@ export class Auth0Interceptor implements HttpInterceptor {
       this.auth0Service.token$
     ]).pipe(
       map(([originalRequest, token]) => {
+
+        // console.log('add token', token);
+
         if (!token) {
           return originalRequest;
         } else {

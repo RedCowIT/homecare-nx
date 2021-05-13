@@ -76,6 +76,11 @@ export function lastItem<T>(array: T[]): T {
   return null;
 }
 
+export function addItem<T>(array: T[], item: T): T[] {
+  array.push(item);
+  return array;
+}
+
 export function removeItem<T>(array: T[], item: T): T[] {
   if (!array || array.length === 0) {
     return array;
@@ -84,6 +89,7 @@ export function removeItem<T>(array: T[], item: T): T[] {
   if (itemIndex !== -1) {
     return removeItemAtIndex(array, itemIndex);
   }
+  return array;
 }
 
 export function removeItemAtIndex<T>(array: T[], index: number): T[] {

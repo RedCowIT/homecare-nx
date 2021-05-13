@@ -32,7 +32,13 @@
       "@homecare/auth0": ["libs/auth0/src/index.ts"],
       "@homecare/shared": ["libs/shared/src/index.ts"],
       "@homecare/core": ["libs/core/src/index.ts"],
-      "@homecare-nx/appointment": ["libs/appointment/src/index.ts"]
+      "@homecare/appointment": ["libs/appointment/src/index.ts"],
+      "@homecare/storage": ["libs/storage/src/index.ts"],
+      "@homecare/entity": ["libs/entity/src/index.ts"],
+      "@homecare/product": ["libs/product/src/index.ts"],
+      "@homecare/billing": ["libs/billing/src/index.ts"],
+      "@homecare/plan": ["libs/plan/src/index.ts"],
+      "@homecare/customer": ["libs/customer/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

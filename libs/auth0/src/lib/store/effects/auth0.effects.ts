@@ -29,8 +29,12 @@ export class Auth0Effects {
       } else {
 
         return combineLatest([
-          this.auth0ClientService.isAuthenticated().pipe(tap((auth) => console.log('auth0client.isauth', auth))),
-          this.auth0ClientService.getToken().pipe(tap((token) => console.log('auth0client.getToken', token)))
+          this.auth0ClientService.isAuthenticated().pipe(tap((auth) => {
+            //console.log('auth0client.isauth', auth)
+          })),
+          this.auth0ClientService.getToken().pipe(tap((token) => {
+            //console.log('auth0client.getToken', token);
+          }))
         ]).pipe(
           mergeMap(([authenticated, token]) => {
 
@@ -53,7 +57,7 @@ export class Auth0Effects {
       return this.auth0ClientService.handleCallback(action.url).pipe(
         mergeMap(targetPath => {
 
-          console.log('auth0ClientService.handleCallback result', targetPath);
+          // console.log('auth0ClientService.handleCallback result', targetPath);
 
           return combineLatest([
             of(targetPath),
@@ -85,7 +89,7 @@ export class Auth0Effects {
   redirectOnAuth$ = createEffect(() => this.actions$.pipe(
     ofType(auth0Actions.redirectOnAuth),
     tap(action => {
-      console.log('redirectOnAuth', action);
+      // console.log('redirectOnAuth', action);
       this.router.navigateByUrl(action.targetPath);
 
     })
@@ -98,7 +102,7 @@ export class Auth0Effects {
       this.auth0ClientService.getAuthorizationUrl().pipe(
         first()
       ).subscribe(async url => {
-        console.log('auth url', url);
+        // console.log('auth url', url);
 
         // window.location.href = url;
         //window.open(url, '_system');

@@ -14,5 +14,11 @@ module.exports = {
     '<rootDir>/libs/shared',
     '<rootDir>/libs/core',
     '<rootDir>/libs/appointment',
+    '<rootDir>/libs/storage',
+    '<rootDir>/libs/entity',
+    '<rootDir>/libs/product',
+    '<rootDir>/libs/billing',
+    '<rootDir>/libs/plan',
+    '<rootDir>/libs/customer',
   ],
 };

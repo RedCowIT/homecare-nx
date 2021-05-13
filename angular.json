@@ -426,7 +426,7 @@
       "projectType": "library",
       "root": "libs/core",
       "sourceRoot": "libs/core/src",
-      "prefix": "homecare-nx",
+      "prefix": "homecare",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
@@ -451,7 +451,7 @@
       "projectType": "library",
       "root": "libs/appointment",
       "sourceRoot": "libs/appointment/src",
-      "prefix": "homecare-nx",
+      "prefix": "homecare",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
@@ -467,6 +467,156 @@
           "outputs": ["coverage/libs/appointment"],
           "options": {
             "jestConfig": "libs/appointment/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "storage": {
+      "projectType": "library",
+      "root": "libs/storage",
+      "sourceRoot": "libs/storage/src",
+      "prefix": "homecare",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/storage/src/**/*.ts",
+              "libs/storage/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/storage"],
+          "options": {
+            "jestConfig": "libs/storage/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "entity": {
+      "projectType": "library",
+      "root": "libs/entity",
+      "sourceRoot": "libs/entity/src",
+      "prefix": "homecare",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/entity/src/**/*.ts",
+              "libs/entity/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/entity"],
+          "options": {
+            "jestConfig": "libs/entity/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "product": {
+      "projectType": "library",
+      "root": "libs/product",
+      "sourceRoot": "libs/product/src",
+      "prefix": "homecare",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/product/src/**/*.ts",
+              "libs/product/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/product"],
+          "options": {
+            "jestConfig": "libs/product/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "billing": {
+      "projectType": "library",
+      "root": "libs/billing",
+      "sourceRoot": "libs/billing/src",
+      "prefix": "homecare",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/billing/src/**/*.ts",
+              "libs/billing/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/billing"],
+          "options": {
+            "jestConfig": "libs/billing/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "plan": {
+      "projectType": "library",
+      "root": "libs/plan",
+      "sourceRoot": "libs/plan/src",
+      "prefix": "homecare",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/plan/src/**/*.ts",
+              "libs/plan/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/plan"],
+          "options": {
+            "jestConfig": "libs/plan/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "customer": {
+      "projectType": "library",
+      "root": "libs/customer",
+      "sourceRoot": "libs/customer/src",
+      "prefix": "homecare",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/customer/src/**/*.ts",
+              "libs/customer/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/customer"],
+          "options": {
+            "jestConfig": "libs/customer/jest.config.js",
             "passWithNoTests": true
           }
         }

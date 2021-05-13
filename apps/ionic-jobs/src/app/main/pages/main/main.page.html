@@ -9,12 +9,6 @@
   Main Page.
   <div *ngIf="auth0Service.token$ | async as token">
     Token: {{token}}
-
-    Token: {{token}}
-
-    Token: {{token}}
-
-    Token: {{token}}
   </div>
 
   <div *ngIf="platform.is('mobile'); else tablet">

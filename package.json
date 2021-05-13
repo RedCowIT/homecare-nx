@@ -69,6 +69,7 @@
     "ionic-plugin-deeplinks": "^1.0.22",
     "rxjs": "^6.6.0",
     "tslib": "^2.0.0",
+    "voca": "^1.4.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

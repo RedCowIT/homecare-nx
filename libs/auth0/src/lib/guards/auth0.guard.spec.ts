@@ -1,13 +1,13 @@
 import {fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {Component} from '@angular/core';
-import {Auth0Guard, Auth0Service} from '@engagewall/auth0';
+import {Auth0Guard, Auth0Service} from '@homecare/auth0';
 import {Router, Routes} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {Location} from '@angular/common';
 import {of} from 'rxjs';
 
 @Component({
-  selector: 'engagewall-nx-blank',
+  selector: 'homecare-nx-blank',
   template: '',
   styles: ['']
 })

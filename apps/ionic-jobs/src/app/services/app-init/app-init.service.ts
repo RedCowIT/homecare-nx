@@ -1,23 +1,18 @@
-import {EMPTY, Observable, of} from 'rxjs';
+import {combineLatest, from, Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {AppInitFactory, AppInitHandler} from '@homecare/shared';
-import {filter, first, map, mergeMap, tap, withLatestFrom} from 'rxjs/operators';
-//import {AccountsService, CurrentAccountService} from '@homecare/account';
+import {filter, first, tap} from 'rxjs/operators';
 import {Auth0Service} from '@homecare/auth0';
-//import {CurrentUserService} from '../../../../../../libs/account/src/lib/services/current-user/current-user.service';
-import {LoggerService} from "@homecare/core";
-import {LogHandlerFactory} from "@homecare/core";
+import {LoggerService, LogHandlerFactory} from "@homecare/core";
 import {environment} from "../../../environments/environment";
-import {verify as verifyIdToken} from "@auth0/auth0-spa-js/src/jwt";
 import {Platform} from "@ionic/angular";
-import {StatusBarStyle} from "@capacitor/core";
+import {Storage} from '@ionic/storage-angular';
 
 /**
  * Bootstraps application before any component loads
  *
+ * - Init Log Handlers
  * - Init Auth
- * - Init Current Account
- * - Prefetch accounts (if authenticated)
  *
  */
 @Injectable({
@@ -26,6 +21,7 @@ import {StatusBarStyle} from "@capacitor/core";
 export class AppInitService implements AppInitHandler {
 
   constructor(private platform: Platform,
+              private storage: Storage,
               private auth0Service: Auth0Service,
               private logger: LoggerService) {
 
@@ -33,64 +29,43 @@ export class AppInitService implements AppInitHandler {
 
   init(): void {
 
-    console.log('AppInitService.init');
-    console.log('window.localStorage:', window.localStorage?.getItem);
-
     LogHandlerFactory.createLogHandlers(this.logger, environment.logHandlers);
+
+    this.logger.debug('AppInitService.init');
 
     this.platform.ready().then(async () => {
       if (this.platform.is('capacitor')) {
-        console.log('Platform Ready');
-
+        this.logger.debug('Capacitor ready');
       }
 
       this.auth0Service.init();
     });
-
-    // this.currentAccountService.init();
 
   }
 
 
   waitUntilInitialized(): Observable<any> {
 
-    // const ready$ = this.auth0Service.isInitialised$.pipe(
-    //   withLatestFrom(this.currentAccountService.isInitialized$),
-    //   filter(([authReady, currentAccountReady]) => {
-    //     return authReady && currentAccountReady;
-    //   })
-    // );
-    //
-    // return ready$.pipe(
-    //   mergeMap(() => this.auth0Service.isAuthenticated$),
-    //   tap((authenticated) => {
-    //     if (authenticated) {
-    //       this.accountsService.getAll(); // prefetch, but don't wait for result
-    //       this.currentUserService.load();
-    //     }
-    //   }),
-    //   first()
-    // );
+    const storage$ = from(this.storage.create());
 
-    console.log('waitUntilInitialized...');
-
-    const ready$ = this.auth0Service.isInitialised$.pipe(
+    const authReady$ = this.auth0Service.isInitialised$.pipe(
       filter(authReady => {
-        console.log('waitUntilInitialized...authReady', authReady);
         return authReady;
       })
-    )
+    );
 
-    return ready$.pipe(
-      mergeMap(() => this.auth0Service.isAuthenticated$),
-      tap((authenticated) => {
-        console.log('waitUntilInitialized...isAuthenticated', authenticated);
+    return combineLatest([storage$, authReady$]).pipe(
+      tap(([storage, authenticated]) => {
+
+        this.logger.debug('AppInitService.initialized', {authenticated});
+
         if (authenticated) {
           this.authenticated();
         }
       }),
       first()
     );
+
   }
 
   /**

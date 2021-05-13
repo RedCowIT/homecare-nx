@@ -1,5 +1,5 @@
 /**
- * Engagewall - NX Schematics
+ * Homecare - NX Schematics
  */
 
 import {externalSchematic, Rule} from '@angular-devkit/schematics';

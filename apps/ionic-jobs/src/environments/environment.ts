@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   api: {
     domain: 'homecare-job-api.test',
-    baseUrl: 'http://homecare-job-api.test',
-    timeout: 90
+    baseUrl: 'https://homecare-job-api.test',
+    timeout: 10000
   },
   auth: {
     domain: 'homecaresc-dev.eu.auth0.com',
