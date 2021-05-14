@@ -1,5 +1,4 @@
-import { createAction, props } from '@ngrx/store';
-import {CacheItem} from "../../models/cache-item";
+import {createAction, props} from '@ngrx/store';
 
 export const initCacheStore = createAction(
   '[Cache Store] Init'
@@ -35,7 +34,12 @@ export const setCacheStoreItem = createAction(
 
 export const setCacheStoreItemSuccess = createAction(
   '[Cache Store] Set Item Success',
-  props<{key: string, cacheItem: CacheItem}>()
+  props<{key: string}>()
+)
+
+export const setCacheStoreItemError = createAction(
+  '[Cache Store] Set Item Error',
+  props<{error: any}>()
 )
 
 export const getCacheStoreItem = createAction(

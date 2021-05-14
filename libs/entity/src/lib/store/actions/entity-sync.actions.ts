@@ -28,7 +28,8 @@ export const initEntitySyncError = createAction(
 );
 
 export const initEntitySyncSuccess = createAction(
-  '[Sync Entity] Init Success'
+  '[Sync Entity] Init Success',
+  props<{ payloadId: string}>()
 );
 
 export const syncEntities = createAction(

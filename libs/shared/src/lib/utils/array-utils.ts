@@ -177,3 +177,12 @@ export function arrayIndexOfEarliestStr(a: string[]) {
 export function arrayDiff<T>(a1: T[], a2: T[]): T[] {
   return a1.filter(item => a2.indexOf(item) < 0);
 }
+
+export function haveSameContents(a: unknown[], b: unknown[]): boolean {
+  for (const v of new Set([...a, ...b])) {
+    if (a.filter(e => e === v).length !== b.filter(e => e === v).length) {
+      return false;
+    }
+  }
+  return true;
+}

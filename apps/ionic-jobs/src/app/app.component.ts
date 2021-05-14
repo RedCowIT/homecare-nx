@@ -24,7 +24,7 @@ export class AppComponent {
 
   initializeApp() {
 
-    console.log('initializeApp');
+    // console.log('initializeApp');
     App.addListener('appUrlOpen', async (data: any) => {
       await this.zone.run(async () => {
         await this.handleUrlOpen(data);

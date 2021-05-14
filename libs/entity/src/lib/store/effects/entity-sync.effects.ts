@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {catchError, first, map, mergeMap, switchMap} from "rxjs/operators";
+import {catchError, concatMap, first, map, mergeMap, switchMap} from "rxjs/operators";
 import {
   initEntitySync,
   initEntitySyncError,
@@ -9,7 +9,7 @@ import {
 } from "../actions/entity-sync.actions";
 import {StorageService} from "@homecare/storage";
 import {EntityCacheService} from "../../services/entity-cache/entity-cache.service";
-import {EMPTY, forkJoin, Observable, of} from "rxjs";
+import {combineLatest, EMPTY, forkJoin, Observable, of} from "rxjs";
 import {EntityCacheItem} from "../../models/entity-cache-item";
 import {Store} from "@ngrx/store";
 import {
@@ -19,7 +19,8 @@ import {
 } from "../selectors/entity-sync.selectors";
 import {EntityServices} from "@ngrx/data";
 import {LoggerService} from "@homecare/core";
-import {lastItem} from "@homecare/shared";
+import {haveSameContents, lastItem, pluck} from "@homecare/shared";
+import {load} from "dotenv";
 
 
 @Injectable()
@@ -39,36 +40,46 @@ export class EntitySyncEffects {
           mergeMap(entityCacheItem => {
 
             if (entityCacheItem) {
-
-              this.logger.debug('EntitySync: init from cache.');
-
-              this.initStoreFromCache(entityCacheItem); // TODO: async
-
-              // continue and fire sync entities to check latest
-
-              return of(initEntitySyncSuccess(), syncEntities());
-
-
-            } else {
-
-              this.logger.debug('EntitySync: cache miss, init from fetch.');
-
-              return this.syncEntities().pipe(
-                switchMap(payloadId => {
-                  return [
-                    syncEntitiesSuccess({
-                      payloadId
-                    }),
-                    initEntitySyncSuccess()
-                  ]
+              return this.initStoreFromCache(entityCacheItem).pipe(
+                catchError(error => {
+                  console.warn('Failed to init store from cache', error);
+                  return of(null);
                 })
-              );
-
+              )
             }
+
+            return of(null);
+
+          }),
+          mergeMap((loadedPayload: string) => {
+
+            if (loadedPayload) {
+
+              this.logger.debug('EntitySync: initialised from cache.');
+
+              return of(initEntitySyncSuccess({
+                payloadId: loadedPayload
+              }), syncEntities()); // fire sync to latest after success action
+            }
+
+            this.logger.debug('EntitySync: cache miss, init from fetch.');
+
+            return this.syncEntities().pipe(
+              switchMap(payloadId => {
+                return [
+                  syncEntitiesSuccess({
+                    payloadId
+                  }),
+                  initEntitySyncSuccess({
+                    payloadId
+                  })
+                ]
+              })
+            );
 
           }),
           catchError(error => of(initEntitySyncError({error})))
-        )
+        );
 
       })
     );
@@ -94,8 +105,60 @@ export class EntitySyncEffects {
               private logger: LoggerService) {
   }
 
-  initStoreFromCache(entityCacheItem: EntityCacheItem) {
+  /**
+   * If successful, returns payload id of populated cache items.
+   *
+   * @param entityCacheItem
+   */
+  initStoreFromCache(entityCacheItem: EntityCacheItem): Observable<string> {
 
+    return this.store.select(selectSyncEntities).pipe(
+      first(),
+      map(entityNames => {
+
+        if (!this.validateEntityCacheItem(entityNames, entityCacheItem)) {
+          return null;
+        }
+
+        this.populateEntities(entityCacheItem.data);
+
+        return entityCacheItem.payloadId;
+      }),
+      catchError(error => {
+        console.warn('Failed to init store from cache', error);
+        return of(null);
+      })
+    )
+
+  }
+
+  validateEntityCacheItem(entityNames: string[], entityCacheItem: EntityCacheItem): boolean {
+    if (!entityCacheItem?.data) {
+      return false;
+    }
+    if (entityNames.length <= 0) {
+      throw new Error('Cannot validate entity cache item against empty entity name set');
+    }
+    if (!haveSameContents(entityNames, pluck(entityCacheItem.data as [], 'entityName'))) {
+      this.logger.warn('Cached entity name mismatch, abandoning cache init.');
+      return false;
+    }
+
+    return true;
+  }
+
+  populateEntities(entityData: Array<{ entityName: string, entities: unknown[] }>) {
+    for (const entityItem of entityData) {
+
+      const entityService = this.entityServices.getEntityCollectionService(entityItem.entityName)
+
+      if (!entityService) {
+        throw new Error(`No matching entity service for entity: ${entityItem.entityName}`);
+      }
+
+
+      entityService.addAllToCache(entityItem.entities);
+    }
   }
 
   /**
@@ -113,6 +176,7 @@ export class EntitySyncEffects {
       mergeMap(([payloadId, requiresFetch]) => {
 
         if (requiresFetch) {
+          this.logger.debug('Entity sync payload change, fetching new entities.')
           return this.fetchEntities(payloadId);
         } else {
           return of(payloadId);
@@ -127,6 +191,7 @@ export class EntitySyncEffects {
     return this.store.select(selectEntitySyncPayloadId).pipe(
       first(),
       map(lastPayloadId => {
+        console.log({lastPayloadId, payloadId});
         return lastPayloadId !== payloadId;
       })
     )
@@ -168,9 +233,8 @@ export class EntitySyncEffects {
 
   cacheEntities(payloadId: string): Observable<boolean> {
     return this.store.select(selectSyncEntities).pipe(
-      first()
-    ).pipe(
-      mergeMap((entityNames) => {
+      first(),
+      concatMap((entityNames) => {
 
           const entities$ = [];
 
@@ -179,10 +243,10 @@ export class EntitySyncEffects {
             const cacheEntity$ = this.entityServices.getEntityCollectionService(entityName).entities$.pipe(
               first(),
               map(entities => {
-                return of({
+                return {
                   entityName,
                   entities
-                })
+                };
               })
             )
 
@@ -193,7 +257,7 @@ export class EntitySyncEffects {
 
         }
       ),
-      map(entityData => {
+      map((entityData: Array<{ entityName: string, entities: unknown[] }>) => {
 
         // TODO: async, do we need to wait on this?
         this.entityCacheService.save(EntitySyncEffects.CACHE_KEY,

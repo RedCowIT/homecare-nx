@@ -6,14 +6,16 @@ import {
   setCacheStoreItem
 } from "../../store/actions/cache-store.actions";
 import {from, Observable} from "rxjs";
-import {ClientStorage} from "../storage/client-storage";
 import {selectCacheStoreKeys} from "../../store/selectors/cache-store.selectors";
+import {CacheItem} from "../../models/cache-item";
+import {map} from "rxjs/operators";
+import {StorageService} from "@homecare/storage";
 
 export class CacheStoreService {
 
   readonly keys$: Observable<string[]>;
 
-  constructor(private store: Store, private clientStorage: ClientStorage) {
+  constructor(private store: Store, private storageService: StorageService) {
     this.keys$ = this.store.select(selectCacheStoreKeys);
   }
 
@@ -35,8 +37,26 @@ export class CacheStoreService {
     }));
   }
 
+  /**
+   * TODO: expiry policy.
+   *
+   * @param key
+   */
   get<T>(key: string): Observable<T> {
-    console.log(this.clientStorage);
-    return from(this.clientStorage.get(key));
+
+    return this.storageService.get<CacheItem>(key).pipe(
+      map((cacheItem: CacheItem) => {
+        return cacheItem?.data as T;
+      })
+    )
+
+  }
+
+  createCacheItem(data: any): CacheItem {
+    return {
+      version: '1',
+      createdAt: new Date().toISOString(),
+      data
+    }
   }
 }

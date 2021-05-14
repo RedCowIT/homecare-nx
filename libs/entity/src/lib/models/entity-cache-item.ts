@@ -1,4 +1,4 @@
 export interface EntityCacheItem {
   payloadId: string;
-  data: unknown;
+  data: Array<{entityName: string, entities: unknown[]}>;
 }

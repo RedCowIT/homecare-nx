@@ -28,10 +28,10 @@ export class Auth0Guard implements CanActivate {
       tap(isAuthenticated => {
 
         if (!isAuthenticated) {
-          console.log('!authenticated');
+          // console.log('!authenticated');
           this.auth0Service.login(state.url);
         } else {
-          console.log('authenticated!');
+          // console.log('authenticated!');
         }
       })
     );

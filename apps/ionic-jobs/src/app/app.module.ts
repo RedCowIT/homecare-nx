@@ -16,7 +16,7 @@ import {AppInitService, AppInitServiceFactory} from "./services/app-init/app-ini
 import {AppErrorService} from "./services/app-error/app-error.service";
 import {EntityInitService} from "./services/entity-init/entity-init.service";
 import {AppDataErrorService} from "./services/app-data-error/app-data-error.service";
-import {ClientStorage, StorageService} from "@homecare/storage";
+import {ClientStorage, StorageModule, StorageService} from "@homecare/storage";
 import {EntityModule} from "@homecare/entity";
 import {CacheStoreService} from "../../../../libs/storage/src/lib/services/cache/cache-store.service";
 import {Store} from "@ngrx/store";
@@ -25,7 +25,7 @@ function storageFactory(storage: ClientStorage): StorageService {
   return new StorageService(storage);
 }
 
-function cacheStoreServiceFactory(store: Store, storage: ClientStorage): CacheStoreService {
+function cacheStoreServiceFactory(store: Store, storage: StorageService): CacheStoreService {
   return new CacheStoreService(store, storage);
 }
 
@@ -40,6 +40,7 @@ function cacheStoreServiceFactory(store: Store, storage: ClientStorage): CacheSt
     AppStoreModule,
     SharedModule,
     CoreModule,
+    StorageModule,
     AuthModule,
     EntityModule,
     MainModule
@@ -50,7 +51,7 @@ function cacheStoreServiceFactory(store: Store, storage: ClientStorage): CacheSt
     {provide: DataErrorService, useClass: AppDataErrorService},
     {provide: ErrorHandler, useClass: AppErrorService},
     {provide: StorageService, useFactory: storageFactory, deps: [Storage]},
-    {provide: CacheStoreService, useFactory: cacheStoreServiceFactory, deps: [Store, Storage]},
+    {provide: CacheStoreService, useFactory: cacheStoreServiceFactory, deps: [Store, StorageService]},
     {provide: APP_INITIALIZER, useFactory: AppInitServiceFactory, deps: [EntityInitService], multi: true},
     {provide: APP_INITIALIZER, useFactory: AppInitServiceFactory, deps: [AppInitService], multi: true}
   ]

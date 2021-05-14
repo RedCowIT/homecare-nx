@@ -65,7 +65,8 @@ const entitySyncReducer = createReducer(
     return {
       ...state,
       initialized: true,
-      callState: LoadingState.LOADED
+      callState: LoadingState.LOADED,
+      payloadId: action.payloadId
     };
 
   }),

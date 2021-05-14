@@ -38,6 +38,7 @@ export class StorageService {
    */
   set<T>(key: string, value: T | T[]): Observable<any> {
 
+    console.log('set',{key, value});
     if (value === null) {
       return fromPromise(this.storage.remove(key));
     }
