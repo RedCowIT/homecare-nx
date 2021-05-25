@@ -97,6 +97,7 @@ export class Auth0ClientService {
 
       }),
       map((cbRes: any) => {
+        console.log('handled callback', cbRes);
         return cbRes.appState && cbRes.appState.target ? cbRes.appState.target : '/';
       })
     );

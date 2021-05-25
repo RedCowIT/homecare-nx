@@ -4,20 +4,20 @@
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: #3880ff;
-  --ion-color-primary-rgb: 56, 128, 255;
+  --ion-color-primary: #1bb664;
+  --ion-color-primary-rgb: 27, 182, 100;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #3171e0;
-  --ion-color-primary-tint: #4c8dff;
+  --ion-color-primary-shade: #169853;
+  --ion-color-primary-tint: #1fcf72;
 
   /** secondary **/
-  --ion-color-secondary: #0cd1e8;
-  --ion-color-secondary-rgb: 12, 209, 232;
+  --ion-color-secondary: #507b64;
+  --ion-color-secondary-rgb: 80, 123, 100;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #0bb8cc;
-  --ion-color-secondary-tint: #24d6ea;
+  --ion-color-secondary-shade: #395847;
+  --ion-color-secondary-tint: #5d9176;
 
   /** tertiary **/
   --ion-color-tertiary: #7044ff;
@@ -59,6 +59,14 @@
   --ion-color-dark-shade: #1e2023;
   --ion-color-dark-tint: #383a3e;
 
+  /** mid-dark **/
+  --ion-color-mid-dark: #5a5a5a;
+  --ion-color-mid-dark-rgb: 90, 90, 90;
+  --ion-color-mid-dark-contrast: #ffffff;
+  --ion-color-mid-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-mid-dark-shade: #454545;
+  --ion-color-mid-dark-tint: #777777;
+
   /** medium **/
   --ion-color-medium: #989aa2;
   --ion-color-medium-rgb: 152, 154, 162;
@@ -74,4 +82,35 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  --master-width: 160px;
+  --background: #F8F8F8;
+  --border-color: gray;
+
+  --spacer: 1rem;
+
+  --xl-text-size: 2rem;
+  --bold-font-weight: 600;
+  --bolder-font-weight: 800;
+
+  ion-content {
+    --background: var(--background);
+  }
+
+  ion-textarea {
+    border: 1px solid var(--border-color);
+    --padding-start: 10px;
+    --padding-end: 10px;
+    --padding-top: 10px;
+    padding: 5px;
+  }
+}
+
+.ion-color-mid-dark {
+  --ion-color-base: var(--ion-color-mid-dark) !important;
+  --ion-color-base-rgb: var(--ion-color-mid-dark-rgb) !important;
+  --ion-color-contrast: var(--ion-color-mid-dark-contrast) !important;
+  --ion-color-contrast-rgb: var(--ion-color-mid-dark-contrast-rgb) !important;
+  --ion-color-shade: var(--ion-color-mid-dark-shade) !important;
+  --ion-color-tint: var(--ion-color-mid-dark-tint) !important;
 }

@@ -1,0 +1,37 @@
+:host {
+  display: flex;
+}
+
+.modal-header {
+  display: flex;
+  width:100%;
+  align-content: center;
+  align-items:center;
+}
+
+.modal-title {
+  font-weight: bold;
+  font-size: 20px;
+  padding:20px;
+}
+
+.modal-close {
+  ion-button.clear {
+    --color: var(--ion-color-medium);
+  }
+}
+
+.modal-actions {
+  display: flex;
+  flex: 1;
+  align-items: center;
+
+  ion-button.default {
+    --background: transparent;
+    --border-radius: var(--border-radius);
+    --border-style: solid;
+    --border-width: 1px;
+    --border-color: var(--ion-color-medium);
+    --color: var(--ion-color-medium);
+  }
+}

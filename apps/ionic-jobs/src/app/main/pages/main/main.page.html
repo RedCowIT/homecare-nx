@@ -1,27 +1,22 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>main</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-no-padding ion-no-margin">
 
-<ion-content>
+  <div class="master-detail">
 
-  Main Page.
-  <div *ngIf="auth0Service.token$ | async as token">
-    Token: {{token}}
+    <div *ngIf="!platform.isMobile;" class="master secondary-bg">
+      <div>
+        <hc-main-side-nav></hc-main-side-nav>
+      </div>
+    </div>
+
+    <div class="detail">
+      <ion-router-outlet></ion-router-outlet>
+    </div>
+
   </div>
-
-  <div *ngIf="platform.is('mobile'); else tablet">
-
-  </div>
-
-  <ng-template #tablet>
-    TABLET
-  </ng-template>
 
 </ion-content>
 
-<div *ngIf="platform.is('mobile');">
+<div *ngIf="platform.isMobile">
   <hc-main-tabs></hc-main-tabs>
 </div>
 

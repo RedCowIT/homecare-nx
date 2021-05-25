@@ -32,6 +32,9 @@
     "product": { "tags": [] },
     "billing": { "tags": [] },
     "plan": { "tags": [] },
-    "customer": { "tags": [] }
+    "customer": { "tags": [] },
+    "ionic-shared": { "tags": [] },
+    "common": { "tags": [] },
+    "ionic-common": { "tags": [] }
   }
 }

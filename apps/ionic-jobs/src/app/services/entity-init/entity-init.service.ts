@@ -5,6 +5,8 @@ import {EntityDefinitionService} from "@ngrx/data";
 import {AppointmentEntity, appointmentEntityMetadata} from "@homecare/appointment";
 import {EntitySyncService} from "@homecare/entity";
 import {appDataIdEntityMetadata} from "@homecare/core";
+import {customerEntityMetadata} from "@homecare/customer";
+import {PlanEntity, planEntityMetadata} from "@homecare/plan";
 
 /**
  * Registers NGRX metadata before anything else
@@ -19,7 +21,9 @@ export class EntityInitService implements AppInitHandler {
    */
   static readonly entityMetadata = [
     appDataIdEntityMetadata,
-    appointmentEntityMetadata
+    appointmentEntityMetadata,
+    customerEntityMetadata,
+    planEntityMetadata
   ];
 
   /**
@@ -29,7 +33,10 @@ export class EntityInitService implements AppInitHandler {
     AppointmentEntity.AppointmentNoAnswerReason,
     AppointmentEntity.CallTypeClass,
     AppointmentEntity.CallType,
-    AppointmentEntity.AppointmentStatus
+    AppointmentEntity.AppointmentStatus,
+    PlanEntity.PlanPaymentPeriod,
+    PlanEntity.PlanType,
+    PlanEntity.Plan
   ];
 
   constructor(private entityDefinitionService: EntityDefinitionService,

@@ -16,10 +16,10 @@ import {AppInitService, AppInitServiceFactory} from "./services/app-init/app-ini
 import {AppErrorService} from "./services/app-error/app-error.service";
 import {EntityInitService} from "./services/entity-init/entity-init.service";
 import {AppDataErrorService} from "./services/app-data-error/app-data-error.service";
-import {ClientStorage, StorageModule, StorageService} from "@homecare/storage";
+import {CacheStoreService, ClientStorage, StorageModule, StorageService} from "@homecare/storage";
 import {EntityModule} from "@homecare/entity";
-import {CacheStoreService} from "../../../../libs/storage/src/lib/services/cache/cache-store.service";
 import {Store} from "@ngrx/store";
+import {JobModule} from "./job/job.module";
 
 function storageFactory(storage: ClientStorage): StorageService {
   return new StorageService(storage);
@@ -43,10 +43,14 @@ function cacheStoreServiceFactory(store: Store, storage: StorageService): CacheS
     StorageModule,
     AuthModule,
     EntityModule,
-    MainModule
+    MainModule,
+    JobModule
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
+  exports: [
+
+  ],
   providers: [
     {provide: DataErrorService, useClass: AppDataErrorService},
     {provide: ErrorHandler, useClass: AppErrorService},

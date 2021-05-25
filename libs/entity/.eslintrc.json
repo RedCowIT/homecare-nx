@@ -12,11 +12,11 @@
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",
-          { "type": "attribute", "prefix": "homecareNx", "style": "camelCase" }
+          { "type": "attribute", "prefix": "dd", "style": "camelCase" }
         ],
         "@angular-eslint/component-selector": [
           "error",
-          { "type": "element", "prefix": "homecare-nx", "style": "kebab-case" }
+          { "type": "element", "prefix": "dd", "style": "kebab-case" }
         ]
       }
     },

@@ -1,0 +1,18 @@
+.mid-dark-bg {
+  background-color: var(--ion-color-mid-dark);
+  color: var(--ion-color-mid-dark-contrast);
+}
+
+.dark-bg {
+  background-color: var(--ion-color-dark);
+  color: var(--ion-color-dark-contrast);
+}
+
+.secondary-bg {
+  background-color: var(--ion-color-secondary);
+  color: var(--ion-color-secondary-contrast);
+}
+
+html, body {
+  background-color: var(--background);
+}

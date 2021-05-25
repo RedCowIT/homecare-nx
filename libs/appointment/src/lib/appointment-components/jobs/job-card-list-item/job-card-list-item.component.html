@@ -1,0 +1,41 @@
+<div *ngIf="appointment$ | async as appointment">
+  <ion-card *ngIf="appointment">
+    <ion-card-header>
+      <hc-job-date-header [date]="appointment.bookingDateTime"></hc-job-date-header>
+    </ion-card-header>
+    <ion-card-content>
+
+      <div class="customer-name ion-margin-bottom bold">
+        <hc-customer-name [id]="appointment.customerId"></hc-customer-name>
+      </div>
+
+      <div class="customer-address ion-margin-bottom bold">
+        <hc-customer-address [id]="appointment.addressId"></hc-customer-address>
+      </div>
+
+      <div class="details-toggle" (click)="toggleDetails()">
+        <div *ngIf="showDetails; else hideDetailsToggle">
+          - Hide Details
+        </div>
+        <ng-template #hideDetailsToggle>
+          + Show Details
+        </ng-template>
+      </div>
+
+      <div *ngIf="showDetails" class="details">
+        <div class="ion-margin-top">
+          <hc-job-details [id]="appointmentId"></hc-job-details>
+        </div>
+      </div>
+
+      <div class="card-buttons d-flex ion-justify-content-end">
+        <hc-no-answer-button [appointmentId]="appointment.id"></hc-no-answer-button>
+        <ion-button (click)="openJob()" class="ion-margin-start">
+          Start
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</div>
+
+

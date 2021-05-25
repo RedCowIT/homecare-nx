@@ -426,7 +426,7 @@
       "projectType": "library",
       "root": "libs/core",
       "sourceRoot": "libs/core/src",
-      "prefix": "homecare",
+      "prefix": "hc",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
@@ -451,7 +451,7 @@
       "projectType": "library",
       "root": "libs/appointment",
       "sourceRoot": "libs/appointment/src",
-      "prefix": "homecare",
+      "prefix": "hc",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
@@ -476,7 +476,7 @@
       "projectType": "library",
       "root": "libs/storage",
       "sourceRoot": "libs/storage/src",
-      "prefix": "homecare",
+      "prefix": "hc",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
@@ -501,7 +501,7 @@
       "projectType": "library",
       "root": "libs/entity",
       "sourceRoot": "libs/entity/src",
-      "prefix": "homecare",
+      "prefix": "hc",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
@@ -526,7 +526,7 @@
       "projectType": "library",
       "root": "libs/product",
       "sourceRoot": "libs/product/src",
-      "prefix": "homecare",
+      "prefix": "hc",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
@@ -551,7 +551,7 @@
       "projectType": "library",
       "root": "libs/billing",
       "sourceRoot": "libs/billing/src",
-      "prefix": "homecare",
+      "prefix": "hc",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
@@ -576,7 +576,7 @@
       "projectType": "library",
       "root": "libs/plan",
       "sourceRoot": "libs/plan/src",
-      "prefix": "homecare",
+      "prefix": "hc",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
@@ -601,7 +601,7 @@
       "projectType": "library",
       "root": "libs/customer",
       "sourceRoot": "libs/customer/src",
-      "prefix": "homecare",
+      "prefix": "hc",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",
@@ -617,6 +617,56 @@
           "outputs": ["coverage/libs/customer"],
           "options": {
             "jestConfig": "libs/customer/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "common": {
+      "projectType": "library",
+      "root": "libs/common",
+      "sourceRoot": "libs/common/src",
+      "prefix": "hc",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/common/src/**/*.ts",
+              "libs/common/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/common"],
+          "options": {
+            "jestConfig": "libs/common/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "ionic-common": {
+      "projectType": "library",
+      "root": "libs/ionic-common",
+      "sourceRoot": "libs/ionic-common/src",
+      "prefix": "dd",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/ionic-common/src/**/*.ts",
+              "libs/ionic-common/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ionic-common"],
+          "options": {
+            "jestConfig": "libs/ionic-common/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -638,6 +688,9 @@
       "unitTestRunner": "jest"
     },
     "@nrwl/angular:component": {
+      "style": "scss"
+    },
+    "@schematics/angular:component": {
       "style": "scss"
     }
   }

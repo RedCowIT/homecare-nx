@@ -1,0 +1,21 @@
+<div class="sidenav-wrap d-flex-column">
+  <div *ngIf="items$ | async as menuItems">
+    <ion-list *ngIf="menuItems" class="ion-no-padding" lines="none">
+      <ion-item color="mid-dark"
+                *ngFor="let item of menuItems"
+                [routerLink]="item.route" routerLinkActive="active">
+        <ion-icon [name]="item.icon" ></ion-icon>
+        <span class="label">{{ item.label }}</span>
+      </ion-item>
+    </ion-list>
+  </div>
+  <div class="mt-auto ion-padding ion-text-center">
+    <ion-button fill="outline" color="light" routerLink="/main/jobs">
+      <ion-icon slot="start" name="chevron-back"></ion-icon>
+      Back
+    </ion-button>
+  </div>
+</div>
+
+
+

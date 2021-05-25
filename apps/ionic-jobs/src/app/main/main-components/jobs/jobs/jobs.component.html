@@ -1,0 +1,16 @@
+
+<div *ngIf="appointmentsService.entities$ | async as appointments">
+  <div *ngIf="appointments">
+
+    <div *ngIf="platform.isMobile; else tablet">
+      <hc-job-list></hc-job-list>
+    </div>
+
+    <ng-template #tablet>
+      <hc-job-card-list [appointments]="appointments"></hc-job-card-list>
+    </ng-template>
+
+  </div>
+</div>
+
+

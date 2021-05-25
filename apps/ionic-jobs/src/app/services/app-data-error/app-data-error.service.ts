@@ -51,8 +51,6 @@ export class AppDataErrorService extends DataErrorService {
 
     console.error('unauthorized');
 
-    throw new Error('unauthorized');
-
     this.authService.logout();
     this.router.navigateByUrl('/logout');
   }

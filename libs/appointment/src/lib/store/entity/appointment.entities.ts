@@ -1,4 +1,5 @@
 export enum AppointmentEntity {
+  Appointment = 'Appointment',
   AppointmentCallType = 'AppointmentCallType',
   AppointmentNoAnswer = 'AppointmentNoAnswer',
   AppointmentNoAnswerReason = 'AppointmentNoAnswerReason',
@@ -8,6 +9,7 @@ export enum AppointmentEntity {
 }
 
 export const appointmentEntityMetadata = {
+  [AppointmentEntity.Appointment]: {},
   [AppointmentEntity.AppointmentCallType]: {},
   [AppointmentEntity.AppointmentNoAnswer]: {},
   [AppointmentEntity.AppointmentNoAnswerReason]: {},

@@ -20,5 +20,8 @@ module.exports = {
     '<rootDir>/libs/billing',
     '<rootDir>/libs/plan',
     '<rootDir>/libs/customer',
+    '<rootDir>/libs/ionic-shared',
+    '<rootDir>/libs/common',
+    '<rootDir>/libs/ionic-common',
   ],
 };

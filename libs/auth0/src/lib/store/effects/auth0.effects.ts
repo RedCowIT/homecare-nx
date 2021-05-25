@@ -98,19 +98,20 @@ export class Auth0Effects {
   login$ = createEffect(() => this.actions$.pipe(
     ofType(auth0Actions.login),
     tap(action => {
-
-      this.auth0ClientService.getAuthorizationUrl().pipe(
+      this.auth0ClientService.getAuthorizationUrl(action.targetPath).pipe(
         first()
       ).subscribe(async url => {
-        // console.log('auth url', url);
 
-        // window.location.href = url;
-        //window.open(url, '_system');
         window.location.href = url;
+
+        // console.log('auth url', url);
+        // window.location.href = url;
+        // window.open(url, '_system');
         // await Browser.open({url: url});
       })
 
       // this.auth0ClientService.login(action.targetPath);
+
     })
   ), {dispatch: false});
 

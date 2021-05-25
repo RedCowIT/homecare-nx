@@ -16,7 +16,7 @@
         ],
         "@angular-eslint/component-selector": [
           "error",
-          { "type": "element", "prefix": "homecare-nx", "style": "kebab-case" }
+          { "type": "element", "prefix": "hc", "style": "kebab-case" }
         ]
       }
     },

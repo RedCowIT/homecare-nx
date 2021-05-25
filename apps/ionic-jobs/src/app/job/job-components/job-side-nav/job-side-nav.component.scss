@@ -1,0 +1,13 @@
+:host {
+  display: block;
+  height: calc(100vh);
+  overflow-y: scroll;
+}
+
+.sidenav-wrap {
+  height: 100%;
+}
+
+ion-item.active {
+  --ion-color-base: var(--ion-color-mid-dark-shade) !important;
+}

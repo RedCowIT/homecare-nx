@@ -124,7 +124,7 @@
     "typescript": "~4.1.4"
   },
   "xplat": {
-    "prefix": "homecare-nx",
+    "prefix": "hc",
     "framework": "angular"
   }
 }

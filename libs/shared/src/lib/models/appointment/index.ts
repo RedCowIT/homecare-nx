@@ -1,3 +1,4 @@
+export * from './appointment';
 export * from './appointment-no-answer-reason';
 export * from './appointment-call-type';
 export * from './appointment-no-answer';

@@ -1,0 +1,9 @@
+<div *ngIf="model$ | async as model">
+  <div *ngIf="model">
+    <span>{{model.address1}}, </span>
+    <span *ngIf="model.address2">{{model.address2}}, </span>
+    <span *ngIf="model.address3">{{model.address3}}, </span>
+    <span *ngIf="model.address4">{{model.address4}}, </span>
+    <span>{{model.postcode}}</span>
+  </div>
+</div>

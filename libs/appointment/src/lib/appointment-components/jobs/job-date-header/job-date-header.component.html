@@ -1,0 +1,14 @@
+<ion-grid class="ion-no-padding">
+  <ion-row class="ion-justify-content-between">
+    <ion-col>
+      <div class="xl-text bolder">
+        {{ date | date: 'shortTime' }}
+      </div>
+    </ion-col>
+    <ion-col class="ion-text-right">
+      <div>
+        {{ date | date }}
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>

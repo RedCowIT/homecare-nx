@@ -4,3 +4,4 @@ export * from './lib/guards';
 export * from './lib/models';
 export * from './lib/support';
 export * from './lib/utils';
+export * from './lib/containers';

@@ -13,3 +13,6 @@
 // or .wp mode classes. The mode class is automatically applied to the <body>
 // element in the app.
 @import '@homecare-nx/xplat-ionic-scss/index';
+@import '/libs/shared/src/lib/styles/shared-styles.scss';
+@import './theme/backgrounds';
+@import './theme/layout';

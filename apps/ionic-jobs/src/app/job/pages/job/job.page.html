@@ -1,0 +1,18 @@
+<ion-content class="ion-no-padding ion-no-margin">
+
+  <div class="master-detail">
+
+    <div *ngIf="!platform.isMobile;" class="master mid-dark-bg">
+      <div>
+        <hc-job-side-nav></hc-job-side-nav>
+      </div>
+    </div>
+
+    <div class="detail">
+      <ion-router-outlet></ion-router-outlet>
+    </div>
+
+  </div>
+
+</ion-content>
+

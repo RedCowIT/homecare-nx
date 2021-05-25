@@ -1,0 +1,9 @@
+<div class="ion-page">
+  <dd-modal-header [title]="'No Answer / Rebook'"></dd-modal-header>
+  <ion-content>
+    <hc-appointment-no-answer-form
+      [appointmentId]="appointmentId"
+      (create)="close()"
+      (update)="close()"></hc-appointment-no-answer-form>
+  </ion-content>
+</div>

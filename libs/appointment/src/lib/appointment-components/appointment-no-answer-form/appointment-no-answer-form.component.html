@@ -1,0 +1,28 @@
+<div [formGroup]="formService.form">
+
+  <div *ngIf="appointmentNoAnswerReasonsService.entities$ | async as noAnswerReasons">
+    <ion-item *ngIf="noAnswerReasons">
+      <ion-label position="stacked">Reason</ion-label>
+      <ion-select formControlName="noAnswerReasonId" placeholder="Select one" interface="popover">
+        <ion-select-option *ngFor="let noAnswerReason of noAnswerReasons"
+                           [value]="noAnswerReason.id">{{noAnswerReason.description}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
+  <ion-item lines="none">
+    <ion-label position="stacked">Notes</ion-label>
+    <ion-textarea formControlName="notes"></ion-textarea>
+  </ion-item>
+
+  <ion-item lines="none">
+    <dd-entity-form-submit
+      [loading]="isLoading"
+      [disabled]="!formService.form.valid || isLoading"
+      label="Save"
+      (submitted)="submit()"
+    ></dd-entity-form-submit>
+  </ion-item>
+
+
+</div>

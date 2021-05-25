@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {EntityCollectionServiceBase, EntityCollectionServiceElementsFactory} from '@ngrx/data';
 import {AppointmentEntity} from "../../appointment.entities";
+import {AppointmentNoAnswer} from "@homecare/shared";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentNoAnswersService
-  extends EntityCollectionServiceBase<AppointmentEntity.AppointmentNoAnswer> {
+  extends EntityCollectionServiceBase<AppointmentNoAnswer> {
 
   constructor(
     serviceElementsFactory:

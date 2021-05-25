@@ -4,6 +4,8 @@ import {Browser, Plugins, StatusBarStyle} from '@capacitor/core';
 import {Auth0Service} from "@homecare/auth0";
 import {EntitySyncService} from "@homecare/entity";
 import {CoreEntity} from "@homecare/core";
+import {filter} from "rxjs/operators";
+import {isAuthenticated} from "../../../../libs/auth0/src/lib/store/selectors/auth0.selectors";
 
 const {StatusBar, SplashScreen} = Plugins;
 
@@ -37,7 +39,12 @@ export class AppComponent {
       }
     });
 
-    this.entitySyncService.init(CoreEntity.AppDataId);
+    // TODO: only trigger after authenticated
+    this.auth0Service.isAuthenticated$.pipe(
+      filter(isAuthenticated => isAuthenticated)
+    ).subscribe(() => {
+      this.entitySyncService.init(CoreEntity.AppDataId);
+    })
   }
 
   ngAfterViewInit() {

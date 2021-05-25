@@ -1,5 +1,12 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  CanActivateChild,
+  Router,
+  RouterStateSnapshot,
+  UrlTree
+} from '@angular/router';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {Auth0Service} from '../services/auth0/auth0.service';
@@ -12,7 +19,7 @@ import {Auth0Service} from '../services/auth0/auth0.service';
 @Injectable({
   providedIn: 'root'
 })
-export class Auth0Guard implements CanActivate {
+export class Auth0Guard implements CanActivate, CanActivateChild {
 
   constructor(
     private auth0Service: Auth0Service,
@@ -20,21 +27,26 @@ export class Auth0Guard implements CanActivate {
   ) {
   }
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> {
+  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+    Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this.doCanActivate(childRoute, state);
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return this.doCanActivate(route, state);
+  }
+
+  doCanActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+    Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     return this.auth0Service.isAuthenticated$.pipe(
       tap(isAuthenticated => {
-
         if (!isAuthenticated) {
-          // console.log('!authenticated');
           this.auth0Service.login(state.url);
-        } else {
-          // console.log('authenticated!');
         }
       })
     );
+
   }
 
 }

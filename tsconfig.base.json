@@ -38,7 +38,10 @@
       "@homecare/product": ["libs/product/src/index.ts"],
       "@homecare/billing": ["libs/billing/src/index.ts"],
       "@homecare/plan": ["libs/plan/src/index.ts"],
-      "@homecare/customer": ["libs/customer/src/index.ts"]
+      "@homecare/customer": ["libs/customer/src/index.ts"],
+      "@homecare/ionic-shared": ["libs/ionic-shared/src/index.ts"],
+      "@homecare/common": ["libs/common/src/index.ts"],
+      "@homecare/ionic-common": ["libs/ionic-common/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
