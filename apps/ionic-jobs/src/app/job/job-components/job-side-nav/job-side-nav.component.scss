@@ -11,3 +11,7 @@
 ion-item.active {
   --ion-color-base: var(--ion-color-mid-dark-shade) !important;
 }
+
+ion-item ion-icon {
+  margin-right: 10px;
+}

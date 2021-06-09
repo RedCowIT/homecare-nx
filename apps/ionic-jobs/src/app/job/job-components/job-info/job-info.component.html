@@ -1,24 +1,29 @@
-<div *ngIf="currentJobService.appointment$ | async as appointment">
-  <ion-card *ngIf="appointment">
-    <ion-card-header>
-      <hc-job-date-header [date]="appointment.bookingDateTime"></hc-job-date-header>
-    </ion-card-header>
-    <ion-card-content>
+<div class="detail-with-footer">
+  <div class="detail-content">
+    <div *ngIf="currentJobService.appointment$ | async as appointment">
+      <ion-card *ngIf="appointment">
+        <ion-card-header>
+          <hc-job-date-header [date]="appointment.bookingDateTime"></hc-job-date-header>
+        </ion-card-header>
+        <ion-card-content>
 
-      <div class="customer-name ion-margin-bottom bold">
-        <hc-customer-name [id]="appointment.customerId"></hc-customer-name>
-      </div>
+          <div class="customer-name ion-margin-bottom bold">
+            <hc-customer-name [id]="appointment.customerId"></hc-customer-name>
+          </div>
 
-      <div class="customer-address ion-margin-bottom bold">
-        <hc-customer-address [id]="appointment.addressId"></hc-customer-address>
-      </div>
+          <div class="customer-address ion-margin-bottom bold">
+            <hc-customer-address [id]="appointment.addressId"></hc-customer-address>
+          </div>
 
-      <div class="ion-margin-top">
-        <hc-job-details [id]="appointment.id"></hc-job-details>
-      </div>
+          <div class="ion-margin-top">
+            <hc-job-details [id]="appointment.id"></hc-job-details>
+          </div>
 
-    </ion-card-content>
-  </ion-card>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+  <div class="detail-footer">
+    <hc-job-footer [buttonConfigs$]="footerButtons$"></hc-job-footer>
+  </div>
 </div>
-
-

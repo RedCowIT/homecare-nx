@@ -8,7 +8,7 @@ import {JobService} from "../../services/job/job.service";
 @Component({
   selector: 'hc-job',
   templateUrl: './job.page.html',
-  styleUrls: ['./job.page.css'],
+  styleUrls: ['./job.page.scss'],
 })
 export class JobPage extends SubscribedContainer implements OnInit {
 

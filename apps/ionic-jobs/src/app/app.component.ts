@@ -3,9 +3,8 @@ import {Platform} from '@ionic/angular';
 import {Browser, Plugins, StatusBarStyle} from '@capacitor/core';
 import {Auth0Service} from "@homecare/auth0";
 import {EntitySyncService} from "@homecare/entity";
-import {CoreEntity} from "@homecare/core";
+import {CoreEntity, PlatformService} from "@homecare/core";
 import {filter} from "rxjs/operators";
-import {isAuthenticated} from "../../../../libs/auth0/src/lib/store/selectors/auth0.selectors";
 
 const {StatusBar, SplashScreen} = Plugins;
 
@@ -17,6 +16,7 @@ const {App} = Plugins;
 })
 export class AppComponent {
   constructor(
+    public platformService: PlatformService,
     private platform: Platform,
     private zone: NgZone,
     private auth0Service: Auth0Service,

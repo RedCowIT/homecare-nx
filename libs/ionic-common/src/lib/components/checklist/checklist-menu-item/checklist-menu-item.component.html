@@ -1,0 +1,6 @@
+<ion-item [color]="color"
+          [routerLink]="checklistMenuItem.route" routerLinkActive="active"
+          [disabled]="checklistMenuItem.status === 'disabled'"
+          class="status-{{checklistMenuItem.status}}">
+  <span class="label">{{ checklistMenuItem.label }}</span>
+</ion-item>

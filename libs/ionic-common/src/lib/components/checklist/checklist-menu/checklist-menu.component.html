@@ -1,0 +1,9 @@
+<div *ngIf="checklistMenuItems">
+  <ion-list *ngIf="checklistMenuItems" class="ion-no-padding" lines="none">
+    <dd-checklist-menu-item
+      *ngFor="let checklistMenuItem of checklistMenuItems"
+      [checklistMenuItem]="checklistMenuItem"
+      [color]="color">
+    </dd-checklist-menu-item>
+  </ion-list>
+</div>

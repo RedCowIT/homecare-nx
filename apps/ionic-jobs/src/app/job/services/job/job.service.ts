@@ -1,29 +1,37 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject, Observable} from "rxjs";
-import {Appointment, Job, selectEntity} from "@homecare/shared";
-import {ChecklistMenuItem} from "@homecare/common";
-import {AppointmentsService} from "@homecare/appointment";
+import {combineLatest, Observable} from "rxjs";
+import {Appointment, CallType, CallTypeClassDescription, Job, selectEntity, selectEntityByKey} from "@homecare/shared";
+import {
+  AppointmentCallTypesService,
+  AppointmentsService,
+  CallTypeClassesService,
+  CallTypesService
+} from "@homecare/appointment";
 import {Store} from "@ngrx/store";
 import {JobState} from "../../store/reducers/job.reducer";
 import {getJobMap, getJobs} from "../../store/selectors/job.selectors";
 import {Dictionary} from "@ngrx/entity";
 import {addJob, removeJob} from "../../store/actions/job.actions";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
 })
 export class JobService {
-  appointmentId: number;
-  appointmentId$ = new BehaviorSubject<number>(null);
-
-  readonly appointment$: Observable<Appointment>;
-  readonly menuItems$: Observable<ChecklistMenuItem[]>;
+  // appointmentId: number;
+  // appointmentId$ = new BehaviorSubject<number>(null);
+  //
+  // readonly appointment$: Observable<Appointment>;
+  // readonly menuItems$: Observable<ChecklistMenuItem[]>;
 
   readonly entities$: Observable<Job[]>;
   readonly entityMap$: Observable<Dictionary<Job>>;
 
   constructor(private store: Store<JobState>,
-              private appointmentsService: AppointmentsService) {
+              private appointmentsService: AppointmentsService,
+              private appointmentCallTypesService: AppointmentCallTypesService,
+              private callTypesService: CallTypesService,
+              private callTypeClassesService: CallTypeClassesService) {
 
     this.entities$ = this.store.select(getJobs);
     this.entityMap$ = this.store.select(getJobMap);
@@ -40,5 +48,40 @@ export class JobService {
 
   selectAppointment(appointmentId: number): Observable<Appointment> {
     return selectEntity(this.appointmentsService, appointmentId);
+  }
+
+  isNCOOnly(appointmentId: number): Observable<boolean> {
+
+    return combineLatest([
+      selectEntityByKey(this.appointmentCallTypesService, 'appointmentId', appointmentId),
+      this.callTypesService.entityMap$,
+      this.callTypeClassesService.entityMap$
+    ]).pipe(
+      map(([appointmentCallTypes, callTypeMap, callTypeClasses]) => {
+
+        for (const appointmentCallType of appointmentCallTypes) {
+          const callType = callTypeMap[appointmentCallType.callTypeId];
+          const callTypeClass = callTypeClasses[callType.callTypeClassId];
+
+          if (callTypeClass.description !== CallTypeClassDescription.NCO) {
+            return false;
+          }
+
+        }
+
+        return true;
+      })
+    )
+  }
+
+  selectAppointmentCallTypes(appointmentId: number): Observable<CallType[]> {
+    return combineLatest([
+      selectEntityByKey(this.appointmentCallTypesService, 'appointmentId', appointmentId),
+      this.callTypesService.entityMap$
+    ]).pipe(
+      map(([appointmentCallTypes, callTypeMap]) => {
+        return appointmentCallTypes.map(appointmentCallType => callTypeMap[appointmentCallType.callTypeId]);
+      })
+    )
   }
 }

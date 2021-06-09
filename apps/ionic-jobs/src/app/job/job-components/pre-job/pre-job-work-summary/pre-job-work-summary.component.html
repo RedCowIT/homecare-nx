@@ -1,0 +1,22 @@
+<div class="detail-with-footer">
+  <div class="detail-content">
+    <div *ngIf="currentJobService.appointment$ | async as appointment">
+      <ion-card *ngIf="appointment">
+        <ion-card-header>
+          <ion-card-title>Confirm jobs at agreed price</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+
+          <div class="ion-margin-top">
+            <div class="heading">Services</div>
+            <hc-appointment-call-type-list [id]="appointment.id"></hc-appointment-call-type-list>
+          </div>
+
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+  <div class="detail-footer">
+    <hc-job-footer [buttonConfigs$]="footerButtons$"></hc-job-footer>
+  </div>
+</div>

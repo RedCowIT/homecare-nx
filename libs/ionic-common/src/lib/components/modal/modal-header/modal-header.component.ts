@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ModalController} from "@ionic/angular";
-import {ButtonConfig} from "../../../models/button-config";
+import {ButtonConfig} from "@homecare/common";
+
 
 @Component({
   selector: 'dd-modal-header',

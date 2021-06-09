@@ -24,6 +24,34 @@ export const JobSectionMeta = {
   [JobSection.PreJob]: {
     label: 'Pre Job',
     icon: 'list'
+  },
+  [JobSection.Quote]: {
+    label: 'Quote',
+    icon: 'calculator'
+  },
+  [JobSection.Contact]: {
+    label: 'Quote',
+    icon: 'calculator'
+  },
+  [JobSection.Contact]: {
+    label: 'Contact',
+    icon: 'person'
+  },
+  [JobSection.Invoice]: {
+    label: 'Invoice',
+    icon: 'newspaper-outline'
+  },
+  [JobSection.Payment]: {
+    label: 'Payment',
+    icon: 'card'
+  },
+  [JobSection.DD]: {
+    label: 'DD',
+    icon: 'today'
+  },
+  [JobSection.SignOff]: {
+    label: 'Sign Off',
+    icon: 'thumbs-up-sharp'
   }
 }
 

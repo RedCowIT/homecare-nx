@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {JobService} from "../../services/job/job.service";
 import {Observable} from "rxjs";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {JobSectionMeta} from "@homecare/shared";
 import {filter, map} from "rxjs/operators";
 import {ChecklistMenuItem} from "@homecare/common";
+import {CurrentJobService} from "../../services/current-job/current-job.service";
 
 @Component({
   selector: 'hc-job-side-nav',
@@ -17,11 +18,15 @@ export class JobSideNavComponent implements OnInit {
 
   items$: Observable<ChecklistMenuItem[]>;
 
-  constructor(private route: ActivatedRoute, public jobsService: JobService) {
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              public jobsService: JobService,
+              public currentJobService: CurrentJobService) {
   }
 
   ngOnInit(): void {
-    this.appointmentId = this.route.snapshot.data['appointmentId'];
+
+    this.appointmentId = this.currentJobService.appointmentId;
 
     this.items$ = this.jobsService.entityMap$.pipe(
       map(jobMap => jobMap[this.appointmentId]),
@@ -32,7 +37,7 @@ export class JobSideNavComponent implements OnInit {
           return {
             id: jobSection.id,
             label: JobSectionMeta[jobSection.id].label,
-            route: jobSection.id,
+            route: this.createRoute(jobSection.id),
             icon: JobSectionMeta[jobSection.id].icon,
             status: jobSection.status
           };
@@ -42,7 +47,8 @@ export class JobSideNavComponent implements OnInit {
     )
   }
 
-  navigate(route: string) {
-
+  createRoute(jobSectionId: string) {
+    return `/job/${this.appointmentId}/${jobSectionId}`;
   }
+
 }

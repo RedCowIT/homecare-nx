@@ -2,6 +2,7 @@ import {Dictionary} from "@ngrx/entity";
 import {EntityCollectionServiceBase} from "@ngrx/data";
 import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
+import {findByKey} from "./array-utils";
 
 export function entityMapValues<T>(dictionary: Dictionary<T>, keys: any[]) {
 
@@ -20,4 +21,8 @@ export function entityMapValues<T>(dictionary: Dictionary<T>, keys: any[]) {
  */
 export function selectEntity<T>(entityService: EntityCollectionServiceBase<T>, id: any): Observable<T> {
   return entityService.entityMap$.pipe(map(entityMap => entityMap[id]));
+}
+
+export function selectEntityByKey<T>(entityService: EntityCollectionServiceBase<T>, key: string, value: any): Observable<T[]> {
+  return entityService.entities$.pipe(map(entities => findByKey(entities, key, value)));
 }

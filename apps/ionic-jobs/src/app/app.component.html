@@ -1,4 +1,4 @@
-<ion-app>
+<ion-app [ngClass]="{'mobile': platformService.isMobile}">
 
   <ion-router-outlet></ion-router-outlet>
 

@@ -7,5 +7,6 @@ export interface Appointment {
   engineerId: number;
   callTypeId: number;
   bookingDateTime: string;
+  notes: string;
   priceAgreed: number;
 }

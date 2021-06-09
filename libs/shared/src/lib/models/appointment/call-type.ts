@@ -1,5 +1,6 @@
 export interface CallType {
   id: number;
+  callTypeClassId: number;
   active: boolean;
   description: string;
   customerDescription: string;

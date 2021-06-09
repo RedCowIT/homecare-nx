@@ -2,7 +2,14 @@ import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {addJob, setJobSections, updateJob} from "../actions/job.actions";
 import {catchError, map, mergeMap, withLatestFrom} from "rxjs/operators";
-import {JobSection, JobSectionStatus, PreJobSection, PreJobSectionStatus} from "@homecare/shared";
+import {
+  CallType, findByKey, firstItem,
+  JobSection,
+  JobSectionStatus,
+  PreJobReport,
+  PreJobSection,
+  PreJobSectionStatus
+} from "@homecare/shared";
 import {JobService} from "../../services/job/job.service";
 import {ChecklistItemStatus} from "@homecare/common";
 import {initPreJobSections, setPreJobSections} from "../actions/pre-job.actions";
@@ -58,14 +65,32 @@ export class PreJobEffects {
   private createPreJobSections(appointmentId: number):
     Observable<PreJobSectionStatus[]> {
 
-    const sections = [
-      {
-        id: PreJobSection.WorkSummary,
-        status: ChecklistItemStatus.Enabled
-      }
-    ];
+    return this.jobsService.selectAppointmentCallTypes(appointmentId).pipe(
+      map(callTypes => {
 
-    return of(sections);
+        const sections = [
+          {
+            id: PreJobSection.WorkSummary,
+            status: ChecklistItemStatus.Enabled
+          },
+          {
+            id: PreJobSection.Appliances,
+            status: ChecklistItemStatus.Enabled
+          },
+          {
+            id: PreJobSection.BeforePhotos,
+            status: ChecklistItemStatus.Disabled
+          }
+        ];
 
+
+        return sections;
+
+      })
+    )
+  }
+
+  requiresPreJobReport(callTypes: CallType[], preJobReport: PreJobReport){
+    return !!firstItem(findByKey(callTypes, preJobReport, 1));
   }
 }

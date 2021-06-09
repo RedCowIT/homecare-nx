@@ -1,0 +1,23 @@
+<div *ngIf="buttonConfigSlots$ | async as buttonConfigSlots">
+  <div *ngIf="buttonConfigSlots" class="footer-wrap ion-padding">
+
+    <div *ngIf="buttonConfigSlots.start?.length" class="footer-start">
+      <ion-button *ngFor="let button of buttonConfigSlots.start" (click)="button.callback()">
+        {{button.label}}
+      </ion-button>
+    </div>
+
+    <div *ngIf="buttonConfigSlots.center?.length"  class="footer-center">
+      <ion-button *ngFor="let button of buttonConfigSlots.center" (click)="button.callback()">
+        {{button.label}}
+      </ion-button>
+    </div>
+
+    <div *ngIf="buttonConfigSlots.end?.length" class="footer-end">
+      <ion-button *ngFor="let button of buttonConfigSlots.end" (click)="button.callback()">
+        {{button.label}}
+      </ion-button>
+    </div>
+
+  </div>
+</div>

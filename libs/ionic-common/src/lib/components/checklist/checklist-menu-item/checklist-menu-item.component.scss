@@ -1,0 +1,24 @@
+ion-item.status-enabled {
+
+}
+
+ion-item.status-complete {
+
+}
+
+ion-item.status-disabled {
+  --ion-color-base: var(--disabled-background-color) !important;
+}
+
+ion-item.active {
+  --ion-color-base: var(--active-background-color) !important;
+  --ion-color-contrast: var(--active-color) !important;
+}
+
+ion-item ion-icon {
+  margin-right: 10px;
+}
+
+ion-item.item-disabled {
+  opacity: 1;
+}

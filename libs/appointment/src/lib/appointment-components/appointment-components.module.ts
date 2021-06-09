@@ -18,6 +18,7 @@ import {IonicCommonComponentsModule} from "@homecare/ionic-common";
 import {RouterModule} from "@angular/router";
 import {JobDetailsComponent} from "./jobs/job-details/job-details.component";
 import {AppointmentBaseComponent} from "./appointment-base/appointment-base.component";
+import { AppointmentCallTypeListComponent } from './appointment-call-type-list/appointment-call-type-list.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import {AppointmentBaseComponent} from "./appointment-base/appointment-base.comp
     AppointmentNoAnswerFormComponent,
     AppointmentNoAnswerModalComponent,
     JobDetailsComponent,
-    AppointmentBaseComponent
+    AppointmentBaseComponent,
+    AppointmentCallTypeListComponent
   ],
   imports: [
     CommonModule,
@@ -52,7 +54,8 @@ import {AppointmentBaseComponent} from "./appointment-base/appointment-base.comp
     NoAnswerButtonComponent,
     JobDateHeaderComponent,
     JobDetailsComponent,
-    AppointmentBaseComponent
+    AppointmentBaseComponent,
+    AppointmentCallTypeListComponent
   ]
 })
 export class AppointmentComponentsModule { }

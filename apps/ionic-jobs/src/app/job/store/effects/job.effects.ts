@@ -5,7 +5,7 @@ import {catchError, map, mergeMap} from "rxjs/operators";
 import {JobSection, JobSectionStatus} from "@homecare/shared";
 import {JobService} from "../../services/job/job.service";
 import {ChecklistItemStatus} from "@homecare/common";
-import {Observable, of, throwError} from "rxjs";
+import {combineLatest, Observable, of, throwError} from "rxjs";
 
 
 @Injectable()
@@ -57,21 +57,53 @@ export class JobEffects {
   private createJobSections(appointmentId: number):
     Observable<JobSectionStatus[]> {
 
-    const sections = [
-      {
-        id: JobSection.Info,
-        status: ChecklistItemStatus.Enabled
-      }
-    ];
 
-    // prejob not available for delivery-only type jobs
-    sections.push({
-      id: JobSection.PreJob,
-      status: ChecklistItemStatus.Enabled
-    });
+    return combineLatest([
+      this.jobsService.isNCOOnly(appointmentId)
+    ]).pipe(
+      map(([isNCOOnly]) => {
 
-    return of(sections);
+        const sections = [
+          {
+            id: JobSection.Info,
+            status: ChecklistItemStatus.Enabled
+          }
+        ];
 
+        if (!isNCOOnly){
+          sections.push({
+            id: JobSection.PreJob,
+            status: ChecklistItemStatus.Enabled
+          });
+        }
+
+        sections.push(
+          {
+            id: JobSection.Quote,
+            status: ChecklistItemStatus.Disabled
+          },
+          {
+            id: JobSection.Contact,
+            status: ChecklistItemStatus.Disabled
+          },
+          {
+            id: JobSection.Invoice,
+            status: ChecklistItemStatus.Disabled
+          },
+          {
+            id: JobSection.Payment,
+            status: ChecklistItemStatus.Disabled
+          },
+          {
+            id: JobSection.DD,
+            status: ChecklistItemStatus.Disabled
+          }
+        );
+
+        return sections;
+
+      })
+    )
   }
 
 }

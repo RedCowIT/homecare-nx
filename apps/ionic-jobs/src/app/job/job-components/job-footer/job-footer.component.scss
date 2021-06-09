@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+
+.footer-wrap {
+  display: flex;
+  position: relative;
+  height: 100%;
+
+  > div {
+    display: flex;
+    flex: 1;
+    align-items: center;
+  }
+}
+.footer-start {
+  justify-content: start;
+}
+
+.footer-center {
+  justify-content: center;
+}
+
+.footer-end {
+  justify-content: flex-end;
+}
