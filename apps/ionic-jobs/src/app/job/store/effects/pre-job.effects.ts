@@ -1,19 +1,24 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {addJob, setJobSections, updateJob} from "../actions/job.actions";
-import {catchError, map, mergeMap, withLatestFrom} from "rxjs/operators";
+import {addJob, completeJobSection} from "../actions/job.actions";
+import {catchError, filter, map, mergeMap, withLatestFrom} from "rxjs/operators";
 import {
-  CallType, findByKey, firstItem,
-  JobSection,
-  JobSectionStatus,
+  CallType,
+  containsItemWithKey,
+  findById,
+  findByKey,
+  findIndexWithId,
+  firstItem, JobSection,
   PreJobReport,
   PreJobSection,
   PreJobSectionStatus
 } from "@homecare/shared";
 import {JobService} from "../../services/job/job.service";
 import {ChecklistItemStatus} from "@homecare/common";
-import {initPreJobSections, setPreJobSections} from "../actions/pre-job.actions";
-import {Observable, of, throwError} from "rxjs";
+import {completePreJobSection, setPreJobSections} from "../actions/pre-job.actions";
+import {Observable, throwError} from "rxjs";
+import {getJobMap} from "../selectors/job.selectors";
+import {Store} from "@ngrx/store";
 
 
 @Injectable()
@@ -35,31 +40,54 @@ export class PreJobEffects {
     );
   });
 
-  initPreJobSections$ = createEffect(() => {
+  completePreJobSection$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(initPreJobSections),
-      withLatestFrom(this.jobsService.entityMap$),
+      ofType(completePreJobSection),
+      withLatestFrom(this.store$.select(getJobMap)),
+      filter(([action, jobMap]) => !!jobMap[action.appointmentId]),
       map(([action, jobMap]) => {
 
         const job = {...jobMap[action.appointmentId]};
 
-        const sections = [
-          {
-            id: PreJobSection.WorkSummary,
-            status: ChecklistItemStatus.Enabled
-          }
-        ];
+        const sections = job.preJobSections.map(preJobSection => {
+          return {...preJobSection};
+        });
 
-        job.preJobSections = sections;
-        console.log('updatejob', job);
-        return updateJob({job})
+        const index = findIndexWithId(sections, action.sectionId);
+
+        const section = findById(sections, action.sectionId);
+        section.status = ChecklistItemStatus.Complete;
+
+        if (index < sections.length - 1) {
+          if (sections[index + 1].status == ChecklistItemStatus.Disabled) {
+            sections[index + 1].status = ChecklistItemStatus.Enabled;
+          }
+        }
+
+        return setPreJobSections({appointmentId: action.appointmentId, preJobSections: sections});
+
       })
     );
   });
 
+  /**
+   * Completes Job section if preJob section is the last
+   */
+  setPreJobSection$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(setPreJobSections),
+      filter(action => action.preJobSections[action.preJobSections.length - 1].status == ChecklistItemStatus.Complete),
+      map(action => {
+
+        return completeJobSection({appointmentId: action.appointmentId, sectionId: JobSection.PreJob});
+
+      })
+    );
+  });
 
   constructor(private actions$: Actions,
-              private jobsService: JobService) {
+              private jobsService: JobService,
+              private store$: Store) {
   }
 
   private createPreJobSections(appointmentId: number):
@@ -83,6 +111,17 @@ export class PreJobEffects {
           }
         ];
 
+        if (containsItemWithKey(callTypes, 'vacuum', true)) {
+          sections.push({
+            id: PreJobSection.VacuumReport,
+            status: ChecklistItemStatus.Disabled
+          });
+        }
+
+        sections.push({
+          id: PreJobSection.Signature,
+          status: ChecklistItemStatus.Disabled
+        });
 
         return sections;
 
@@ -90,7 +129,7 @@ export class PreJobEffects {
     )
   }
 
-  requiresPreJobReport(callTypes: CallType[], preJobReport: PreJobReport){
+  requiresPreJobReport(callTypes: CallType[], preJobReport: PreJobReport) {
     return !!firstItem(findByKey(callTypes, preJobReport, 1));
   }
 }

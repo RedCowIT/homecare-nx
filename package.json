@@ -65,9 +65,11 @@
     "@ngrx/store": "^11.1.1",
     "@ngx-translate/core": "~13.0.0",
     "@ngx-translate/http-loader": "~6.0.0",
+    "@swimlane/ngx-datatable": "^19.0.0",
     "core-js": "^3.6.5",
     "ionic-plugin-deeplinks": "^1.0.22",
     "rxjs": "^6.6.0",
+    "signature_pad": "^3.0.0-beta.4",
     "tslib": "^2.0.0",
     "voca": "^1.4.0",
     "zone.js": "~0.10.2"

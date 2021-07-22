@@ -3,7 +3,8 @@ import {BehaviorSubject} from "rxjs";
 import {ButtonConfig} from "@homecare/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CurrentJobService} from "../../../services/current-job/current-job.service";
-import {createFooterBackButton} from "../../../support/footer-button-factory";
+import {createFooterBackButton, createFooterNextButton} from "../../../support/footer-button-factory";
+import {PreJobSection} from "@homecare/shared";
 
 @Component({
   selector: 'hc-pre-job-appliances',
@@ -21,20 +22,13 @@ export class PreJobAppliancesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    // this.currentJobService.getNextPreJobSectionUrl(currentSection);
-
     this.footerButtons$.next([
       createFooterBackButton(async () => {
-        await this.router.navigateByUrl(`/job/${this.currentJobService.appointmentId}/pre-job/work-summary`);
+        await this.currentJobService.navToPrevJobSection(PreJobSection.Appliances);
       }),
-      {
-        slot: 'end',
-        label: 'Next',
-        callback: async () => {
-          await this.router.navigateByUrl(`/job/${this.currentJobService.appointmentId}/pre-job/appliances`);
-        }
-      }
-    ])
+      createFooterNextButton(async () => {
+        this.currentJobService.completePreJobSection(PreJobSection.Appliances);
+      })
+    ]);
   }
 }

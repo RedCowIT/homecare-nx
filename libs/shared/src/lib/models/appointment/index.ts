@@ -4,5 +4,6 @@ export * from './appointment-call-type';
 export * from './appointment-no-answer';
 export * from './appointment-status';
 export * from './appointment-type';
+export * from './appointment-visit';
 export * from './call-type-class';
 export * from './call-type';

@@ -48,7 +48,7 @@ export function findByKey<T>(items: T[], key: string, value: number | string | b
 
   return items.filter(item => {
 
-    if (!item[key]) {
+    if (item[key] === null || item[key] === undefined) {
       return false;
     }
 
@@ -65,8 +65,24 @@ export function firstItem<T>(array: T[]): T {
   return null;
 }
 
-export function firstByKey<T>(items: T[], key: string, value: number | string | boolean): any {
+export function findIndexWithId(items: unknown[], id: number | string): number {
+  return findIndexWithKey(items, 'id', id);
+}
+
+export function findIndexWithKey(items: unknown[], key: string, value: number | string | boolean): number {
+
+  return items.findIndex((item => {
+    return item[key] == value;
+  }))
+
+}
+
+export function firstByKey<T>(items: T[], key: string, value: number | string | boolean): T {
   return firstItem(findByKey(items, key, value));
+}
+
+export function containsItemWithKey(items: unknown[], key: string, value: number | string | boolean): boolean {
+  return !!firstByKey(items, key, value);
 }
 
 export function lastItem<T>(array: T[]): T {
@@ -135,6 +151,10 @@ export function pluck(array: any[], key: string) {
   }
 
   return array.map(item => item[key]);
+}
+
+export function pluckIds(array: any[]): any[] {
+  return pluck(array, 'id');
 }
 
 export function arrayIndexOfLowest(a: any[]) {

@@ -8,6 +8,7 @@ import * as fromStore from './store/reducers/job.reducer';
 import {EffectsModule} from '@ngrx/effects';
 import {JobEffects} from './store/effects/job.effects';
 import {PreJobEffects} from "./store/effects/pre-job.effects";
+import {QuoteEffects} from "./store/effects/quote.effects";
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import {PreJobEffects} from "./store/effects/pre-job.effects";
       fromStore.reducer),
     EffectsModule.forFeature([
       JobEffects,
-      PreJobEffects
+      PreJobEffects,
+      QuoteEffects
     ])
   ]
 })

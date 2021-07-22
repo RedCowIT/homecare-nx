@@ -1,0 +1,29 @@
+<div class="detail-with-footer">
+  <div class="detail-content">
+    <div *ngIf="currentJobService.appointment$ | async as appointment">
+      <div *ngIf="appointment" class="ion-padding">
+
+        <div class="title ion-margin-top">Vacuum pre-inspection (complete with customer)</div>
+
+        <div>
+
+          <hc-vacuum-report-form [appointmentId]="appointment.id"></hc-vacuum-report-form>
+
+        </div>
+
+        <div>
+          <ion-item color="warning-subtle" lines="none" class="ion-margin-top">
+            <ion-label class="ion-text-wrap">
+              We recommend periodically servicing your vacuum cleaner to maintain 100% optimum performance.
+              This is our recommendation and <strong>not that of the manufacturer</strong>.
+            </ion-label>
+          </ion-item>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="detail-footer">
+    <hc-job-footer [buttonConfigs$]="footerButtons$"></hc-job-footer>
+  </div>
+</div>

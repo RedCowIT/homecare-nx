@@ -2,7 +2,8 @@ import {Action, createFeatureSelector, createReducer, on} from '@ngrx/store';
 import {createEntityAdapter, EntityState, Update} from '@ngrx/entity';
 import {Job} from "@homecare/shared";
 import {addJob, setJobSections} from "../actions/job.actions";
-import {setPreJobSections} from "../actions/pre-job.actions";
+import {completePreJobSection, setPreJobSections} from "../actions/pre-job.actions";
+import {setQuoteSections} from "../actions/quote.actions";
 
 
 export const FEATURE_KEY = 'jobs';
@@ -58,7 +59,23 @@ const channelReducer = createReducer(
       ...state
     });
 
-  })
+  }),
+
+  on(setQuoteSections, (state, action) => {
+
+    const job: Update<Job> = {
+      id: action.appointmentId,
+      changes: {
+        quoteSections: action.quoteSections
+      }
+    };
+
+    return adapter.updateOne(job, {
+      ...state
+    });
+
+  }),
+
 );
 
 export function reducer(state: JobState | undefined, action: Action) {

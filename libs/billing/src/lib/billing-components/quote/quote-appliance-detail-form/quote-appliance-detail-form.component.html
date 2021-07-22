@@ -1,0 +1,44 @@
+<div [formGroup]="formService.form">
+
+  <div *ngIf="brandsService.entities$ | async as brands">
+    <ion-item *ngIf="brands">
+      <ion-label position="stacked">Brand*</ion-label>
+      <ion-select formControlName="brandId" placeholder="Select one" interface="popover">
+        <ion-select-option *ngFor="let brand of brands"
+                           [value]="brand.id">{{brand.description}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
+  <ion-item>
+    <ion-label position="stacked">Model*</ion-label>
+    <ion-input formControlName="model"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Serial No.</ion-label>
+    <ion-input formControlName="serialNo"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Date Purchased*</ion-label>
+    <ion-datetime formControlName="datePurchase" displayFormat="MMMM YYYY"></ion-datetime>
+  </ion-item>
+
+  <div *ngIf="appliancePriceRangesService.entities$ | async as appliancePriceRanges">
+    <ion-item *ngIf="appliancePriceRanges">
+      <ion-label position="stacked">Price Range*</ion-label>
+      <ion-select formControlName="priceRangeId" placeholder="Select one" interface="popover">
+        <ion-select-option *ngFor="let appliancePriceRange of appliancePriceRanges"
+                           [value]="appliancePriceRange.id">{{appliancePriceRange.description}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
+  <dd-entity-form-submit
+    [loading]="isLoading"
+    [disabled]="!formService.form.valid || isLoading"
+    label="Save"
+    (submitted)="submit()"
+  ></dd-entity-form-submit>
+</div>

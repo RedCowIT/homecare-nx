@@ -7,6 +7,7 @@ import {SpinnerComponent} from './spinner/spinner.component';
 import {ChecklistMenuItemComponent} from "./checklist/checklist-menu-item/checklist-menu-item.component";
 import {ChecklistMenuComponent} from "./checklist/checklist-menu/checklist-menu.component";
 import {RouterModule} from "@angular/router";
+import { IconTileComponent } from './icon-tile/icon-tile.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import {RouterModule} from "@angular/router";
     EntityFormSubmitComponent,
     SpinnerComponent,
     ChecklistMenuItemComponent,
-    ChecklistMenuComponent
+    ChecklistMenuComponent,
+    IconTileComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +28,8 @@ import {RouterModule} from "@angular/router";
     EntityFormSubmitComponent,
     SpinnerComponent,
     ChecklistMenuComponent,
-    ChecklistMenuItemComponent
+    ChecklistMenuItemComponent,
+    IconTileComponent
   ]
 })
 export class IonicCommonComponentsModule {}

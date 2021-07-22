@@ -5,3 +5,5 @@ export * from './job';
 export * from './core';
 export * from './customer';
 export * from './plan';
+export * from './product';
+export * from './quote';

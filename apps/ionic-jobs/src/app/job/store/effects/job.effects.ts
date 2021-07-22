@@ -1,11 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {addJob, setJobSections} from "../actions/job.actions";
-import {catchError, map, mergeMap} from "rxjs/operators";
-import {JobSection, JobSectionStatus} from "@homecare/shared";
+import {addJob, completeJobSection, setJobSections} from "../actions/job.actions";
+import {catchError, filter, map, mergeMap, withLatestFrom} from "rxjs/operators";
+import {findById, findIndexWithId, JobSection, JobSectionStatus} from "@homecare/shared";
 import {JobService} from "../../services/job/job.service";
 import {ChecklistItemStatus} from "@homecare/common";
 import {combineLatest, Observable, of, throwError} from "rxjs";
+import {completePreJobSection, setPreJobSections} from "../actions/pre-job.actions";
+import {getJobMap} from "../selectors/job.selectors";
+import {Store} from "@ngrx/store";
 
 
 @Injectable()
@@ -49,8 +52,39 @@ export class JobEffects {
   //   );
   // });
 
+  completeJobSection$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(completeJobSection),
+      withLatestFrom(this.store$.select(getJobMap)),
+      filter(([action, jobMap]) => !!jobMap[action.appointmentId]),
+      map(([action, jobMap]) => {
 
-  constructor(private actions$: Actions,
+        const job = {...jobMap[action.appointmentId]};
+
+        const sections = job.jobSections.map(jobSection => {
+          return {...jobSection};
+        });
+
+        const index = findIndexWithId(sections, action.sectionId);
+
+        const section = findById(sections, action.sectionId);
+        section.status = ChecklistItemStatus.Complete;
+
+        if (index < sections.length - 1) {
+          if (sections[index + 1].status == ChecklistItemStatus.Disabled) {
+            sections[index + 1].status = ChecklistItemStatus.Enabled;
+          }
+        }
+
+        return setJobSections({appointmentId: action.appointmentId, jobSections: sections});
+
+      })
+    );
+  });
+
+
+  constructor(private store$: Store,
+              private actions$: Actions,
               private jobsService: JobService) {
   }
 

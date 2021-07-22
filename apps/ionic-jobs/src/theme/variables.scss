@@ -44,12 +44,12 @@
   --ion-color-success-tint: #28e070;
 
   /** warning **/
-  --ion-color-warning: #ffce00;
-  --ion-color-warning-rgb: 255, 206, 0;
-  --ion-color-warning-contrast: #ffffff;
-  --ion-color-warning-contrast-rgb: 255, 255, 255;
-  --ion-color-warning-shade: #e0b500;
-  --ion-color-warning-tint: #ffd31a;
+  --ion-color-warning-subtle: #f6ede0;
+  --ion-color-warning-subtle-rgb: 246, 237, 224;
+  --ion-color-warning-subtle-contrast: #222428;
+  --ion-color-warning-subtle-contrast-rgb: 34, 34, 34;
+  --ion-color-warning-subtle-shade: #cbc5b4;
+  --ion-color-warning-subtle-tint: #fffbee;
 
   /** danger **/
   --ion-color-danger: #f04141;
@@ -122,6 +122,23 @@
     --master-width: 0;
     --detail-width: calc(100vw);
   }
+
+  ion-item {
+    //--highlight-height: 2px;
+  }
+
+  ion-item.ion-invalid.ion-touched  {
+    border-bottom: 2px solid var(--ion-color-danger);
+  }
+
+  dd-icon-tile {
+    --color: var(--ion-color-primary);
+    --border-color: var(--ion-color-primary);
+    --background-color: white;
+    --highlight-background-color: var(--ion-color-primary);
+    --highlight-border-color: var(--ion-color-primary);
+    --highlight-color: white;
+  }
 }
 
 .ion-color-primary-subtle {
@@ -133,6 +150,15 @@
   --ion-color-tint: var(--ion-color-primary-subtle-tint) !important;
 }
 
+.ion-color-warning-subtle {
+  --ion-color-base: var(--ion-color-warning-subtle) !important;
+  --ion-color-base-rgb: var(--ion-color-warning-subtle-rgb) !important;
+  --ion-color-contrast: var(--ion-color-warning-subtle-contrast) !important;
+  --ion-color-contrast-rgb: var(--ion-color-warning-subtle-contrast-rgb) !important;
+  --ion-color-shade: var(--ion-color-warning-subtle-shade) !important;
+  --ion-color-tint: var(--ion-color-warning-subtle-tint) !important;
+}
+
 .ion-color-mid-dark {
   --ion-color-base: var(--ion-color-mid-dark) !important;
   --ion-color-base-rgb: var(--ion-color-mid-dark-rgb) !important;
@@ -141,3 +167,9 @@
   --ion-color-shade: var(--ion-color-mid-dark-shade) !important;
   --ion-color-tint: var(--ion-color-mid-dark-tint) !important;
 }
+
+.ion-page {
+  background: #F8F8F8;
+}
+
+

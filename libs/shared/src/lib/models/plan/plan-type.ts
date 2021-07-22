@@ -5,4 +5,7 @@ export interface PlanType {
   description: string;
 
   appImgURL: string;
+
+  /** Available to add as 'other plan' **/
+  commercial: boolean;
 }

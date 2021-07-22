@@ -1,0 +1,10 @@
+<div class="ion-page">
+  <dd-modal-header [title]="title"></dd-modal-header>
+  <ion-content>
+    <hc-quote-appliance-detail-form
+      [quoteId]="quoteId"
+      [applianceTypeId]="applianceTypeId"
+      [id]="quoteApplianceDetailId"
+      (create)="close()" (update)="close()"></hc-quote-appliance-detail-form>
+  </ion-content>
+</div>

@@ -1,5 +1,5 @@
 import {createAction, props} from '@ngrx/store';
-import {Job, JobSection, JobSectionStatus} from "@homecare/shared";
+import {Job, JobSection, JobSectionStatus, PreJobSection} from "@homecare/shared";
 
 export const addJob = createAction(
   '[Job] Add Job',
@@ -19,5 +19,10 @@ export const setJobSections = createAction(
 export const updateJob = createAction(
   '[Job] Update Job',
   props<{ job: Job }>()
+);
+
+export const completeJobSection = createAction(
+  '[Job] Complete Section',
+  props<{ appointmentId: number, sectionId: JobSection }>()
 );
 

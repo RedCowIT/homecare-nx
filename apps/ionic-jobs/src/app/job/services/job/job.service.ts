@@ -1,6 +1,16 @@
 import {Injectable} from "@angular/core";
 import {combineLatest, Observable} from "rxjs";
-import {Appointment, CallType, CallTypeClassDescription, Job, selectEntity, selectEntityByKey} from "@homecare/shared";
+import {
+  Appointment,
+  CallType,
+  CallTypeClassDescription,
+  Job,
+  JobSection,
+  PreJobSection,
+  QuoteSection,
+  selectEntity,
+  selectEntityByKey
+} from "@homecare/shared";
 import {
   AppointmentCallTypesService,
   AppointmentsService,
@@ -11,8 +21,10 @@ import {Store} from "@ngrx/store";
 import {JobState} from "../../store/reducers/job.reducer";
 import {getJobMap, getJobs} from "../../store/selectors/job.selectors";
 import {Dictionary} from "@ngrx/entity";
-import {addJob, removeJob} from "../../store/actions/job.actions";
+import {addJob, completeJobSection, removeJob} from "../../store/actions/job.actions";
 import {map} from "rxjs/operators";
+import {completePreJobSection} from "../../store/actions/pre-job.actions";
+import {completeQuoteSection} from "../../store/actions/quote.actions";
 
 @Injectable({
   providedIn: "root"
@@ -61,7 +73,16 @@ export class JobService {
 
         for (const appointmentCallType of appointmentCallTypes) {
           const callType = callTypeMap[appointmentCallType.callTypeId];
+
+          if (!callType) {
+            return false;
+          }
+
           const callTypeClass = callTypeClasses[callType.callTypeClassId];
+
+          if (!callTypeClass) {
+            return false;
+          }
 
           if (callTypeClass.description !== CallTypeClassDescription.NCO) {
             return false;
@@ -83,5 +104,23 @@ export class JobService {
         return appointmentCallTypes.map(appointmentCallType => callTypeMap[appointmentCallType.callTypeId]);
       })
     )
+  }
+
+  completeJobSection(appointmentId: number, sectionId: JobSection) {
+    this.store.dispatch(completeJobSection({
+      appointmentId, sectionId
+    }));
+  }
+
+  completePreJobSection(appointmentId: number, sectionId: PreJobSection) {
+    this.store.dispatch(completePreJobSection({
+      appointmentId, sectionId
+    }));
+  }
+
+  completeQuoteSection(appointmentId: number, sectionId: QuoteSection) {
+    this.store.dispatch(completeQuoteSection({
+      appointmentId, sectionId
+    }));
   }
 }

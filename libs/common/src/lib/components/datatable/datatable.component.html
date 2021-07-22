@@ -1,0 +1,15 @@
+<div *ngIf="source.rows$ | async as rows">
+  <ngx-datatable *ngIf="rows"
+    class="material"
+    [headerHeight]="40"
+    [footerHeight]="footerHeight"
+    [rowHeight]="40"
+    [rows]="rows"
+    [columns]="source.columns"
+    [columnMode]="'force'"
+    [limit]="100"
+    (select)="select($event)"
+    [selectionType]="selectionType"
+  >
+  </ngx-datatable>
+</div>

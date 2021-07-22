@@ -1,0 +1,5 @@
+<div class="sidenav-wrap d-flex-column">
+  <div *ngIf="items$ | async as menuItems">
+    <dd-checklist-menu [checklistMenuItems]="menuItems" color="light"></dd-checklist-menu>
+  </div>
+</div>

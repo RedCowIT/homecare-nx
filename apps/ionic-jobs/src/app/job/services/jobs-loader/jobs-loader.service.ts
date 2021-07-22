@@ -1,8 +1,9 @@
 import {Injectable} from "@angular/core";
-import {tap} from "rxjs/operators";
-import {Appointment} from "@homecare/shared";
+import {catchError, tap} from "rxjs/operators";
+import {Appointment, catchHttpError} from "@homecare/shared";
 import {CustomerAddressesService, CustomerPlansService, CustomersService} from "@homecare/customer";
-import {AppointmentCallTypesService, AppointmentsService} from "@homecare/appointment";
+import {AppointmentCallTypesService, AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
+import {EMPTY} from "rxjs";
 
 
 /**
@@ -16,7 +17,8 @@ export class JobsLoaderService {
               private customersService: CustomersService,
               private customerAddressesService: CustomerAddressesService,
               private customerPlansService: CustomerPlansService,
-              private appointmentCallTypesService: AppointmentCallTypesService) {
+              private appointmentCallTypesService: AppointmentCallTypesService,
+              private appointmentVisitsService: AppointmentVisitsService) {
   }
 
   loadAll() {
@@ -32,6 +34,8 @@ export class JobsLoaderService {
   }
 
   loadAppointmentRelations(appointment: Appointment) {
+
+    this.appointmentVisitsService.getWithQuery({appointmentId: `${appointment.id}`});
 
     this.customersService.getByKey(appointment.customerId);
 

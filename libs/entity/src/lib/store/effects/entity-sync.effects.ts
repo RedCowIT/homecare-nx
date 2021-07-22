@@ -140,7 +140,7 @@ export class EntitySyncEffects {
       throw new Error('Cannot validate entity cache item against empty entity name set');
     }
     if (!haveSameContents(entityNames, pluck(entityCacheItem.data as [], 'entityName'))) {
-      this.logger.warn('Cached entity name mismatch, abandoning cache init.');
+      this.logger.warn('Cached entity name mismatch, abandoning cache init.', {entityNames, entityCacheItem});
       return false;
     }
 

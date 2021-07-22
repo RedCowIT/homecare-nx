@@ -7,6 +7,8 @@ import {EntitySyncService} from "@homecare/entity";
 import {appDataIdEntityMetadata} from "@homecare/core";
 import {customerEntityMetadata} from "@homecare/customer";
 import {PlanEntity, planEntityMetadata} from "@homecare/plan";
+import {ProductEntity, productEntityMetadata} from "@homecare/product";
+import {BillingEntity, billingEntityMetadata} from "@homecare/billing";
 
 /**
  * Registers NGRX metadata before anything else
@@ -22,21 +24,28 @@ export class EntityInitService implements AppInitHandler {
   static readonly entityMetadata = [
     appDataIdEntityMetadata,
     appointmentEntityMetadata,
+    billingEntityMetadata,
     customerEntityMetadata,
-    planEntityMetadata
+    planEntityMetadata,
+    productEntityMetadata
   ];
 
   /**
-   * Entities we need to sync for working offline.
+   * Entities we need to sync for working "offline".
    */
   static readonly syncEntities = [
     AppointmentEntity.AppointmentNoAnswerReason,
     AppointmentEntity.CallTypeClass,
     AppointmentEntity.CallType,
     AppointmentEntity.AppointmentStatus,
+    BillingEntity.QuoteItemType,
     PlanEntity.PlanPaymentPeriod,
     PlanEntity.PlanType,
-    PlanEntity.Plan
+    PlanEntity.Plan,
+    ProductEntity.AppliancePriceRange,
+    ProductEntity.ApplianceType,
+    ProductEntity.Brand,
+    ProductEntity.CommercialProduct
   ];
 
   constructor(private entityDefinitionService: EntityDefinitionService,

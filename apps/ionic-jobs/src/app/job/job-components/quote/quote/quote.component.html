@@ -1,0 +1,20 @@
+<div class="h-100">
+  <div class="detail-content h-100">
+
+    <div class="master-detail">
+
+      <div *ngIf="!platform.isMobile;" class="master gray-1-bg">
+        <div>
+          <hc-quote-side-nav></hc-quote-side-nav>
+        </div>
+      </div>
+
+      <div class="detail">
+        <ion-router-outlet></ion-router-outlet>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+

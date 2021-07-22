@@ -1,0 +1,26 @@
+<div class="detail-with-footer">
+  <div class="detail-content">
+    <div *ngIf="currentJobService.quote$ | async as quote">
+
+      <ion-card *ngIf="quote">
+        <ion-card-header>
+          <ion-card-title>Quote</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+
+          <div class="ion-margin-top">
+            <hc-quote-table [quoteId]="quote.id"></hc-quote-table>
+          </div>
+
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+  </div>
+  <div class="detail-footer">
+    <hc-job-footer [buttonConfigs$]="footerButtons$"></hc-job-footer>
+  </div>
+</div>
+
+
+

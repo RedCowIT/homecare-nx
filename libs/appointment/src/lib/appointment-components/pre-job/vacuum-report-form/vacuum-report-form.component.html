@@ -1,0 +1,31 @@
+<form [formGroup]="formService.form" novalidate>
+
+  <ion-item>
+    <ion-label class="ion-text-wrap">Are you aware that we are an independent company and not affiliated with any vacuum manufacturer?</ion-label>
+    <ion-toggle formControlName="qIndependentCompany"></ion-toggle>
+  </ion-item>
+
+  <ion-item>
+    <ion-label class="ion-text-wrap">Were you advised the cost of service?</ion-label>
+    <ion-toggle formControlName="qServiceCost"></ion-toggle>
+  </ion-item>
+
+  <ion-item>
+    <ion-label class="ion-text-wrap">How often do you wash your filters?</ion-label>
+    <ion-select formControlName="qWashFilters" placeholder="Select one" interface="popover">
+      <ion-select-option *ngFor="let washFilterOption of washFilterOptions"
+                         [value]="washFilterOption.id">{{washFilterOption.description}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label class="ion-text-wrap">Would you like your vacuum working to 100% efficiency?</ion-label>
+    <ion-toggle formControlName="qEfficiency"></ion-toggle>
+  </ion-item>
+
+  <ion-item>
+    <ion-label class="ion-text-wrap">We may offer genuine and/or generic compatible parts depending on availability. All parts come with a 12-month guarantee.</ion-label>
+    <ion-toggle formControlName="qParts"></ion-toggle>
+  </ion-item>
+
+</form>

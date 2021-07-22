@@ -240,6 +240,11 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
+              },
+              {
+                "glob": "**/*.svg",
+                "input": "apps/ionic-jobs/src/assets/icon/packs/appliance",
+                "output": "./svg"
               }
             ],
             "styles": [
@@ -626,7 +631,7 @@
       "projectType": "library",
       "root": "libs/common",
       "sourceRoot": "libs/common/src",
-      "prefix": "hc",
+      "prefix": "dd",
       "architect": {
         "lint": {
           "builder": "@nrwl/linter:eslint",

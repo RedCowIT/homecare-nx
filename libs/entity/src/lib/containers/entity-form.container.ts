@@ -3,7 +3,7 @@ import {first, takeUntil, tap} from "rxjs/operators";
 import {EntityCollectionServiceBase} from "@ngrx/data";
 import {ApiValidationErrors, catchHttpValidationErrors, EntityContainer} from "@homecare/shared";
 import {EntityFormService} from "@homecare/entity";
-import {EventEmitter, OnInit, Output} from "@angular/core";
+import {EventEmitter, Input, OnInit, Output} from "@angular/core";
 
 /**
  * Base class for form components performing standard create/update ops on a single entity.
@@ -18,6 +18,8 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
 
   @Output()
   update = new EventEmitter<T>();
+
+  isSubmitted: boolean;
 
   public errors: string[];
 
@@ -35,12 +37,15 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
 
     super.ngOnInit();
 
-    console.log('setTeditMode', {'id':this.id, 'enabled': !!this.id});
-
     this.setEditMode(!!this.id);
+
+    console.log('EntityForm.onInit', {id: this.id});
 
     if (this.isEditMode()) {
       this.model$.pipe(first()).subscribe(model => {
+
+        console.log('EntityForm.patchForm', model);
+
         this.patchForm(model);
       });
     }
@@ -48,21 +53,21 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
 
   public async submit() {
 
+    this.isSubmitted = true;
+
     this.errors = null;
 
     const dto = this.createDTO();
 
-    if (this.formService.editMode) {
+    console.log('EntityForm.submit', {dto});
 
-      console.log('submit edit mode');
+    if (this.formService.editMode) {
 
       await this.doOperation(
         this.doUpdate(dto),
         EntityFormContainer.OPERATION_UPDATE);
 
     } else {
-
-      console.log('submit create mode');
 
       await this.doOperation(this.doCreate(dto as T), EntityFormContainer.OPERATION_CREATE);
 
@@ -145,6 +150,16 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
 
   public isEditMode(): boolean {
     return this.formService.editMode;
+  }
+
+  /**
+   * Mark all form controls as touched to force display of validation highlighting
+   *
+   * @return true if form is valid
+   */
+  public validate(): boolean {
+    this.formService.form.markAllAsTouched();
+    return this.formService.form.valid;
   }
 
   protected setEditMode(editMode: boolean) {
