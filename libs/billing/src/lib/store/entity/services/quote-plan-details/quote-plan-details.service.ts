@@ -1,20 +1,19 @@
 import {Injectable} from '@angular/core';
 import {EntityCollectionServiceBase, EntityCollectionServiceElementsFactory} from '@ngrx/data';
-import {CommercialProduct} from "@homecare/shared";
-import {ProductEntity} from '../product.entities';
-
+import {QuotePlanDetail} from "@homecare/shared";
+import {BillingEntity} from '../../billing.entities';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CommercialProductsService
-  extends EntityCollectionServiceBase<CommercialProduct> {
+export class QuotePlanDetailsService
+  extends EntityCollectionServiceBase<QuotePlanDetail> {
 
   constructor(
     serviceElementsFactory:
       EntityCollectionServiceElementsFactory) {
 
-    super(ProductEntity.CommercialProduct, serviceElementsFactory);
+    super(BillingEntity.QuotePlanDetail, serviceElementsFactory);
 
   }
 

@@ -1,39 +1,39 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {QuotePlanDetailFormService} from "../../../services/form/quote-plan-detail-form/quote-plan-detail-form.service";
 import {EntityFormContainer} from "@homecare/entity";
-import {firstItem, QuoteApplianceDetail, QuoteItem, QuoteItemTypes, selectEntityByKey} from "@homecare/shared";
-import {AppliancePriceRangesService, ApplianceTypesService} from "@homecare/product";
-import {QuoteApplianceDetailsService} from "../../../store/entity/services/quote-appliance-details/quote-appliance-details.service";
-import {BrandsService} from "../../../../../../product/src/lib/store/entity/services/brands/brands.service";
-
-import {DateService} from "@homecare/common";
+import {firstItem, Plan, QuoteItem, QuoteItemTypes, QuotePlanDetail, selectEntityByKey} from "@homecare/shared";
 import {QuoteItemsService} from "../../../store/entity/services/quote-items/quote-items.service";
+import {QuoteItemTypesService} from "../../../store/entity/services/quote-item-types/quote-item-types.service";
+import {QuotePlanDetailsService} from "../../../store/entity/services/quote-plan-details/quote-plan-details.service";
+import {DateService} from "@homecare/common";
+import {PlanPaymentPeriodsService, PlansService, PlanTypesService} from "@homecare/plan";
 import {first, map, mergeMap} from "rxjs/operators";
 import {Observable, of} from "rxjs";
-import {QuoteItemTypesService} from "../../../store/entity/services/quote-item-types/quote-item-types.service";
-import {QuoteApplianceDetailFormService} from "../../../services/form/quote-appliance-detail-form/quote-appliance-detail-form.service";
 
 @Component({
-  selector: 'hc-quote-appliance-detail-form',
-  templateUrl: './quote-appliance-detail-form.component.html',
-  styleUrls: ['./quote-appliance-detail-form.component.scss'],
-  providers: [QuoteApplianceDetailFormService]
+  selector: 'hc-quote-plan-detail-form',
+  templateUrl: './quote-plan-detail-form.component.html',
+  styleUrls: ['./quote-plan-detail-form.component.scss'],
+  providers: [QuotePlanDetailFormService]
 })
-export class QuoteApplianceDetailFormComponent extends EntityFormContainer<QuoteApplianceDetail> implements OnInit {
+export class QuotePlanDetailFormComponent extends EntityFormContainer<QuotePlanDetail> implements OnInit {
 
   @Input()
   id: number;
 
   @Input()
-  applianceTypeId: number;
+  planTypeId: number;
 
   @Input()
   quoteId: number;
 
-  constructor(public formService: QuoteApplianceDetailFormService,
-              public entityService: QuoteApplianceDetailsService,
-              public appliancePriceRangesService: AppliancePriceRangesService,
-              public applianceTypesService: ApplianceTypesService,
-              public brandsService: BrandsService,
+  plans$: Observable<Plan[]>;
+
+  constructor(public formService: QuotePlanDetailFormService,
+              public entityService: QuotePlanDetailsService,
+              public planPaymentPeriodsService: PlanPaymentPeriodsService,
+              public planTypesService: PlanTypesService,
+              public plansService: PlansService,
               public quoteItemService: QuoteItemsService,
               public quoteItemTypesService: QuoteItemTypesService,
               public dateService: DateService) {
@@ -46,7 +46,7 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
 
     if (!this.isEditMode()) {
       this.patchForm({
-        applianceTypeId: this.applianceTypeId
+        planTypeId: this.planTypeId
       });
 
       this.findApplianceQuoteItemId().pipe(
@@ -57,6 +57,10 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
         }
       });
     }
+
+    console.log('planTypeId', this.planTypeId);
+
+    this.plans$ = selectEntityByKey(this.plansService, 'planTypeId', this.planTypeId);
   }
 
   public async submit() {
@@ -74,14 +78,14 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
 
       } else {
 
-        await this.doOperation(this.doCreate(dto as QuoteApplianceDetail), EntityFormContainer.OPERATION_CREATE);
+        await this.doOperation(this.doCreate(dto as QuotePlanDetail), EntityFormContainer.OPERATION_CREATE);
 
       }
     });
 
   }
 
-  protected createFormData(): Observable<Partial<QuoteApplianceDetail>> {
+  protected createFormData(): Observable<Partial<QuotePlanDetail>> {
 
     const dto = this.createDTO();
 
@@ -89,7 +93,7 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
       return of(dto);
     }
 
-    return selectEntityByKey(this.quoteItemTypesService, 'description', QuoteItemTypes.Appliance)
+    return selectEntityByKey(this.quoteItemTypesService, 'description', QuoteItemTypes.Plan)
       .pipe(
         mergeMap(quoteItemTypes => {
 

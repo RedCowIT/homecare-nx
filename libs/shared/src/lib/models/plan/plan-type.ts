@@ -4,7 +4,7 @@ export interface PlanType {
   /** @example Vacuum Service Plan */
   description: string;
 
-  appImgURL: string;
+  icon: string;
 
   /** Available to add as 'other plan' **/
   commercial: boolean;

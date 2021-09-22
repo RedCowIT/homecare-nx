@@ -1,0 +1,10 @@
+<div class="ion-page">
+  <dd-modal-header [title]="title"></dd-modal-header>
+  <ion-content>
+    <hc-quote-plan-detail-form
+      [quoteId]="quoteId"
+      [planTypeId]="planTypeId"
+      [id]="quotePlanDetailId"
+      (create)="close()" (update)="close()"></hc-quote-plan-detail-form>
+  </ion-content>
+</div>

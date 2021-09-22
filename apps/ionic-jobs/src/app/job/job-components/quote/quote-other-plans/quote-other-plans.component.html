@@ -1,6 +1,19 @@
 <div class="detail-with-footer">
   <div class="detail-content">
-
+    <div *ngIf="iconTiles$ | async as iconTiles">
+      <ion-grid>
+        <ion-row>
+          <ion-col *ngFor="let iconTile of iconTiles" size="3">
+            <dd-icon-tile
+              [label]="iconTile.label"
+              [icon]="iconTile.icon"
+              [badge]="iconTile.badge"
+              [highlight]="iconTile.highlight"
+              (click)="openPlanModal(iconTile.id)"></dd-icon-tile>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
   </div>
   <div class="detail-footer">
     <hc-job-footer [buttonConfigs$]="footerButtons$"></hc-job-footer>

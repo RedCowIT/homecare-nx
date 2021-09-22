@@ -1,7 +1,18 @@
-import {findByKey, firstByKey, pluckIds, QuoteApplianceDetail, QuoteItem} from "@homecare/shared";
-import {combineLatest, EMPTY, Observable, of} from "rxjs";
+import {
+  findByKey,
+  pluckIds,
+  QuoteApplianceDetail,
+  QuoteItem,
+  QuotePlanDetail,
+  QuoteProductDetail
+} from "@homecare/shared";
+import {combineLatest, Observable, of} from "rxjs";
 import {Injectable} from "@angular/core";
-import {QuoteApplianceDetailsService, QuoteItemsService, QuotesService} from "@homecare/billing";
+import {QuoteApplianceDetailsService} from '../../store/entity/services/quote-appliance-details/quote-appliance-details.service';;
+import {QuotePlanDetailsService} from '../../store/entity/services/quote-plan-details/quote-plan-details.service';
+import {QuoteProductDetailsService} from '../../store/entity/services/quote-product-details/quote-product-details.service';
+import {QuotesService} from "../../store/entity/services/quotes/quotes.service";
+import {QuoteItemsService} from '../../store/entity/services/quote-items/quote-items.service';
 import {map, mergeMap} from "rxjs/operators";
 
 @Injectable({
@@ -11,7 +22,9 @@ export class QuoteManagerService {
 
   constructor(private quotesService: QuotesService,
               private quoteItemsService: QuoteItemsService,
-              private quoteApplianceDetailsService: QuoteApplianceDetailsService) {
+              private quoteApplianceDetailsService: QuoteApplianceDetailsService,
+              private quoteProductDetailsService: QuoteProductDetailsService,
+              private quotePlanDetailsService: QuotePlanDetailsService) {
   }
 
   getAppointmentQuoteItems(appointmentId: number): Observable<QuoteItem[]> {
@@ -48,4 +61,55 @@ export class QuoteManagerService {
     )
   }
 
+  getQuotePlanDetailsWithType(appointmentId: number, planTypeId: number): Observable<QuotePlanDetail[]> {
+    return this.getQuotePlanDetails(appointmentId).pipe(
+      map(quotePlanDetails => {
+        return findByKey(quotePlanDetails, 'planTypeId', planTypeId);
+      })
+    )
+  }
+
+  getQuotePlanDetails(appointmentId: number): Observable<QuotePlanDetail[]> {
+    return combineLatest([
+      this.getAppointmentQuoteItems(appointmentId),
+      this.quotePlanDetailsService.entities$
+    ]).pipe(
+      map(([quoteItems, quotePlanDetails]) => {
+        const quoteItemIds = pluckIds(quoteItems);
+        return quotePlanDetails.filter(quotePlanDetail => {
+          return quoteItemIds.includes(quotePlanDetail.quoteItemId);
+        })
+      })
+    );
+  }
+
+  getQuotePlanDetailsWithId(appointmentId: number, planId: number): Observable<QuotePlanDetail[]> {
+    return this.getQuotePlanDetails(appointmentId).pipe(
+      map(quotePlanDetails => {
+        return findByKey(quotePlanDetails, 'planId', planId);
+      })
+    );
+  }
+
+  getQuoteProductDetails(appointmentId: number): Observable<QuoteProductDetail[]> {
+    return combineLatest([
+      this.getAppointmentQuoteItems(appointmentId),
+      this.quoteProductDetailsService.entities$
+    ]).pipe(
+      map(([quoteItems, quoteProductDetails]) => {
+        const quoteItemIds = pluckIds(quoteItems);
+        return quoteProductDetails.filter(quoteProductDetail => {
+          return quoteItemIds.includes(quoteProductDetail.quoteItemId);
+        })
+      })
+    );
+  }
+
+  getQuoteProductDetailsWithId(appointmentId: number, productId: number): Observable<QuoteProductDetail[]> {
+    return this.getQuoteProductDetails(appointmentId).pipe(
+      map(quoteProductDetails => {
+        return findByKey(quoteProductDetails, 'productId', productId);
+      })
+    );
+  }
 }

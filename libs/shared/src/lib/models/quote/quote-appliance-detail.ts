@@ -7,6 +7,6 @@ export interface QuoteApplianceDetail {
   serial?: string;
   underWarranty: boolean;
   warrantyLengthYears: number;
-  datePurchase: string;
+  datePurchased: string;
   priceRangeId: number;
 }

@@ -1,7 +1,7 @@
 export interface ApplianceType {
   id: number;
   description: string;
-  appImgURL: string;
+  icon: string;
 }
 
 export function doesApplianceTypeUseModelLookup(applianceType: ApplianceType) {

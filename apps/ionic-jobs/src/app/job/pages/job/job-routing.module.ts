@@ -17,6 +17,7 @@ import {QuoteProductsComponent} from "../../job-components/quote/quote-products/
 import {QuoteOtherPlansComponent} from "../../job-components/quote/quote-other-plans/quote-other-plans.component";
 import {QuoteCompleteComponent} from "../../job-components/quote/quote-complete/quote-complete.component";
 import {JobInvoiceComponent} from "../../job-components/job-invoice/job-invoice.component";
+import {ProductsResolver} from "../../resolvers/products.resolver";
 
 const routes: Routes = [
   {
@@ -82,7 +83,8 @@ const routes: Routes = [
           },
           {
             path: 'products',
-            component: QuoteProductsComponent
+            component: QuoteProductsComponent,
+            resolve: [ProductsResolver]
           },
           {
             path: 'other-plans',

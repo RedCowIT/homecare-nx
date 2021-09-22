@@ -2,7 +2,9 @@ export enum BillingEntity {
   Quote = 'Quote',
   QuoteItem = 'QuoteItem',
   QuoteItemType = 'QuoteItemType',
-  QuoteApplianceDetail = 'QuoteApplianceDetail'
+  QuoteApplianceDetail = 'QuoteApplianceDetail',
+  QuotePlanDetail = 'QuotePlanDetail',
+  QuoteProductDetail = 'QuoteProductDetail'
 }
 
 export const billingEntityMetadata = {
@@ -10,4 +12,6 @@ export const billingEntityMetadata = {
   [BillingEntity.QuoteItem]: {},
   [BillingEntity.QuoteItemType]: {},
   [BillingEntity.QuoteApplianceDetail]: {},
+  [BillingEntity.QuotePlanDetail]: {},
+  [BillingEntity.QuoteProductDetail]: {},
 }

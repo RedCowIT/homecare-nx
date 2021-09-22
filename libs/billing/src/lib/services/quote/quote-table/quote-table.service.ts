@@ -5,9 +5,18 @@ import {map} from "rxjs/operators";
 import {QuoteApplianceDetailsService} from "../../../store/entity/services/quote-appliance-details/quote-appliance-details.service";
 import {QuoteItemsService} from "../../../store/entity/services/quote-items/quote-items.service";
 import {QuoteItemTypesService} from "../../../store/entity/services/quote-item-types/quote-item-types.service";
-import {ApplianceType, firstByKey, QuoteApplianceDetail, QuoteItemTypes} from "@homecare/shared";
+import {
+  ApplianceType,
+  firstByKey,
+  Product,
+  QuoteApplianceDetail,
+  QuoteItemTypes,
+  QuoteProductDetail
+} from "@homecare/shared";
 import {Dictionary} from "@ngrx/entity";
-import {ApplianceTypesService} from "@homecare/product";
+import {ApplianceTypesService, ProductsService} from "@homecare/product";
+import {QuotePlanDetailsService, QuoteProductDetailsService} from "@homecare/billing";
+import {PlansService} from "@homecare/plan";
 
 @Injectable()
 export class QuoteTableService extends TableSourceService {
@@ -18,7 +27,11 @@ export class QuoteTableService extends TableSourceService {
 
   constructor(private quoteItemsService: QuoteItemsService,
               private quoteItemTypesService: QuoteItemTypesService,
+              private productsService: ProductsService,
+              private plansService: PlansService,
               private quoteApplianceDetailsService: QuoteApplianceDetailsService,
+              private quoteProductDetailsService: QuoteProductDetailsService,
+              private quotePlanDetailsService: QuotePlanDetailsService,
               private applianceTypesService: ApplianceTypesService) {
     super();
   }
@@ -28,22 +41,44 @@ export class QuoteTableService extends TableSourceService {
     this.quoteId = quoteId;
 
     this.columns = [
-      {prop: 'description'},
-      {prop: 'quantity'},
-      {prop: 'quote', name: 'Net'}
+      {prop: 'description', flexGrow: 1},
+      {prop: 'quantity', width: 80},
+      {prop: 'quote', name: 'Net', width: 80}
     ];
 
-    this.rows$ = combineLatest([
-      this.quoteItemsService.entitiesByQuoteId(this.quoteId),
+    const maps$ = combineLatest([
       this.quoteItemTypesService.entityMap$,
       this.applianceTypesService.entityMap$,
+      this.productsService.entityMap$
+    ]).pipe(map(([
+      quoteItemTypes,
+      applianceTypes,
+      products
+    ]) => {
+
+      return {
+        quoteItemTypes,
+        applianceTypes,
+        products
+      };
+
+    }));
+
+    this.rows$ = combineLatest([
+      maps$,
+      this.quoteItemsService.entitiesByQuoteId(this.quoteId),
+      this.quoteItemTypesService.entityMap$,
       this.quoteApplianceDetailsService.entities$,
+      this.quoteProductDetailsService.entities$,
+      this.quotePlanDetailsService.entities$
     ]).pipe(
       map(([
+             maps,
              quoteItems,
              quoteItemTypeMap,
-             applianceTypeMap,
-             quoteApplianceDetails
+             quoteApplianceDetails,
+             quoteProductDetails,
+             quotePlanDetails
            ]) => {
 
         return quoteItems.map(quoteItem => {
@@ -52,7 +87,10 @@ export class QuoteTableService extends TableSourceService {
 
           switch (quoteItemTypeMap[quoteItem.quoteItemTypeId].description) {
             case QuoteItemTypes.Appliance:
-              description = this.getApplianceCoverDescription(quoteItem.id, quoteApplianceDetails, applianceTypeMap);
+              description = this.getApplianceCoverDescription(quoteItem.id, quoteApplianceDetails, maps.applianceTypes);
+              break;
+            case QuoteItemTypes.Product:
+              description = this.getProductDescription(quoteItem.id, quoteProductDetails, maps.products)
               break;
           }
 
@@ -79,12 +117,26 @@ export class QuoteTableService extends TableSourceService {
   getApplianceCoverDescription(quoteItemId: number,
                                quoteApplianceDetails: QuoteApplianceDetail[],
                                applianceTypeMap: Dictionary<ApplianceType>): string {
+
+    console.log('getApplianceCoverDescription', quoteItemId, quoteApplianceDetails, applianceTypeMap);
+
     const details = firstByKey<QuoteApplianceDetail>(quoteApplianceDetails, 'quoteItemId', quoteItemId);
     if (!details) {
       return null;
     }
 
     return `${applianceTypeMap[details.applianceTypeId].description} Cover Plan`;
+  }
+
+  getProductDescription(quoteItemId: number,
+                        quoteProductDetails: QuoteProductDetail[],
+                        productMap: Dictionary<Product>): string {
+    const details = firstByKey<QuoteProductDetail>(quoteProductDetails, 'quoteItemId', quoteItemId);
+    if (!details) {
+      return null;
+    }
+
+    return `${productMap[details.productId].description}`;
   }
 }
 

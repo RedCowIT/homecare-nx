@@ -1,0 +1,14 @@
+<div class="ion-page">
+  <dd-modal-header [title]="'Add Product'"></dd-modal-header>
+  <ion-content class="ion-padding">
+    <div *ngIf="product$ | async as product">
+      <div *ngIf="product">
+        Add {{product.description}} for £{{product.defaultPrice}}?
+      </div>
+      <div class="ion-padding-top">
+        <ion-button (click)="addProduct()">Yes</ion-button>
+      </div>
+    </div>
+  </ion-content>
+</div>
+

@@ -8,4 +8,5 @@ export interface Plan {
   description: string;
   name: string;
   defaultYearlyPrice: number;
+  icon: string;
 }

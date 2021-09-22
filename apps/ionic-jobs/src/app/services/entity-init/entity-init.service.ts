@@ -45,7 +45,9 @@ export class EntityInitService implements AppInitHandler {
     ProductEntity.AppliancePriceRange,
     ProductEntity.ApplianceType,
     ProductEntity.Brand,
-    ProductEntity.CommercialProduct
+    ProductEntity.CommercialProduct,
+    ProductEntity.Manufacturer,
+    ProductEntity.ApplianceModel
   ];
 
   constructor(private entityDefinitionService: EntityDefinitionService,
