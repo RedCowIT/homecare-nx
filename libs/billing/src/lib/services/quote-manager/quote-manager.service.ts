@@ -1,5 +1,5 @@
 import {
-  findByKey,
+  findByKey, firstItem,
   pluckIds,
   QuoteApplianceDetail,
   QuoteItem,
@@ -8,12 +8,13 @@ import {
 } from "@homecare/shared";
 import {combineLatest, Observable, of} from "rxjs";
 import {Injectable} from "@angular/core";
-import {QuoteApplianceDetailsService} from '../../store/entity/services/quote-appliance-details/quote-appliance-details.service';;
-import {QuotePlanDetailsService} from '../../store/entity/services/quote-plan-details/quote-plan-details.service';
-import {QuoteProductDetailsService} from '../../store/entity/services/quote-product-details/quote-product-details.service';
-import {QuotesService} from "../../store/entity/services/quotes/quotes.service";
-import {QuoteItemsService} from '../../store/entity/services/quote-items/quote-items.service';
-import {map, mergeMap} from "rxjs/operators";
+import {QuoteApplianceDetailsService} from '../../store/entity/services/quote/quote-appliance-details/quote-appliance-details.service';;
+import {QuotePlanDetailsService} from '../../store/entity/services/quote/quote-plan-details/quote-plan-details.service';
+import {QuoteProductDetailsService} from '../../store/entity/services/quote/quote-product-details/quote-product-details.service';
+import {QuotesService} from "../../store/entity/services/quote/quotes/quotes.service";
+import {QuoteItemsService} from '../../store/entity/services/quote/quote-items/quote-items.service';
+import {first, map, mergeMap} from "rxjs/operators";
+import {QuoteApplianceDetailModalComponent} from "../../billing-components/quote/quote-appliance-detail-modal/quote-appliance-detail-modal.component";
 
 @Injectable({
   providedIn: 'root'
@@ -112,4 +113,5 @@ export class QuoteManagerService {
       })
     );
   }
+
 }

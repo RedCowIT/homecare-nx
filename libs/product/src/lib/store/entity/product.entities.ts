@@ -5,7 +5,8 @@ export enum ProductEntity {
   Brand = 'Brand',
   CommercialProduct = 'CommercialProduct',
   Manufacturer = 'Manufacturer',
-  Product = 'Product'
+  Product = 'Product',
+  ProductCategory = 'ProductCategory'
 }
 
 export const productEntityMetadata = {
@@ -15,5 +16,6 @@ export const productEntityMetadata = {
   [ProductEntity.Brand]: {},
   [ProductEntity.CommercialProduct]: {},
   [ProductEntity.Manufacturer]: {},
-  [ProductEntity.Product]: {}
+  [ProductEntity.Product]: {},
+  [ProductEntity.ProductCategory]: {}
 }

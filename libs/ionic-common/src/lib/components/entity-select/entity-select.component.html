@@ -1,0 +1,13 @@
+<div [formGroup]="formGroup">
+  <div [formGroupName]="formGroupNameKey">
+    <div *ngIf="entities$ | async as entities">
+      <ion-item *ngIf="entities">
+        <ion-label position="stacked">{{label}}</ion-label>
+        <ion-select [formControlName]="fieldName" placeholder="Select one" interface="action-sheet">
+          <ion-select-option *ngFor="let entity of entities"
+                             [value]="entity[valueKey]">{{entity[labelKey]}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+  </div>
+</div>

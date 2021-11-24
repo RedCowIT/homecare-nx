@@ -30,10 +30,6 @@ export const JobSectionMeta = {
     icon: 'calculator'
   },
   [JobSection.Contact]: {
-    label: 'Quote',
-    icon: 'calculator'
-  },
-  [JobSection.Contact]: {
     label: 'Contact',
     icon: 'person'
   },

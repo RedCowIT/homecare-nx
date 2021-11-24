@@ -7,7 +7,11 @@ import {SpinnerComponent} from './spinner/spinner.component';
 import {ChecklistMenuItemComponent} from "./checklist/checklist-menu-item/checklist-menu-item.component";
 import {ChecklistMenuComponent} from "./checklist/checklist-menu/checklist-menu.component";
 import {RouterModule} from "@angular/router";
-import { IconTileComponent } from './icon-tile/icon-tile.component';
+import {IconTileComponent} from './icon-tile/icon-tile.component';
+import {PopoverSelectComponent} from './popover-select/popover-select.component';
+import { PopoverSelectButtonComponent } from './popover-select-button/popover-select-button.component';
+import { EntitySelectComponent } from './entity-select/entity-select.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -16,12 +20,16 @@ import { IconTileComponent } from './icon-tile/icon-tile.component';
     SpinnerComponent,
     ChecklistMenuItemComponent,
     ChecklistMenuComponent,
-    IconTileComponent
+    IconTileComponent,
+    PopoverSelectComponent,
+    PopoverSelectButtonComponent,
+    EntitySelectComponent,
   ],
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   exports: [
     ModalHeaderComponent,
@@ -29,7 +37,9 @@ import { IconTileComponent } from './icon-tile/icon-tile.component';
     SpinnerComponent,
     ChecklistMenuComponent,
     ChecklistMenuItemComponent,
-    IconTileComponent
+    IconTileComponent,
+    PopoverSelectComponent,
+    EntitySelectComponent
   ]
 })
 export class IonicCommonComponentsModule {}

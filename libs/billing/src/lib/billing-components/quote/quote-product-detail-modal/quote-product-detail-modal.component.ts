@@ -12,9 +12,9 @@ import {
 import {ProductsService} from "@homecare/product";
 import {first, map, mergeMap} from "rxjs/operators";
 
-import {QuoteItemsService} from '../../../store/entity/services/quote-items/quote-items.service';
-import {QuoteItemTypesService} from '../../../store/entity/services/quote-item-types/quote-item-types.service';
-import {QuoteProductDetailsService} from '../../../store/entity/services/quote-product-details/quote-product-details.service';
+import {QuoteItemsService} from '../../../store/entity/services/quote/quote-items/quote-items.service';
+import {QuoteItemTypesService} from '../../../store/entity/services/quote/quote-item-types/quote-item-types.service';
+import {QuoteProductDetailsService} from '../../../store/entity/services/quote/quote-product-details/quote-product-details.service';
 import {ModalController} from "@ionic/angular";
 
 @Component({
@@ -52,7 +52,8 @@ export class QuoteProductDetailModalComponent implements OnInit {
 
           return this.quoteItemsService.add({
             quoteId: this.quoteId,
-            quoteItemTypeId: quoteItemType.id
+            quoteItemTypeId: quoteItemType.id,
+            qty: 1
           } as QuoteItem);
 
         }),

@@ -16,6 +16,9 @@ export class EntityFormSubmitComponent {
   @Input()
   label: string;
 
+  @Input()
+  color = 'primary';
+
   @Output()
   submitted = new EventEmitter();
 

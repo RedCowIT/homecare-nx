@@ -4,7 +4,12 @@ export enum BillingEntity {
   QuoteItemType = 'QuoteItemType',
   QuoteApplianceDetail = 'QuoteApplianceDetail',
   QuotePlanDetail = 'QuotePlanDetail',
-  QuoteProductDetail = 'QuoteProductDetail'
+  QuoteProductDetail = 'QuoteProductDetail',
+  Invoice = 'Invoice',
+  InvoiceItem = 'InvoiceItem',
+  InvoiceItemType = 'InvoiceItemType',
+  InvoicePayment = 'InvoicePayment',
+  InvoicePaymentType = 'InvoicePaymentType'
 }
 
 export const billingEntityMetadata = {
@@ -14,4 +19,9 @@ export const billingEntityMetadata = {
   [BillingEntity.QuoteApplianceDetail]: {},
   [BillingEntity.QuotePlanDetail]: {},
   [BillingEntity.QuoteProductDetail]: {},
+  [BillingEntity.Invoice]: {},
+  [BillingEntity.InvoiceItem]: {},
+  [BillingEntity.InvoiceItemType]: {},
+  [BillingEntity.InvoicePayment]: {},
+  [BillingEntity.InvoicePaymentType]: {}
 }

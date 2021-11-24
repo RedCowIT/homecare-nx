@@ -25,6 +25,8 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
 
   public isLoading: boolean;
 
+  public groupName: string;
+
   protected constructor(public formService: EntityFormService,
                         public entityService: EntityCollectionServiceBase<T>) {
 
@@ -79,7 +81,7 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
   }
 
   protected createDTO(): Partial<T> {
-    return this.formService.createDTO<T>();
+    return this.formService.createDTO<T>({groupName: this.groupName});
   }
 
   protected doUpdate(model: Partial<T>): Observable<T> {

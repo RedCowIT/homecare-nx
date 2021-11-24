@@ -28,86 +28,21 @@ export class CustomerApplianceFormComponent extends EntityFormContainer<Customer
   @Input()
   customerId: number;
 
-  usesModelLookup: BooleanValue; // some appliance types use free text for manufacturer model
-
-  manufacturers: Manufacturer[];
-
-  applianceModels: ApplianceModel[];
-
   constructor(public formService: CustomerApplianceFormService,
               public entityService: CustomerAppliancesService,
-              public applianceTypesService: ApplianceTypesService,
-              public manufacturersService: ManufacturersService,
-              public applianceModelsService: ApplianceModelsService) {
+              public applianceTypesService: ApplianceTypesService) {
+
     super(formService, entityService);
+
+    this.groupName = 'appliance';
   }
 
 
   ngOnInit() {
+
     super.ngOnInit();
-    this.patchForm({customerId: this.customerId});
 
-    this.updateSelects();
-
-    this.formService.form.valueChanges.pipe(
-      takeUntil(this.destroyed$),
-      tap(() => this.updateSelects())
-    ).subscribe();
+    this.patchForm({appliance: {id: this.id, customerId: this.customerId}});
 
   }
-
-  private updateSelects() {
-    this.updateModelLookup();
-    this.updateManufacturers();
-    this.updateModels();
-  }
-
-  private updateModelLookup() {
-    const applianceTypeId = this.formService.form.get('applianceTypeId').value;
-
-    if (!applianceTypeId) {
-      this.usesModelLookup = null;
-      return;
-    }
-
-    selectEntity(this.applianceTypesService, applianceTypeId).pipe(first()).subscribe(applianceType => {
-      this.usesModelLookup = {value: doesApplianceTypeUseModelLookup(applianceType)};
-    });
-  }
-
-  private updateManufacturers() {
-    const applianceTypeId = this.formService.form.get('applianceTypeId').value;
-
-    if (!applianceTypeId) {
-      this.manufacturers = [];
-      return;
-    }
-
-    if (this.usesModelLookup) {
-      selectEntityByKey(this.manufacturersService, 'applianceTypeId', applianceTypeId).pipe(
-        first()
-      ).subscribe(manufacturers => {
-        this.manufacturers = manufacturers;
-      });
-    } else {
-      this.manufacturers = [];
-    }
-  }
-
-  private updateModels() {
-    const manufacturerId = this.formService.form.get('manufacturerId').value;
-
-    if (!manufacturerId) {
-      this.applianceModels = [];
-      return;
-    }
-
-    selectEntityByKey(this.applianceModelsService, 'manufacturerId', manufacturerId).pipe(
-      first()
-    ).subscribe(applianceModels => {
-      this.applianceModels = applianceModels;
-    });
-
-  }
-
 }

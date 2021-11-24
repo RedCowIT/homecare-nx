@@ -2,9 +2,11 @@ import {Injectable} from '@angular/core';
 import {TableSourceService} from "@homecare/common";
 import {combineLatest} from "rxjs";
 import {map} from "rxjs/operators";
-import {QuoteApplianceDetailsService} from "../../../store/entity/services/quote-appliance-details/quote-appliance-details.service";
-import {QuoteItemsService} from "../../../store/entity/services/quote-items/quote-items.service";
-import {QuoteItemTypesService} from "../../../store/entity/services/quote-item-types/quote-item-types.service";
+import {QuoteApplianceDetailsService} from "../../../store/entity/services/quote/quote-appliance-details/quote-appliance-details.service";
+import {QuoteItemsService} from "../../../store/entity/services/quote/quote-items/quote-items.service";
+import {QuoteItemTypesService} from "../../../store/entity/services/quote/quote-item-types/quote-item-types.service";
+import {QuotePlanDetailsService} from "../../../store/entity/services/quote/quote-plan-details/quote-plan-details.service";
+import {QuoteProductDetailsService} from '../../../store/entity/services/quote/quote-product-details/quote-product-details.service';
 import {
   ApplianceType,
   firstByKey,
@@ -15,7 +17,7 @@ import {
 } from "@homecare/shared";
 import {Dictionary} from "@ngrx/entity";
 import {ApplianceTypesService, ProductsService} from "@homecare/product";
-import {QuotePlanDetailsService, QuoteProductDetailsService} from "@homecare/billing";
+
 import {PlansService} from "@homecare/plan";
 
 @Injectable()
@@ -41,9 +43,9 @@ export class QuoteTableService extends TableSourceService {
     this.quoteId = quoteId;
 
     this.columns = [
-      {prop: 'description', flexGrow: 1},
-      {prop: 'quantity', width: 80},
-      {prop: 'quote', name: 'Net', width: 80}
+      {prop: 'description', flexGrow: 4},
+      {prop: 'quantity', flexGrow: 1},
+      {prop: 'quote', name: 'Cost', flexGrow: 1, headerClass: "ion-text-end", cellClass: 'ion-text-end'}
     ];
 
     const maps$ = combineLatest([
@@ -51,10 +53,10 @@ export class QuoteTableService extends TableSourceService {
       this.applianceTypesService.entityMap$,
       this.productsService.entityMap$
     ]).pipe(map(([
-      quoteItemTypes,
-      applianceTypes,
-      products
-    ]) => {
+                   quoteItemTypes,
+                   applianceTypes,
+                   products
+                 ]) => {
 
       return {
         quoteItemTypes,
@@ -100,8 +102,8 @@ export class QuoteTableService extends TableSourceService {
             quote: quoteItem.quote,
             quantity: 1
           };
-        });
 
+        });
       })
     );
 

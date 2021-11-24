@@ -39,6 +39,8 @@ export class EntityInitService implements AppInitHandler {
     AppointmentEntity.CallType,
     AppointmentEntity.AppointmentStatus,
     BillingEntity.QuoteItemType,
+    BillingEntity.InvoiceItemType,
+    BillingEntity.InvoicePaymentType,
     PlanEntity.PlanPaymentPeriod,
     PlanEntity.PlanType,
     PlanEntity.Plan,
@@ -47,7 +49,8 @@ export class EntityInitService implements AppInitHandler {
     ProductEntity.Brand,
     ProductEntity.CommercialProduct,
     ProductEntity.Manufacturer,
-    ProductEntity.ApplianceModel
+    ProductEntity.ApplianceModel,
+    ProductEntity.ProductCategory,
   ];
 
   constructor(private entityDefinitionService: EntityDefinitionService,

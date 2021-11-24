@@ -10,12 +10,11 @@
           </div>
         </ion-col>
         <ion-col size="6">
-          <div class="notes">
+          <div *ngIf="appointment.notes && appointment.notes !== ''" class="notes">
             <div class="heading">Notes</div>
             <div class="notes-content">
-              <ion-item color="primary-subtle" class="ion-padding">
+              <ion-item color="primary-subtle" class="ion-padding" lines="none">
                 {{appointment.notes}}
-                ** VACUUM UPGRADE OPPORTUNITY **
               </ion-item>
             </div>
           </div>

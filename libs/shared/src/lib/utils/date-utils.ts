@@ -10,7 +10,7 @@ export function millisFromNow(date: string | moment.Moment): number {
 }
 
 export function displayTime(millisec: number): string {
-  if (millisec === undefined){
+  if (millisec === undefined) {
     return '0';
   }
 
@@ -30,4 +30,8 @@ export function displayTime(millisec: number): string {
     return `${hours}:${minutes}:${seconds}`;
   }
   return `${minutes}:${seconds}`;
+}
+
+export function nowAsDateString(): string {
+  return moment().format('YYYY-MM-D');
 }

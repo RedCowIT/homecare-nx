@@ -131,6 +131,10 @@ export class JobEffects {
           {
             id: JobSection.DD,
             status: ChecklistItemStatus.Disabled
+          },
+          {
+            id: JobSection.SignOff,
+            status: ChecklistItemStatus.Disabled
           }
         );
 

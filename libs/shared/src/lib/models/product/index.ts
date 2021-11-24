@@ -4,4 +4,6 @@ export * from './appliance-type';
 export * from './brand';
 export * from './manufacturer';
 export * from './product';
+export * from './product-category';
 export * from './commercial-product';
+export * from './product-categories';

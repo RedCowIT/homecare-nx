@@ -1,0 +1,27 @@
+
+<dd-datatable
+  #invoiceTable
+  [source]="invoiceTableService"
+  [footerHeight]="0"
+  (selectRow)="select($event)"></dd-datatable>
+
+
+<hc-add-invoice-item-button [invoiceId]="invoiceId" (update)="load()"></hc-add-invoice-item-button>
+
+<div *ngIf="invoiceSummaryService.invoiceSummary$ | async as invoiceSummary">
+  <div *ngIf="invoiceSummary" class="quote-summary ion-text-end">
+
+    <div>
+      <strong>Net</strong> {{invoiceSummary.net | currency: 'GBP' }}
+    </div>
+
+    <div>
+      <strong>VAT</strong> {{invoiceSummary.vat | currency: 'GBP' }}
+    </div>
+
+    <div>
+      <strong>Gross</strong> {{invoiceSummary.gross | currency: 'GBP' }}
+    </div>
+
+  </div>
+</div>

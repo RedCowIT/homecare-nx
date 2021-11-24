@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {EntityCollectionServiceBase, EntityCollectionServiceElementsFactory} from '@ngrx/data';
-import {PlanPaymentPeriod} from "@homecare/shared";
+import {PlanPaymentPeriod, PlanPaymentPeriods, selectFirstEntityByKey} from "@homecare/shared";
 import {PlanEntity} from "../../plan.entities";
+import {Observable} from "rxjs";
 
 
 @Injectable({
@@ -18,4 +19,15 @@ export class PlanPaymentPeriodsService
 
   }
 
+  selectMonthly(): Observable<PlanPaymentPeriod> {
+    return this.selectByDescription(PlanPaymentPeriods.Monthly);
+  }
+
+  selectAnnual(): Observable<PlanPaymentPeriod>{
+    return this.selectByDescription(PlanPaymentPeriods.Annual);
+  }
+
+  selectByDescription(description: string): Observable<PlanPaymentPeriod>{
+    return selectFirstEntityByKey(this, 'description', description);
+  }
 }

@@ -2,14 +2,14 @@ import {Component, Input, OnInit} from '@angular/core';
 import {EntityFormContainer} from "@homecare/entity";
 import {firstItem, QuoteApplianceDetail, QuoteItem, QuoteItemTypes, selectEntityByKey} from "@homecare/shared";
 import {AppliancePriceRangesService, ApplianceTypesService} from "@homecare/product";
-import {QuoteApplianceDetailsService} from "../../../store/entity/services/quote-appliance-details/quote-appliance-details.service";
+import {QuoteApplianceDetailsService} from "../../../store/entity/services/quote/quote-appliance-details/quote-appliance-details.service";
 import {BrandsService} from "../../../../../../product/src/lib/store/entity/services/brands/brands.service";
 
 import {DateService} from "@homecare/common";
-import {QuoteItemsService} from "../../../store/entity/services/quote-items/quote-items.service";
+import {QuoteItemsService} from "../../../store/entity/services/quote/quote-items/quote-items.service";
 import {first, map, mergeMap} from "rxjs/operators";
 import {Observable, of} from "rxjs";
-import {QuoteItemTypesService} from "../../../store/entity/services/quote-item-types/quote-item-types.service";
+import {QuoteItemTypesService} from "../../../store/entity/services/quote/quote-item-types/quote-item-types.service";
 import {QuoteApplianceDetailFormService} from "../../../services/form/quote-appliance-detail-form/quote-appliance-detail-form.service";
 
 @Component({
@@ -42,11 +42,13 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
 
   ngOnInit(): void {
 
+    this.groupName = 'appliance';
+
     super.ngOnInit();
 
     if (!this.isEditMode()) {
       this.patchForm({
-        applianceTypeId: this.applianceTypeId
+        appliance: {applianceTypeId: this.applianceTypeId}
       });
 
       this.findApplianceQuoteItemId().pipe(
@@ -97,7 +99,8 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
 
           return this.quoteItemService.add({
             quoteId: this.quoteId,
-            quoteItemTypeId: quoteItemType.id
+            quoteItemTypeId: quoteItemType.id,
+            qty: 1
           } as QuoteItem);
 
         }),

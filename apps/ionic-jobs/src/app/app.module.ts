@@ -20,6 +20,8 @@ import {CacheStoreService, ClientStorage, StorageModule, StorageService} from "@
 import {EntityModule} from "@homecare/entity";
 import {Store} from "@ngrx/store";
 import {JobModule} from "./job/job.module";
+import {ApiUrlService} from "@homecare/common";
+import {environment} from "../environments/environment";
 
 function storageFactory(storage: ClientStorage): StorageService {
   return new StorageService(storage);
@@ -57,7 +59,8 @@ function cacheStoreServiceFactory(store: Store, storage: StorageService): CacheS
     {provide: StorageService, useFactory: storageFactory, deps: [Storage]},
     {provide: CacheStoreService, useFactory: cacheStoreServiceFactory, deps: [Store, StorageService]},
     {provide: APP_INITIALIZER, useFactory: AppInitServiceFactory, deps: [EntityInitService], multi: true},
-    {provide: APP_INITIALIZER, useFactory: AppInitServiceFactory, deps: [AppInitService], multi: true}
+    {provide: APP_INITIALIZER, useFactory: AppInitServiceFactory, deps: [AppInitService], multi: true},
+    {provide: ApiUrlService, useValue: new ApiUrlService(environment.api.baseUrl)},
   ]
 })
 export class AppModule {}

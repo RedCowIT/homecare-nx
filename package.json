@@ -68,6 +68,7 @@
     "@swimlane/ngx-datatable": "^19.0.0",
     "core-js": "^3.6.5",
     "ionic-plugin-deeplinks": "^1.0.22",
+    "moment": "^2.29.1",
     "rxjs": "^6.6.0",
     "signature_pad": "^3.0.0-beta.4",
     "tslib": "^2.0.0",

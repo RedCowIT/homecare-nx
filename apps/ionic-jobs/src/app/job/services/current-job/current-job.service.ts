@@ -3,7 +3,7 @@ import {BehaviorSubject, combineLatest, Observable} from "rxjs";
 import {
   Appointment,
   findIndexWithId,
-  firstByKey,
+  firstByKey, Invoice,
   Job,
   JobSection,
   PreJobSection,
@@ -17,7 +17,7 @@ import {JobService} from "../job/job.service";
 import {first, map} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {QuoteSection} from "@homecare/shared";
-import {QuotesService} from "@homecare/billing";
+import {InvoicesService, QuotesService} from "@homecare/billing";
 
 
 @Injectable({
@@ -36,12 +36,15 @@ export class CurrentJobService {
 
   readonly quote$: Observable<Quote>;
 
+  readonly invoice$: Observable<Invoice>;
+
   // readonly menuItems$: Observable<ChecklistMenuItem[]>;
 
   constructor(private store: Store<JobState>,
               private jobsService: JobService,
               private appointmentsService: AppointmentsService,
               private quotesService: QuotesService,
+              private invoicesService: InvoicesService,
               private router: Router) {
 
     this.job$ = combineLatest([this.appointmentId$, this.jobsService.entityMap$]).pipe(
@@ -61,6 +64,12 @@ export class CurrentJobService {
     this.quote$ = combineLatest([this.appointmentId$, this.quotesService.entities$]).pipe(
       map(([appointmentId, quotes]) => {
         return firstByKey(quotes, 'appointmentId', appointmentId);
+      })
+    );
+
+    this.invoice$ = combineLatest([this.appointmentId$, this.invoicesService.entities$]).pipe(
+      map(([appointmentId, invoices]) => {
+        return firstByKey(invoices, 'appointmentId', appointmentId);
       })
     );
   }

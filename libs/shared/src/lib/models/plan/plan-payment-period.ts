@@ -10,3 +10,8 @@ export interface PlanPaymentPeriod {
   /** 1 for annually; 12 for monthly; */
   multiplier: number;
 }
+
+export enum PlanPaymentPeriods {
+  Monthly = 'Monthly',
+  Annual = 'Annually'
+}

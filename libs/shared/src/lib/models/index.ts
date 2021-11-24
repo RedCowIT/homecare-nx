@@ -7,3 +7,4 @@ export * from './customer';
 export * from './plan';
 export * from './product';
 export * from './quote';
+export * from './invoice';

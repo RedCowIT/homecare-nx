@@ -5,3 +5,4 @@ export * from './quote-product-detail';
 export * from './quote-item';
 export * from './quote-item-type';
 export * from './quote-section';
+export * from './quote-summary';

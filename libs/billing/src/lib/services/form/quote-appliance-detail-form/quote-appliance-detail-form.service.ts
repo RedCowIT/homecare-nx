@@ -11,14 +11,16 @@ export class QuoteApplianceDetailFormService extends EntityFormService {
 
   protected init(): void {
     this.form = this.fb.group({
-      id: undefined,
-      quoteItemId: undefined,
-      applianceTypeId: [null, Validators.required],
-      brandId: [null, Validators.required],
-      model: [null, Validators.required],
-      serialNo: [null],
-      priceRangeId: [null, Validators.required],
-      datePurchase: [null, Validators.required]
+      'appliance': this.fb.group({
+        id: undefined,
+        quoteItemId: undefined,
+        applianceTypeId: [null, Validators.required],
+        brandId: [null, Validators.required],
+        model: [null, Validators.required],
+        serialNo: [null],
+        priceRangeId: [null, Validators.required],
+        datePurchase: [null, Validators.required]
+      })
     });
   }
 }

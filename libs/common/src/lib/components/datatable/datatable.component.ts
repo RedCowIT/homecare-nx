@@ -15,7 +15,13 @@ export class DatatableComponent implements OnInit {
   footerHeight = 40;
 
   @Input()
+  rowHeight = 'auto';
+
+  @Input()
   source: TableSourceService;
+
+  @Input()
+  columnMode = ColumnMode.flex;
 
   @Output()
   selectRow = new EventEmitter<unknown>();
@@ -28,5 +34,14 @@ export class DatatableComponent implements OnInit {
 
   select(event){
     this.selectRow.emit(event.selected);
+  }
+
+  /**
+   * fix: ngrx-datatable does not stretch to 100% width on first init
+   */
+  ngAfterViewChecked() {
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 100);
   }
 }

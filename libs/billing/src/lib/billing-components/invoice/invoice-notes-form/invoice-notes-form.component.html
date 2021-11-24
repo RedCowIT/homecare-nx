@@ -1,0 +1,13 @@
+<div [formGroup]="formService.form">
+
+  <ion-item>
+    <ion-label position="stacked">Invoice notes (internal use)</ion-label>
+    <ion-textarea formControlName="notes" autoGrow="true"></ion-textarea>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Description of work for the customer service report</ion-label>
+    <ion-textarea formControlName="serviceNotes" autoGrow="true"></ion-textarea>
+  </ion-item>
+
+</div>

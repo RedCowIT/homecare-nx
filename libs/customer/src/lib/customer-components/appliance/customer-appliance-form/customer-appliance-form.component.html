@@ -1,51 +1,6 @@
 <div [formGroup]="formService.form">
 
-  <div *ngIf="applianceTypesService.entities$ | async as applianceTypes">
-    <ion-item *ngIf="applianceTypes">
-      <ion-label position="stacked">Appliance Type</ion-label>
-      <ion-select formControlName="applianceTypeId" placeholder="Select one" interface="popover">
-        <ion-select-option *ngFor="let applianceType of applianceTypes"
-                           [value]="applianceType.id">{{applianceType.description}}</ion-select-option>
-      </ion-select>
-    </ion-item>
-  </div>
-
-  <div *ngIf="usesModelLookup">
-    <div *ngIf="usesModelLookup.value; else useFreeText">
-
-        <ion-item *ngIf="manufacturers">
-          <ion-label position="stacked">Manufacturer</ion-label>
-          <ion-select formControlName="manufacturerId" placeholder="Select one" interface="popover">
-            <ion-select-option *ngFor="let manufacturer of manufacturers"
-                               [value]="manufacturer.id">{{manufacturer.description}}</ion-select-option>
-          </ion-select>
-        </ion-item>
-
-      <ion-item *ngIf="applianceModels">
-        <ion-label position="stacked">Model</ion-label>
-        <ion-select formControlName="modelId" placeholder="Select one" interface="popover">
-          <ion-select-option *ngFor="let applianceModel of applianceModels"
-                             [value]="applianceModel.id">{{applianceModel.description}}</ion-select-option>
-        </ion-select>
-      </ion-item>
-
-    </div>
-    <ng-template #useFreeText>
-      <ion-item>
-        <ion-label position="stacked">Manufacturer</ion-label>
-        <ion-input formControlName="manufacturerText"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="stacked">Model</ion-label>
-        <ion-input formControlName="modelText"></ion-input>
-      </ion-item>
-    </ng-template>
-  </div>
-
-  <ion-item>
-    <ion-label position="stacked">Serial</ion-label>
-    <ion-input formControlName="serialNo"></ion-input>
-  </ion-item>
+  <hc-appliance-form [form]="formService.form" [groupName]="'appliance'"></hc-appliance-form>
 
   <ion-item lines="none">
     <dd-entity-form-submit

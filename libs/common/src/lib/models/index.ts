@@ -4,3 +4,4 @@ export * from './button-config';
 export * from './route-button-config';
 export * from './table-data';
 export * from './boolean-value';
+export * from './select-option';

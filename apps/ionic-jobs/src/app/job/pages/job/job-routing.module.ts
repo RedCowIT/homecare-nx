@@ -18,6 +18,7 @@ import {QuoteOtherPlansComponent} from "../../job-components/quote/quote-other-p
 import {QuoteCompleteComponent} from "../../job-components/quote/quote-complete/quote-complete.component";
 import {JobInvoiceComponent} from "../../job-components/job-invoice/job-invoice.component";
 import {ProductsResolver} from "../../resolvers/products.resolver";
+import {SignOffComponent} from "../../job-components/sign-off/sign-off/sign-off.component";
 
 const routes: Routes = [
   {
@@ -103,6 +104,10 @@ const routes: Routes = [
       {
         path: 'invoice',
         component: JobInvoiceComponent,
+      },
+      {
+        path: 'sign-off',
+        component: SignOffComponent,
       }
     ]
   }

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {CurrentJobService} from "../../services/current-job/current-job.service";
+import {first} from "rxjs/operators";
+import {Invoice, Quote} from "@homecare/shared";
+import {InvoicesService} from "@homecare/billing";
 
 @Component({
   selector: 'hc-job-invoice',
@@ -7,9 +11,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JobInvoiceComponent implements OnInit {
 
-  constructor() { }
+  constructor(public currentJobService: CurrentJobService, public invoicesService: InvoicesService) { }
 
   ngOnInit(): void {
+    this.currentJobService.invoice$.pipe(
+      first()
+    ).subscribe(invoice => {
+      if (!invoice) {
+        this.invoicesService.add({
+          appointmentId: this.currentJobService.appointmentId
+        } as Invoice);
+      }
+    })
   }
 
 }

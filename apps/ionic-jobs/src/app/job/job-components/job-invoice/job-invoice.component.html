@@ -1,1 +1,58 @@
-<p>job-invoice works!</p>
+<div class="detail">
+  <div class="detail-content">
+    <div *ngIf="currentJobService.appointment$ | async as appointment">
+      <ion-card *ngIf="appointment">
+        <ion-card-header>
+          <hc-job-date-header [date]="appointment.bookingDateTime"></hc-job-date-header>
+        </ion-card-header>
+        <ion-card-content>
+
+          <div class="customer-name ion-margin-bottom bold">
+            <hc-customer-name [id]="appointment.customerId"></hc-customer-name>
+          </div>
+
+          <div class="customer-address ion-margin-bottom bold">
+            <hc-customer-address [id]="appointment.addressId"></hc-customer-address>
+          </div>
+
+          <div class="ion-margin-top">
+            <hc-job-details [id]="appointment.id"></hc-job-details>
+          </div>
+
+        </ion-card-content>
+      </ion-card>
+
+      <div *ngIf="currentJobService.invoice$ | async as invoice">
+
+        <div *ngIf="invoice">
+
+          <hc-invoice-notes-form [id]="invoice.id"></hc-invoice-notes-form>
+
+
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Invoice Items</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+
+              <div class="ion-margin-top">
+                <hc-invoice-table [invoiceId]="invoice.id"></hc-invoice-table>
+              </div>
+
+            </ion-card-content>
+          </ion-card>
+
+          <div class="ion-padding">
+            <hc-invoice-payment-form [invoiceId]="invoice.id"></hc-invoice-payment-form>
+          </div>
+
+          <div class="ion-margin-top ion-padding">
+            <ion-button (click)="save()">Save</ion-button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

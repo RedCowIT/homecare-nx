@@ -35,10 +35,15 @@ export abstract class EntityFormService {
    */
   public createDTO<T>(options?: any): Partial<T> {
 
-    return {
+    const value = {
       ...this.form.value
     };
 
+    if (options?.groupName) {
+      return value[options.groupName];
+    }
+
+    return value;
   }
 
   public setValues(values: any, options?: any): void {
@@ -46,12 +51,12 @@ export abstract class EntityFormService {
     this.form.patchValue(values);
     this.valuesSet();
 
-    if (options?.disableValid){
+    if (options?.disableValid) {
       Object.keys(values).forEach((key: string) => {
 
         // Get a reference to the control using the FormGroup.get() method
         const control = this.form.get(key);
-        if (control.valid){
+        if (control.valid) {
           control.disable();
         }
       });
@@ -64,11 +69,11 @@ export abstract class EntityFormService {
 
   protected abstract init(): void;
 
-  protected editModeSet(){
+  protected editModeSet() {
     // noop
   }
 
-  protected valuesSet(){
+  protected valuesSet() {
     // noop
   }
 }

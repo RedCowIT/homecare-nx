@@ -1,0 +1,46 @@
+<div [formGroup]="formGroup">
+
+  <div [formGroupName]="formGroupNameKey">
+
+    <!-- Optional -->
+    <dd-entity-select
+      *ngIf="!hideTypeSelect"
+      [formGroup]="formGroup"
+      [formGroupNameKey]="formGroupNameKey"
+      entityName="ApplianceType"
+      fieldName="applianceTypeId"
+    ></dd-entity-select>
+
+    <dd-entity-select
+      [formGroup]="formGroup"
+      [formGroupNameKey]="formGroupNameKey"
+      entityName="Brand"
+      fieldName="brandId"
+    ></dd-entity-select>
+
+    <ion-item>
+      <ion-label position="stacked">Model</ion-label>
+      <ion-input formControlName="model" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Serial No.</ion-label>
+      <ion-input formControlName="model" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Date Purchased*</ion-label>
+      <ion-datetime formControlName="datePurchase" displayFormat="MMMM YYYY"></ion-datetime>
+    </ion-item>
+
+    <dd-entity-select
+      [formGroup]="formGroup"
+      [formGroupNameKey]="formGroupNameKey"
+      entityName="AppliancePriceRange"
+      fieldName="priceRangeId"
+      label="Price Range"
+    ></dd-entity-select>
+
+  </div>
+
+</div>

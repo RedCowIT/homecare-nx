@@ -5,14 +5,16 @@ import {CustomerAddressComponent} from './customer-address/customer-address.comp
 import {CustomerPlanListComponent} from './customer-plan/customer-plan-list/customer-plan-list.component';
 import {IonicModule} from "@ionic/angular";
 import {CommonComponentsModule} from "../../../../common/src/lib/components/common-components.module";
-import { AddCustomerApplianceComponent } from './add-customer-appliance/add-customer-appliance.component';
+import {AddCustomerApplianceComponent} from './add-customer-appliance/add-customer-appliance.component';
 import {SharedComponentsModule} from "@homecare/shared";
-import { CustomerApplianceModalComponent } from './appliance/customer-appliance-modal/customer-appliance-modal.component';
-import { CustomerApplianceFormComponent } from './appliance/customer-appliance-form/customer-appliance-form.component';
+import {CustomerApplianceModalComponent} from './appliance/customer-appliance-modal/customer-appliance-modal.component';
+import {CustomerApplianceFormComponent} from './appliance/customer-appliance-form/customer-appliance-form.component';
 import {CustomerApplianceTableComponent} from "./appliance/customer-appliance-table/customer-appliance-table.component";
 import {IonicCommonComponentsModule} from "@homecare/ionic-common";
 import {ReactiveFormsModule} from "@angular/forms";
-import { CustomerContactFormComponent } from './customer-contact-form/customer-contact-form.component';
+import {CustomerContactFormComponent} from './customer-contact-form/customer-contact-form.component';
+import {PlanComponentsModule} from "../../../../plan/src/lib/plan-components/plan-components.module";
+import {ProductComponentsModule} from "../../../../product/src/lib/product-components/product-components.module";
 
 
 @NgModule({
@@ -26,14 +28,16 @@ import { CustomerContactFormComponent } from './customer-contact-form/customer-c
     CustomerApplianceFormComponent,
     CustomerContactFormComponent
   ],
-    imports: [
-        CommonModule,
-        IonicModule,
-        CommonComponentsModule,
-        IonicCommonComponentsModule,
-        SharedComponentsModule,
-        ReactiveFormsModule
-    ],
+  imports: [
+    CommonModule,
+    IonicModule,
+    CommonComponentsModule,
+    IonicCommonComponentsModule,
+    SharedComponentsModule,
+    ReactiveFormsModule,
+    PlanComponentsModule,
+    ProductComponentsModule
+  ],
   exports: [
     CustomerNameComponent,
     CustomerAddressComponent,
@@ -43,4 +47,5 @@ import { CustomerContactFormComponent } from './customer-contact-form/customer-c
     CustomerContactFormComponent
   ]
 })
-export class CustomerComponentsModule { }
+export class CustomerComponentsModule {
+}

@@ -27,6 +27,7 @@ import {QuoteSideNavComponent} from './quote/quote-side-nav/quote-side-nav.compo
 import {JobCustomerContactComponent} from './job-customer-contact/job-customer-contact.component';
 import {BillingComponentsModule} from "../../../../../../libs/billing/src/lib/billing-components/billing-components.module";
 import { JobInvoiceComponent } from './job-invoice/job-invoice.component';
+import { SignOffComponent } from './sign-off/sign-off/sign-off.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { JobInvoiceComponent } from './job-invoice/job-invoice.component';
     QuoteComponent,
     QuoteSideNavComponent,
     JobCustomerContactComponent,
-    JobInvoiceComponent
+    JobInvoiceComponent,
+    SignOffComponent
   ],
   imports: [
     CommonModule,

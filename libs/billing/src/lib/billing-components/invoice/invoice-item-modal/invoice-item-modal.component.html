@@ -1,0 +1,56 @@
+<div class="ion-page">
+
+  <dd-modal-header [title]="title"></dd-modal-header>
+
+  <ion-content>
+
+    <div [ngSwitch]="type" *ngIf="invoiceItemType$ | async as invoiceItemType" class="h-100">
+
+      <div *ngSwitchCase="'Service'" class="h-100">
+
+        <div *ngIf="serviceProductCategory$ | async as serviceProductCategory" class="h-100">
+
+          <hc-product-invoice-item-form *ngIf="serviceProductCategory"
+                                        [invoiceId]="invoiceId"
+                                        [categoryId]="serviceProductCategory.id"
+                                        [invoiceItemTypeId]="invoiceItemType.id"
+                                        [invoiceItemId]="invoiceItemId"
+                                        (done)="close()">
+          </hc-product-invoice-item-form>
+
+        </div>
+
+
+      </div>
+
+      <div *ngSwitchCase="'ServicePlan'" class="h-100">
+
+        <div *ngIf="servicePlanTypes$ | async as servicePlanTypes" class="h-100">
+          <hc-customer-plan-invoice-item-form
+            [invoiceId]="invoiceId"
+            [planTypes]="servicePlanTypes"
+            [invoiceItemTypeId]="invoiceItemType.id"
+            [invoiceItemId]="invoiceItemId"
+            (done)="close()"
+          ></hc-customer-plan-invoice-item-form>
+        </div>
+
+
+      </div>
+
+      <div *ngSwitchCase="'RepairPlan'" class="h-100">
+        <hc-appliance-plan-invoice-item-form
+          [invoiceId]="invoiceId"
+          [invoiceItemTypeId]="invoiceItemType.id"
+          [invoiceItemId]="invoiceItemId"
+          (done)="close()"
+        ></hc-appliance-plan-invoice-item-form>
+      </div>
+
+    </div>
+
+  </ion-content>
+</div>
+
+
+

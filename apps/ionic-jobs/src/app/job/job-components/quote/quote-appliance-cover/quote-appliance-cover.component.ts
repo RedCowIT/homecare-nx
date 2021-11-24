@@ -2,16 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable} from "rxjs";
 import {ApplianceTypesService} from "@homecare/product";
 import {first, map} from "rxjs/operators";
-import {CustomerApplianceModalComponent} from "../../../../../../../../libs/customer/src/lib/customer-components/appliance/customer-appliance-modal/customer-appliance-modal.component";
 import {ModalController} from "@ionic/angular";
 import {QuoteApplianceDetailModalComponent} from "../../../../../../../../libs/billing/src/lib/billing-components/quote/quote-appliance-detail-modal/quote-appliance-detail-modal.component";
 import {CurrentJobService} from "../../../services/current-job/current-job.service";
-import {QuoteApplianceDetailsService, QuoteItemsService} from "@homecare/billing";
-import {findByKey, firstItem, PreJobSection, QuoteSection} from "@homecare/shared";
+import {findByKey, firstItem, QuoteSection} from "@homecare/shared";
 import {QuoteManagerService} from "../../../../../../../../libs/billing/src/lib/services/quote-manager/quote-manager.service";
 import {ButtonConfig} from "@homecare/common";
 import {Router} from "@angular/router";
-import {createFooterBackButton, createFooterNextButton} from "../../../support/footer-button-factory";
+import {createFooterNextButton} from "../../../support/footer-button-factory";
 
 @Component({
   selector: 'hc-quote-appliance-cover',
@@ -54,7 +52,7 @@ export class QuoteApplianceCoverComponent implements OnInit {
           return {
             id: applianceType.id,
             label: applianceType.description,
-            icon: applianceType.appImgURL,
+            icon: applianceType.icon,
             badge: quoteApplianceDetailsMatch.length > 0 ? '&check;' : '',
             highlight: quoteApplianceDetailsMatch.length > 0 //change
           }
@@ -76,7 +74,7 @@ export class QuoteApplianceCoverComponent implements OnInit {
 
       const componentProps: any = {
         applianceTypeId,
-        quoteId: quote.id
+        quoteId: quote.id,
       };
 
       if (quoteApplianceDetails.length) {
