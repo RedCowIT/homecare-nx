@@ -24,10 +24,10 @@ export class CustomerApplianceTableService extends TableSourceService {
     this.customerId = customerId;
 
     this.columns = [
-      {prop: 'type'},
-      {prop: 'make'},
-      {prop: 'model'},
-      {prop: 'serial'}
+      {prop: 'type', flexGrow: 1},
+      {prop: 'make', flexGrow: 1},
+      {prop: 'model', flexGrow: 1},
+      {prop: 'serial', flexGrow: 1}
     ];
 
     this.rows$ = combineLatest([

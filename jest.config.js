@@ -23,5 +23,6 @@ module.exports = {
     '<rootDir>/libs/ionic-shared',
     '<rootDir>/libs/common',
     '<rootDir>/libs/ionic-common',
+    '<rootDir>/libs/document',
   ],
 };

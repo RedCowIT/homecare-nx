@@ -35,6 +35,7 @@
     "customer": { "tags": [] },
     "ionic-shared": { "tags": [] },
     "common": { "tags": [] },
-    "ionic-common": { "tags": [] }
+    "ionic-common": { "tags": [] },
+    "document": { "tags": [] }
   }
 }

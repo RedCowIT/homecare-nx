@@ -8,6 +8,7 @@ import {JobsComponent} from './jobs/jobs/jobs.component';
 import {AppointmentComponentsModule} from "@homecare/appointment";
 import { MessagesComponent } from './messages/messages/messages.component';
 import { DocsComponent } from './docs/docs/docs.component';
+import {AuthComponentsModule} from "../../auth/components/auth-components.module";
 
 
 @NgModule({
@@ -22,12 +23,13 @@ import { DocsComponent } from './docs/docs/docs.component';
         MainTabsComponent,
         MainSideNavComponent
     ],
-  imports: [
-    CommonModule,
-    IonicModule,
-    RouterModule,
-    AppointmentComponentsModule
-  ]
+    imports: [
+        CommonModule,
+        IonicModule,
+        RouterModule,
+        AppointmentComponentsModule,
+        AuthComponentsModule
+    ]
 })
 export class MainComponentsModule {
 }
