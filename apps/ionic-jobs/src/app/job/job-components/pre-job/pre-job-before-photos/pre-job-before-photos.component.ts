@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {ButtonConfig} from "@homecare/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CurrentJobService} from "../../../services/current-job/current-job.service";
 import {createFooterBackButton, createFooterNextButton} from "../../../support/footer-button-factory";
-import {PreJobSection} from "@homecare/shared";
+import {DocumentSubType, DocumentSubTypes, PreJobSection, selectFirstEntityByKey} from "@homecare/shared";
+import {DocumentsService, DocumentSubTypesService, DocumentTypesService} from "@homecare-nx/document";
 
 @Component({
   selector: 'hc-pre-job-before-photos',
@@ -15,10 +16,20 @@ export class PreJobBeforePhotosComponent implements OnInit {
 
   footerButtons$ = new BehaviorSubject<ButtonConfig[]>([]);
 
+  documentSubType$: Observable<DocumentSubType>;
+
+
+
   constructor(public route: ActivatedRoute,
               public router: Router,
-              public currentJobService: CurrentJobService) {
+              public currentJobService: CurrentJobService,
+              public documentsService: DocumentsService,
+              public documentTypesService: DocumentTypesService,
+              public documentSubTypesService: DocumentSubTypesService) {
 
+    this.documentSubType$ = selectFirstEntityByKey(this.documentSubTypesService,
+      'description',
+      DocumentSubTypes.BeforePic)
   }
 
   ngOnInit(): void {

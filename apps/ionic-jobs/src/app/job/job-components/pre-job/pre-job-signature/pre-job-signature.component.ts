@@ -4,7 +4,7 @@ import {ButtonConfig} from "@homecare/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CurrentJobService} from "../../../services/current-job/current-job.service";
 import {createFooterBackButton} from "../../../support/footer-button-factory";
-import {PreJobSection} from "@homecare/shared";
+import {PreJobSection, selectEntity} from "@homecare/shared";
 import {AppointmentVisitsService} from "@homecare/appointment";
 import {first, mergeMap} from "rxjs/operators";
 
@@ -16,6 +16,8 @@ import {first, mergeMap} from "rxjs/operators";
 export class PreJobSignatureComponent implements OnInit {
 
   footerButtons$ = new BehaviorSubject<ButtonConfig[]>([]);
+
+  showError = false;
 
   constructor(public route: ActivatedRoute,
               public router: Router,
@@ -36,14 +38,29 @@ export class PreJobSignatureComponent implements OnInit {
         slot: 'end',
         callback: async () => {
 
-          this.appointmentVisitsService.entityMap$.pipe(
-            mergeMap(appointmentVisitMap => {
-              return this.appointmentVisitsService.upsert(appointmentVisitMap[this.currentJobService.appointmentId]);
-            }),
-            first()
-          ).subscribe(async () => {
-            await this.currentJobService.completePreJobSection(PreJobSection.Signature);
-          });
+          this.showError = false;
+
+          selectEntity(this.appointmentVisitsService, this.currentJobService.appointmentId)
+            .pipe(first())
+            .subscribe(appointmentVisit => {
+
+              console.log('Signature', appointmentVisit.preInspectionSignatureJSON);
+
+              if (!appointmentVisit.preInspectionSignatureJSON) {
+                this.showError = true;
+                return;
+              }
+
+              this.appointmentVisitsService.entityMap$.pipe(
+                mergeMap(appointmentVisitMap => {
+                  return this.appointmentVisitsService.upsert(appointmentVisitMap[this.currentJobService.appointmentId]);
+                }),
+                first()
+              ).subscribe(async () => {
+                await this.currentJobService.completePreJobSection(PreJobSection.Signature);
+              });
+            });
+
         }
 
       }
@@ -51,9 +68,16 @@ export class PreJobSignatureComponent implements OnInit {
   }
 
   updateSignature(data) {
+
+    console.log('updateSignature', data);
+
     this.appointmentVisitsService.updateOneInCache({
       id: this.currentJobService.appointmentId,
       preInspectionSignatureJSON: data
     });
+
+    if (data){
+      this.showError = false;
+    }
   }
 }

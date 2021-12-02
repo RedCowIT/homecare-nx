@@ -1,1 +1,67 @@
-<p>sign-off works!</p>
+<div class="detail-with-footer">
+  <div class="detail-content" [formGroup]="formService.form">
+
+    <hc-post-job-after-photos></hc-post-job-after-photos>
+
+    <ion-card>
+      <ion-card-content>
+        <div class="ion-margin-top ion-margin-bottom">
+          <h2>How did we do?</h2>
+        </div>
+        <p>
+          The work carried out has been completed to my satisfaction and I am happy for Homecare Service Centre Limited
+          to contact me again in the future by telephone or letter.
+        </p>
+        <p>
+          Calls to and from Homecare Service Centre Ltd may be recorded for training and monitoring purposes.
+        </p>
+        <div class="ion-margin-top ion-margin-bottom">
+          <ion-item color="primary-subtle" class="ion-padding">
+            Plan customers - please note that we will telephone you on or around the date when your next service /
+            shampoo is due. However, if you would like to call us to arrange on a specific date then please call 0151
+            561 6688 / 0151 525 4777
+          </ion-item>
+        </div>
+
+        <div class="ion-margin-top ion-margin-bottom">
+          <label>How would you rate the service engineer and the work carried out today?</label>
+          <bar-rating [max]="10" [theme]="'square'" formControlName="engineerRating"></bar-rating>
+        </div>
+
+        <div class="ion-margin-top ion-margin-bottom">
+          <ion-item>
+            <ion-label position="stacked">Customer Comments</ion-label>
+            <ion-textarea formControlName="customerComments"></ion-textarea>
+          </ion-item>
+        </div>
+
+
+      </ion-card-content>
+    </ion-card>
+
+    <div class="ion-padding">
+
+      <div class="title ion-margin-top">Customer Signature</div>
+
+      <div class="ion-margin-top">
+
+        <dd-signature-pad
+          (done)="updateSignature($event)"
+          [format]="'base64'"
+        ></dd-signature-pad>
+
+      </div>
+
+      <div *ngIf="errors.length" class="ion-margin-top">
+        <ion-item color="danger">
+
+        </ion-item>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="detail-footer">
+    <ion-button>Complete Appointment</ion-button>
+  </div>
+</div>

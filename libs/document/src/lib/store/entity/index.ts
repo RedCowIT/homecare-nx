@@ -1,2 +1,2 @@
-export * from './document.entities';
 export * from './services';
+export * from './document.entities';

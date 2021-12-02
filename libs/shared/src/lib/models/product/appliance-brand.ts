@@ -1,4 +1,4 @@
-export interface Brand {
+export interface ApplianceBrand {
   id: number;
   description: string;
 }

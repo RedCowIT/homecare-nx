@@ -1,1 +1,20 @@
-<p>pre-job-shampoo-report works!</p>
+<div class="detail-with-footer">
+  <div class="detail-content">
+    <div *ngIf="currentJobService.appointment$ | async as appointment">
+      <div *ngIf="appointment" class="ion-padding">
+
+        <div class="title ion-margin-top">Shampoo pre-inspection comments (complete with customer)</div>
+
+        <div>
+
+          <hc-shampoo-report-form [appointmentId]="appointment.id"></hc-shampoo-report-form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="detail-footer">
+    <hc-job-footer [buttonConfigs$]="footerButtons$"></hc-job-footer>
+  </div>
+</div>

@@ -7,7 +7,26 @@
         </ion-card-header>
         <ion-card-content>
 
-          <div class="ion-margin-top">
+          <div *ngIf="documentSubType$ | async as documentSubType" class="ion-margin-top">
+
+            <div *ngIf="documentSubType">
+
+              <div class="ion-margin-top ion-margin-bottom">
+                <hc-document-gallery
+                  [parentId]="appointment.customerId"
+                  [subId]="appointment.id"
+                  [documentTypeId]="documentSubType.documentTypeId"
+                  [documentSubTypeId]="documentSubType.id"></hc-document-gallery>
+              </div>
+
+              <hc-document-upload
+                [parentId]="appointment.customerId"
+                [subId]="appointment.id"
+                [documentTypeId]="documentSubType.documentTypeId"
+                [documentSubTypeId]="documentSubType.id"
+              ></hc-document-upload>
+
+            </div>
 
           </div>
 

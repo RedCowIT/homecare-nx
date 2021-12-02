@@ -111,6 +111,13 @@ export class PreJobEffects {
           }
         ];
 
+        if (containsItemWithKey(callTypes, 'carpet', true)) {
+          sections.push({
+            id: PreJobSection.ShampooReport,
+            status: ChecklistItemStatus.Disabled
+          });
+        }
+
         if (containsItemWithKey(callTypes, 'vacuum', true)) {
           sections.push({
             id: PreJobSection.VacuumReport,

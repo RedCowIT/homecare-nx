@@ -3,3 +3,8 @@ export interface DocumentSubType {
   documentTypeId: number;
   description: string;
 }
+
+export enum DocumentSubTypes {
+  BeforePic = 'Before Pic',
+  AfterPic = 'After Pic'
+}

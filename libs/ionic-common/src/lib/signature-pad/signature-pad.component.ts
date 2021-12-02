@@ -15,7 +15,7 @@ export class SignaturePadComponent implements OnInit, AfterViewInit {
   @Output() pointsChange = new EventEmitter<any>();
 
   @Input() editable = true;
-  @Input() emitOnDragEnd = false;
+  @Input() emitOnDragEnd = true;
 
   @Input() penColor = 'black';
   @Input() backgroundColor = 'transparent';
@@ -132,14 +132,17 @@ export class SignaturePadComponent implements OnInit, AfterViewInit {
     switch (this.format) {
 
       case 'base64':
+        console.log('toBase64');
         this.done.emit(this.signaturePad.toDataURL());
         break;
 
       case 'json':
+        console.log('toJson');
         this.done.emit(this.signaturePad.toData());
         break;
 
       default:
+        console.log('toBlob');
         this.canvasRef.nativeElement.toBlob((blob) => {
           this.done.emit(blob);
         });

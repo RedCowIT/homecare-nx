@@ -1,12 +1,9 @@
 <div [formGroup]="formService.form" class="d-flex">
-  <div>
-    <ion-button fill="outline" color="dark" (click)="changePaymentType($event)">Change Method</ion-button>
-  </div>
   <div *ngIf="invoicePaymentType">
     <div class="label">{{invoicePaymentType.description}}</div>
     <ion-input formControlName="amount" type="number"></ion-input>
   </div>
-  <div>
+  <div class="ion-margin-top ion-margin-start">
     <dd-entity-form-submit
       [loading]="isLoading"
       [disabled]="!formService.form.valid || isLoading"
@@ -15,4 +12,8 @@
       (submitted)="submit()"
     ></dd-entity-form-submit>
   </div>
+</div>
+
+<div class="ion-margin-top">
+  <a (click)="changePaymentType($event)">Change Method</a>
 </div>

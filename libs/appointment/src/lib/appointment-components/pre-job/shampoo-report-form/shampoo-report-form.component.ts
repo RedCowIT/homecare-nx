@@ -1,15 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {EntityFormContainer} from "@homecare/entity";
+import {AppointmentVisit} from "@homecare/shared";
+import {AppointmentVisitsService} from "@homecare/appointment";
+import {ShampooReportFormService} from "../../../services/form/shampoo-report-form/shampoo-report-form.service";
 
 @Component({
   selector: 'hc-shampoo-report-form',
   templateUrl: './shampoo-report-form.component.html',
-  styleUrls: ['./shampoo-report-form.component.scss']
+  styleUrls: ['./shampoo-report-form.component.scss'],
+  providers: [ShampooReportFormService]
 })
-export class ShampooReportFormComponent implements OnInit {
+export class ShampooReportFormComponent extends EntityFormContainer<AppointmentVisit> implements OnInit {
 
-  constructor() { }
+  @Input()
+  appointmentId: number;
 
-  ngOnInit(): void {
+  constructor(public formService: ShampooReportFormService,
+              public entityService: AppointmentVisitsService) {
+    super(formService, entityService);
   }
 
+  ngOnInit() {
+    super.ngOnInit();
+    this.patchForm({appointmentId: this.appointmentId});
+  }
 }

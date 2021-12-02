@@ -19,6 +19,7 @@ import {QuoteCompleteComponent} from "../../job-components/quote/quote-complete/
 import {JobInvoiceComponent} from "../../job-components/job-invoice/job-invoice.component";
 import {ProductsResolver} from "../../resolvers/products.resolver";
 import {SignOffComponent} from "../../job-components/sign-off/sign-off/sign-off.component";
+import {PreJobShampooReportComponent} from "../../job-components/pre-job/pre-job-shampoo-report/pre-job-shampoo-report.component";
 
 const routes: Routes = [
   {
@@ -58,6 +59,10 @@ const routes: Routes = [
           {
             path: 'before-photos',
             component: PreJobBeforePhotosComponent
+          },
+          {
+            path: 'shampoo',
+            component: PreJobShampooReportComponent
           },
           {
             path: 'vacuum',

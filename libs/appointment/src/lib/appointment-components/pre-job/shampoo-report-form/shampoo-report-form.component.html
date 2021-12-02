@@ -1,1 +1,8 @@
-<p>shampoo-report-form works!</p>
+<form [formGroup]="formService.form" novalidate>
+
+  <ion-item>
+    <ion-label class="ion-text-wrap">Comments</ion-label>
+    <ion-textarea formControlName="shampooComments"></ion-textarea>
+  </ion-item>
+
+</form>

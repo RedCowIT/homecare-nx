@@ -1,3 +1,4 @@
+export * from './appliance-brands.service';
 export * from './appliance-models.service';
 export * from './appliance-price-ranges.service';
 export * from './appliance-types.service';

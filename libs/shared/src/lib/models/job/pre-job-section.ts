@@ -23,6 +23,9 @@ export const PreJobSectionMeta = {
   [PreJobSection.VacuumReport]: {
     label: 'Vacuum Report',
   },
+  [PreJobSection.ShampooReport]: {
+    label: 'Shampoo Report',
+  },
   [PreJobSection.Signature]: {
     label: 'Signature',
   }

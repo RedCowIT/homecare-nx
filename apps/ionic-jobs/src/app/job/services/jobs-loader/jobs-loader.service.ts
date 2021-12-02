@@ -4,6 +4,7 @@ import {Appointment, catchHttpError} from "@homecare/shared";
 import {CustomerAddressesService, CustomerPlansService, CustomersService} from "@homecare/customer";
 import {AppointmentCallTypesService, AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
 import {EMPTY} from "rxjs";
+import {DocumentsService} from "@homecare-nx/document";
 
 
 /**
@@ -18,7 +19,9 @@ export class JobsLoaderService {
               private customerAddressesService: CustomerAddressesService,
               private customerPlansService: CustomerPlansService,
               private appointmentCallTypesService: AppointmentCallTypesService,
-              private appointmentVisitsService: AppointmentVisitsService) {
+              private appointmentVisitsService: AppointmentVisitsService,
+              private documentsService: DocumentsService
+              ) {
   }
 
   loadAll() {
@@ -47,6 +50,11 @@ export class JobsLoaderService {
 
     this.appointmentCallTypesService.getWithQuery({
       appointmentId: `${appointment.id}`
+    });
+
+    this.documentsService.getWithQuery({
+      parentId: `${appointment.customerId}`,
+      subId: `${appointment.id}`
     });
   }
 }

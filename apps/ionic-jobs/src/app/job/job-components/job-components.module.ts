@@ -28,6 +28,9 @@ import {JobCustomerContactComponent} from './job-customer-contact/job-customer-c
 import {BillingComponentsModule} from "../../../../../../libs/billing/src/lib/billing-components/billing-components.module";
 import { JobInvoiceComponent } from './job-invoice/job-invoice.component';
 import { SignOffComponent } from './sign-off/sign-off/sign-off.component';
+import {DocumentComponentsModule} from "../../../../../../libs/document/src/lib/document-components/document-components.module";
+import { PostJobAfterPhotosComponent } from './sign-off/post-job-after-photos/post-job-after-photos.component';
+import {BarRatingModule} from "ngx-bar-rating";
 
 @NgModule({
   declarations: [
@@ -51,19 +54,22 @@ import { SignOffComponent } from './sign-off/sign-off/sign-off.component';
     QuoteSideNavComponent,
     JobCustomerContactComponent,
     JobInvoiceComponent,
-    SignOffComponent
+    SignOffComponent,
+    PostJobAfterPhotosComponent
   ],
-  imports: [
-    CommonModule,
-    IonicModule,
-    AppointmentComponentsModule,
-    CustomerComponentsModule,
-    BillingComponentsModule,
-    IonicCommonComponentsModule,
-    RouterModule,
-    ReactiveFormsModule,
-    SignaturePadModule
-  ],
+    imports: [
+        CommonModule,
+        IonicModule,
+        AppointmentComponentsModule,
+        CustomerComponentsModule,
+        BillingComponentsModule,
+        IonicCommonComponentsModule,
+        RouterModule,
+        ReactiveFormsModule,
+        SignaturePadModule,
+        DocumentComponentsModule,
+        BarRatingModule
+    ],
   exports: [
     JobSideNavComponent,
     JobFooterComponent

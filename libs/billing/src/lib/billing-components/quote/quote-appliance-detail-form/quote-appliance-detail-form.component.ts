@@ -1,9 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EntityFormContainer} from "@homecare/entity";
 import {firstItem, QuoteApplianceDetail, QuoteItem, QuoteItemTypes, selectEntityByKey} from "@homecare/shared";
-import {AppliancePriceRangesService, ApplianceTypesService} from "@homecare/product";
+import {ApplianceBrandsService, AppliancePriceRangesService, ApplianceTypesService} from "@homecare/product";
 import {QuoteApplianceDetailsService} from "../../../store/entity/services/quote/quote-appliance-details/quote-appliance-details.service";
-import {BrandsService} from "../../../../../../product/src/lib/store/entity/services/brands/brands.service";
 
 import {DateService} from "@homecare/common";
 import {QuoteItemsService} from "../../../store/entity/services/quote/quote-items/quote-items.service";
@@ -33,7 +32,7 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
               public entityService: QuoteApplianceDetailsService,
               public appliancePriceRangesService: AppliancePriceRangesService,
               public applianceTypesService: ApplianceTypesService,
-              public brandsService: BrandsService,
+              public applianceBrandsService: ApplianceBrandsService,
               public quoteItemService: QuoteItemsService,
               public quoteItemTypesService: QuoteItemTypesService,
               public dateService: DateService) {

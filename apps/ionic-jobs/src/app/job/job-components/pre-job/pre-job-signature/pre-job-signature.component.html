@@ -3,17 +3,21 @@
     <div *ngIf="currentJobService.appointment$ | async as appointment">
       <div *ngIf="appointment" class="ion-padding">
 
-        <div class="title ion-margin-top">Vacuum pre-inspection (complete with customer)</div>
+        <div class="title ion-margin-top">Customer Signature</div>
 
         <div class="ion-margin-top">
 
-          <div class="label ion-margin-bottom">Customer Signature</div>
-
           <dd-signature-pad
-            (pointsChange)="updateSignature($event)"
-            [format]="'json'"
+            (done)="updateSignature($event)"
+            [format]="'base64'"
           ></dd-signature-pad>
 
+        </div>
+
+        <div *ngIf="showError" class="ion-margin-top">
+          <ion-item color="danger">
+            Signature required
+          </ion-item>
         </div>
 
       </div>

@@ -9,6 +9,7 @@ import {customerEntityMetadata} from "@homecare/customer";
 import {PlanEntity, planEntityMetadata} from "@homecare/plan";
 import {ProductEntity, productEntityMetadata} from "@homecare/product";
 import {BillingEntity, billingEntityMetadata} from "@homecare/billing";
+import {DocumentEntity, documentEntityMetadata} from "@homecare-nx/document";
 
 /**
  * Registers NGRX metadata before anything else
@@ -27,7 +28,8 @@ export class EntityInitService implements AppInitHandler {
     billingEntityMetadata,
     customerEntityMetadata,
     planEntityMetadata,
-    productEntityMetadata
+    productEntityMetadata,
+    documentEntityMetadata
   ];
 
   /**
@@ -46,11 +48,13 @@ export class EntityInitService implements AppInitHandler {
     PlanEntity.Plan,
     ProductEntity.AppliancePriceRange,
     ProductEntity.ApplianceType,
-    ProductEntity.Brand,
+    ProductEntity.ApplianceBrand,
     ProductEntity.CommercialProduct,
     ProductEntity.Manufacturer,
     ProductEntity.ApplianceModel,
     ProductEntity.ProductCategory,
+    DocumentEntity.DocumentType,
+    DocumentEntity.DocumentSubType
   ];
 
   constructor(private entityDefinitionService: EntityDefinitionService,

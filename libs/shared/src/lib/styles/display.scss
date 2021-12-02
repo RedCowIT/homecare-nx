@@ -6,3 +6,7 @@
   @extend .d-flex;
   flex-direction: column;
 }
+
+.object-cover {
+  object-fit: cover;
+}

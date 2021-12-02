@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import {EntityFormService} from "@homecare/entity";
 import {FormBuilder, Validators} from "@angular/forms";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ShampooReportFormService extends EntityFormService {
 
   constructor(protected fb: FormBuilder) {
@@ -14,7 +12,8 @@ export class ShampooReportFormService extends EntityFormService {
   protected init(): void {
     this.form = this.fb.group({
       id: undefined,
-      appointmentId: [null, Validators.required]
+      appointmentId: [null, Validators.required],
+      shampooComments: [null, Validators.required]
     });
   }
 

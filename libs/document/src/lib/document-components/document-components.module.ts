@@ -1,12 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DocumentUploadComponent } from './document-upload/document-upload.component';
+import { DocumentGalleryComponent } from './document-gallery/document-gallery.component';
+import { DocumentThumbnailComponent } from './document-thumbnail/document-thumbnail.component';
+import {IonicModule} from "@ionic/angular";
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    DocumentUploadComponent,
+    DocumentGalleryComponent,
+    DocumentThumbnailComponent
+  ],
   imports: [
-    CommonModule
+    CommonModule,
+    IonicModule
+  ],
+  exports: [
+    DocumentUploadComponent,
+    DocumentGalleryComponent
   ]
 })
 export class DocumentComponentsModule { }
