@@ -15,7 +15,10 @@ export class DatatableComponent implements OnInit {
   footerHeight = 40;
 
   @Input()
-  rowHeight = 'auto';
+  headerHeight:any = 'auto';
+
+  @Input()
+  rowHeight:any = 'auto';
 
   @Input()
   source: TableSourceService;

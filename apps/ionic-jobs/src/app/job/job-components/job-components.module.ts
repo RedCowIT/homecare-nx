@@ -31,6 +31,8 @@ import { SignOffComponent } from './sign-off/sign-off/sign-off.component';
 import {DocumentComponentsModule} from "../../../../../../libs/document/src/lib/document-components/document-components.module";
 import { PostJobAfterPhotosComponent } from './sign-off/post-job-after-photos/post-job-after-photos.component';
 import {BarRatingModule} from "ngx-bar-rating";
+import { PreJobPoliciesComponent } from './pre-job/pre-job-policies/pre-job-policies.component';
+import { JobPaymentComponent } from './job-payment/job-payment.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,9 @@ import {BarRatingModule} from "ngx-bar-rating";
     JobCustomerContactComponent,
     JobInvoiceComponent,
     SignOffComponent,
-    PostJobAfterPhotosComponent
+    PostJobAfterPhotosComponent,
+    PreJobPoliciesComponent,
+    JobPaymentComponent
   ],
     imports: [
         CommonModule,

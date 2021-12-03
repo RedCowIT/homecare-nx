@@ -1,15 +1,16 @@
 <div class="detail-with-footer">
   <div class="detail-content">
     <div *ngIf="currentJobService.appointment$ | async as appointment">
-      <div *ngIf="appointment" class="ion-padding">
+      <div *ngIf="appointment">
 
-        <div class="title ion-margin-top">Shampoo pre-inspection comments (complete with customer)</div>
-
-        <div>
-
-          <hc-shampoo-report-form [appointmentId]="appointment.id"></hc-shampoo-report-form>
-
-        </div>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Shampoo pre-inspection (complete with customer)</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <hc-shampoo-report-form [appointmentId]="appointment.id"></hc-shampoo-report-form>
+          </ion-card-content>
+        </ion-card>
 
       </div>
     </div>

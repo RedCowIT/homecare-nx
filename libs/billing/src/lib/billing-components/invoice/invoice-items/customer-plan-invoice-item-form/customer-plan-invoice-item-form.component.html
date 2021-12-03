@@ -1,58 +1,64 @@
-<div [formGroup]="formService.form">
+<div class="content-with-action-footer">
 
-  <div [formGroupName]="'customerPlan'">
+  <div class="content">
 
-    <div *ngIf="plans$ | async as plans">
-      <ion-item *ngIf="plans">
-        <ion-label position="stacked">Plan</ion-label>
-        <ion-select formControlName="planId" placeholder="Select one" interface="action-sheet">
-          <ion-select-option *ngFor="let plan of plans"
-                             [value]="plan.id">{{plan.description}}</ion-select-option>
-        </ion-select>
-      </ion-item>
+    <div [formGroup]="formService.form">
+
+      <div [formGroupName]="'customerPlan'">
+
+        <div *ngIf="plans$ | async as plans">
+          <ion-item *ngIf="plans">
+            <ion-label position="stacked">Plan</ion-label>
+            <ion-select formControlName="planId" placeholder="Select one" interface="action-sheet">
+              <ion-select-option *ngFor="let plan of plans"
+                                 [value]="plan.id">{{plan.description}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <ion-item>
+          <ion-label position="stacked">Start Date</ion-label>
+          <ion-input formControlName="startDate" readonly></ion-input>
+        </ion-item>
+
+      </div>
+
+      <div [formGroupName]="'invoiceItem'">
+        <ion-item>
+          <ion-label position="stacked">Quantity</ion-label>
+          <ion-input formControlName="qty" type="number"></ion-input>
+        </ion-item>
+      </div>
+
+      <div formGroupName="customerPlan">
+
+        <hc-plan-payment-period-select [formGroup]="formService.form" [formGroupNameValue]="'customerPlan'"></hc-plan-payment-period-select>
+
+        <ion-item>
+          <ion-label position="stacked">Period Price</ion-label>
+          <ion-input formControlName="periodPrice" type="number"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Upgrade</ion-label>
+          <ion-toggle formControlName="upgrade"></ion-toggle>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-label position="stacked">Notes</ion-label>
+          <ion-textarea formControlName="notes" placeholder="What does this plan cover?"></ion-textarea>
+        </ion-item>
+
+      </div>
+
     </div>
 
-    <ion-item>
-      <ion-label position="stacked">Start Date</ion-label>
-      <ion-input formControlName="startDate" readonly></ion-input>
-    </ion-item>
-
   </div>
 
-  <div [formGroupName]="'invoiceItem'">
-    <ion-item>
-      <ion-label position="stacked">Quantity</ion-label>
-      <ion-input formControlName="qty" type="number"></ion-input>
-    </ion-item>
-  </div>
-
-  <div formGroupName="customerPlan">
-
-    <hc-plan-payment-period-select [formGroup]="formService.form" [formGroupNameValue]="'customerPlan'"></hc-plan-payment-period-select>
-
-    <ion-item>
-      <ion-label position="stacked">Period Price</ion-label>
-      <ion-input formControlName="periodPrice" type="number"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">Upgrade</ion-label>
-      <ion-toggle formControlName="upgrade"></ion-toggle>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">Notes</ion-label>
-      <ion-textarea formControlName="notes" placeholder="What does this plan cover?"></ion-textarea>
-    </ion-item>
-
-  </div>
-
-  <ion-item lines="none">
-
+  <div class="action-footer">
     <ion-button color="primary" size="default" (click)="save()" [disabled]="isLoading">
       Save
     </ion-button>
-
-  </ion-item>
-
+  </div>
 </div>
+

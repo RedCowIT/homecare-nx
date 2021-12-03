@@ -8,7 +8,9 @@ export function createFooterBackButton(
   return {
     label,
     slot,
-    callback
+    callback,
+    color: 'dark',
+    fill: 'outline'
   }
 }
 

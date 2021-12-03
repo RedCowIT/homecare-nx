@@ -2,19 +2,28 @@
   <div *ngIf="buttonConfigSlots" class="footer-wrap ion-padding">
 
     <div *ngIf="buttonConfigSlots.start?.length" class="footer-start">
-      <ion-button *ngFor="let button of buttonConfigSlots.start" (click)="button.callback()">
+      <ion-button *ngFor="let button of buttonConfigSlots.start"
+                  [color]="button.color"
+                  [fill]="button.fill"
+                  (click)="button.callback()">
         {{button.label}}
       </ion-button>
     </div>
 
     <div *ngIf="buttonConfigSlots.center?.length"  class="footer-center">
-      <ion-button *ngFor="let button of buttonConfigSlots.center" (click)="button.callback()">
+      <ion-button *ngFor="let button of buttonConfigSlots.center"
+                  [color]="button.color"
+                  [fill]="button.fill"
+                  (click)="button.callback()">
         {{button.label}}
       </ion-button>
     </div>
 
     <div *ngIf="buttonConfigSlots.end?.length" class="footer-end">
-      <ion-button *ngFor="let button of buttonConfigSlots.end" (click)="button.callback()">
+      <ion-button *ngFor="let button of buttonConfigSlots.end"
+                  [color]="button.color"
+                  [fill]="button.fill"
+                  (click)="button.callback()">
         {{button.label}}
       </ion-button>
     </div>

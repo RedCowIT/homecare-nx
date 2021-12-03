@@ -4,6 +4,7 @@
   --action-footer-padding-start: 15px;
   --action-footer-padding-end: 15px;
   --action-footer-bg: rgba(0,0,0,0.04);
+  //--action-footer-bg: var(--ion-color-secondary);
 
   position: relative;
   height: 100%;
@@ -22,5 +23,6 @@
     background: var(--action-footer-bg);
     display: flex;
     align-items: center;
+    justify-content: end;
   }
 }

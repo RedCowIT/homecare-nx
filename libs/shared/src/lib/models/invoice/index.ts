@@ -4,3 +4,4 @@ export * from './invoice-item-type';
 export * from './invoice-summary';
 export * from './invoice-payment';
 export * from './invoice-payment-type';
+export * from './invoice-status';

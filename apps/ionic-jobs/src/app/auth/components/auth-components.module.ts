@@ -1,21 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserNameComponent } from './user-name/user-name.component';
-import { LogoutComponent } from './logout/logout.component';
+import { LogoutButtonComponent } from './logout-button/logout-button.component';
+import {IonicModule} from "@ionic/angular";
 
 
 
 @NgModule({
   declarations: [
     UserNameComponent,
-    LogoutComponent
+    LogoutButtonComponent,
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    IonicModule
   ],
   exports: [
     UserNameComponent,
-    LogoutComponent
+    LogoutButtonComponent
   ]
 })
 export class AuthComponentsModule { }

@@ -21,6 +21,14 @@ export class QuoteSummaryService {
     this.quoteSummary$ = this.quoteItemsService.entitiesByQuoteId(quoteId).pipe(
       map(quoteItems => {
 console.log('calculating quote summary', quoteItems);
+
+      if (!quoteItems || quoteItems.length === 0){
+        return {
+          quoteId,
+          gross: 0
+        }
+      }
+
         const gross = quoteItems.map(quoteItem => quoteItem.quote * quoteItem.qty)
           .reduce((previousValue, currentValue) => previousValue + currentValue);
 

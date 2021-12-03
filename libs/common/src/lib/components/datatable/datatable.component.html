@@ -1,7 +1,7 @@
 <div *ngIf="source.rows$ | async as rows">
   <ngx-datatable *ngIf="rows"
     class="material"
-    [headerHeight]="40"
+    [headerHeight]="headerHeight"
     [footerHeight]="footerHeight"
     [rowHeight]="rowHeight"
     [rows]="rows"

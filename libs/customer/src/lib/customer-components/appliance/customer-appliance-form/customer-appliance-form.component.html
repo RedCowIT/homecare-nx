@@ -1,15 +1,18 @@
-<div [formGroup]="formService.form">
+<div class="content-with-action-footer">
 
-  <hc-appliance-form [form]="formService.form" [groupName]="'appliance'"></hc-appliance-form>
+  <div class="content">
+    <div [formGroup]="formService.form">
 
-  <ion-item lines="none">
+      <hc-appliance-form [form]="formService.form" [groupName]="'appliance'"></hc-appliance-form>
+
+    </div>
+  </div>
+  <div class="action-footer">
     <dd-entity-form-submit
       [loading]="isLoading"
       [disabled]="!formService.form.valid || isLoading"
       label="Save"
       (submitted)="submit()"
     ></dd-entity-form-submit>
-  </ion-item>
-
-
+  </div>
 </div>

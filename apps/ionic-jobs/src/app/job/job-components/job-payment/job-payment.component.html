@@ -1,0 +1,26 @@
+<div class="detail ion-padding">
+  <div class="detail-content">
+
+    <div *ngIf="customer$ | async as customer">
+      <div class="customer-name">{{customer.name}}</div>
+      <div class="customer-number">No. {{customer.id}}</div>
+    </div>
+
+
+    <div *ngIf="currentJobService.invoice$ | async as invoice">
+
+      <div class="">
+        <hc-invoice-list-table [appointmentId]="invoice.appointmentId"></hc-invoice-list-table>
+      </div>
+
+      <div class="card-payment">
+        <ion-button (click)="makePayment()">
+          Make Payment
+          <ion-icon name="card" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+
+    </div>
+
+  </div>
+</div>

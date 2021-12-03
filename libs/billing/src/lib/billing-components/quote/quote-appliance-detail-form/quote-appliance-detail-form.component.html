@@ -1,16 +1,25 @@
-<div [formGroup]="formService.form">
+<div class="content-with-action-footer">
 
-  <hc-appliance-plan-form
-    [hideTypeSelect]="true"
-    [formGroup]="formService.form"
-    [formGroupNameKey]="'appliance'"
-  ></hc-appliance-plan-form>
+  <div class="content">
 
-  <dd-entity-form-submit
-    [loading]="isLoading"
-    [disabled]="!formService.form.valid || isLoading"
-    label="Save"
-    (submitted)="submit()"
-  ></dd-entity-form-submit>
+    <div [formGroup]="formService.form">
+
+      <hc-appliance-plan-form
+        [hideTypeSelect]="true"
+        [formGroup]="formService.form"
+        [formGroupNameKey]="'appliance'"
+      ></hc-appliance-plan-form>
+
+    </div>
+
+  </div>
+  <div class="action-footer">
+    <dd-entity-form-submit
+      [loading]="isLoading"
+      [disabled]="!formService.form.valid || isLoading"
+      label="Save"
+      (submitted)="submit()"
+    ></dd-entity-form-submit>
+  </div>
 
 </div>

@@ -1,0 +1,11 @@
+<ion-item
+  [detail]="true"
+  [detailIcon]="expanded ? 'chevron-down' : 'chevron-forward'"
+  (click)="expanded = !expanded"
+>
+  {{title}}
+</ion-item>
+
+<div *ngIf="expanded" class="content ion-padding ion-margin" [innerHTML]="content">
+
+</div>

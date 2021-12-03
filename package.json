@@ -47,7 +47,7 @@
     "@angular/platform-browser": "~11.2.0",
     "@angular/platform-browser-dynamic": "~11.2.0",
     "@angular/router": "~11.2.0",
-    "@auth0/auth0-spa-js": "^1.14.0",
+    "@auth0/auth0-spa-js": "^1.19.3",
     "@capacitor/core": "~2.4.5",
     "@homecare-nx/xplat-ionic-scss": "file:libs/xplat/ionic/scss/src",
     "@homecare-nx/xplat-scss": "file:libs/xplat/scss/src",

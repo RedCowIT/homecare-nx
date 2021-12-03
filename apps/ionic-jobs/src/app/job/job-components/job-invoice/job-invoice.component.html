@@ -1,17 +1,20 @@
-<div class="detail">
+<div class="detail-with-footer">
   <div class="detail-content">
+
     <div *ngIf="currentJobService.appointment$ | async as appointment">
       <ion-card *ngIf="appointment">
-        <ion-card-header>
-          <hc-job-date-header [date]="appointment.bookingDateTime"></hc-job-date-header>
+        <ion-card-header class="ion-no-padding ion-margin-top">
+          <ion-title>
+            Invoice
+          </ion-title>
         </ion-card-header>
         <ion-card-content>
 
-          <div class="customer-name ion-margin-bottom bold">
-            <hc-customer-name [id]="appointment.customerId"></hc-customer-name>
+          <div class="ion-padding-start ion-margin-top">
+            Date: {{appointment.bookingDateTime | date:'dd-M-YYYY'}}
           </div>
-
-          <div class="customer-address ion-margin-bottom bold">
+          <div class="customer-name ion-padding-start ion-margin-bottom ion-margin-top bold">
+            <hc-customer-name [id]="appointment.customerId"></hc-customer-name>
             <hc-customer-address [id]="appointment.addressId"></hc-customer-address>
           </div>
 
@@ -26,33 +29,36 @@
 
         <div *ngIf="invoice">
 
-          <hc-invoice-notes-form [id]="invoice.id"></hc-invoice-notes-form>
-
+          <ion-card>
+            <ion-card-content>
+              <hc-invoice-notes-form [id]="invoice.id"></hc-invoice-notes-form>
+            </ion-card-content>
+          </ion-card>
 
           <ion-card>
-            <ion-card-header>
-              <ion-card-title>Invoice Items</ion-card-title>
-            </ion-card-header>
+
             <ion-card-content>
 
-              <div class="ion-margin-top">
+              <div>
                 <hc-invoice-table [invoiceId]="invoice.id"></hc-invoice-table>
               </div>
 
             </ion-card-content>
           </ion-card>
 
-          <div class="ion-padding">
-            <hc-invoice-payment-form [invoiceId]="invoice.id"></hc-invoice-payment-form>
-          </div>
+          <ion-card>
 
-          <div class="ion-margin-top ion-padding">
-            <ion-button (click)="save()">Save</ion-button>
-          </div>
+            <ion-card-content>
+              <hc-invoice-payment-form [invoiceId]="invoice.id"></hc-invoice-payment-form>
+            </ion-card-content>
+          </ion-card>
 
         </div>
 
       </div>
     </div>
+  </div>
+  <div class="detail-footer">
+    <hc-job-footer [buttonConfigs$]="footerButtons$"></hc-job-footer>
   </div>
 </div>

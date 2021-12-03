@@ -7,6 +7,8 @@
   width:100%;
   align-content: center;
   align-items:center;
+  background: var(--ion-color-secondary);
+  color: white;
 }
 
 .modal-title {
@@ -17,7 +19,8 @@
 
 .modal-close {
   ion-button.clear {
-    --color: var(--ion-color-medium);
+    //--color: var(--ion-color-medium);
+    color: white;
   }
 }
 

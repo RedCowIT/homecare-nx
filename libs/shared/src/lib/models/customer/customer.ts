@@ -10,3 +10,11 @@ export interface Customer {
   DOB: string;
   DDReference: string;
 }
+
+export function getCustomerEmail(customer: Customer): string {
+  return customer.email1 ? customer.email1 : customer.email2;
+}
+
+export function getCustomerPhone(customer: Customer): string {
+  return customer.phone1 ? customer.phone1 : customer.phone2;
+}

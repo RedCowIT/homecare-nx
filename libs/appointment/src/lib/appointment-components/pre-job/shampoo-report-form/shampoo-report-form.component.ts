@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EntityFormContainer} from "@homecare/entity";
 import {AppointmentVisit} from "@homecare/shared";
-import {AppointmentVisitsService} from "@homecare/appointment";
+import {AppointmentVisitsService} from "../../../store/entity/services/appointment-visits/appointment-visits.service";
 import {ShampooReportFormService} from "../../../services/form/shampoo-report-form/shampoo-report-form.service";
 
 @Component({

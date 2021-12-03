@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Auth0Service} from "@homecare/auth0";
 
 @Component({
-  selector: 'ew-logout',
+  selector: 'hc-logout',
   templateUrl: './logout.page.html',
   styleUrls: ['./logout.page.css'],
 })

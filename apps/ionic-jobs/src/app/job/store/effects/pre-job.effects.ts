@@ -8,7 +8,8 @@ import {
   findById,
   findByKey,
   findIndexWithId,
-  firstItem, JobSection,
+  firstItem,
+  JobSection,
   PreJobReport,
   PreJobSection,
   PreJobSectionStatus
@@ -124,6 +125,11 @@ export class PreJobEffects {
             status: ChecklistItemStatus.Disabled
           });
         }
+
+        sections.push({
+          id: PreJobSection.Policies,
+          status: ChecklistItemStatus.Disabled
+        });
 
         sections.push({
           id: PreJobSection.Signature,

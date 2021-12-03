@@ -1,39 +1,48 @@
-<div [formGroup]="formService.form">
+<div class="content-with-action-footer">
+  <div class="content">
 
-  <div *ngIf="plans$ | async as plans">
-    <ion-item *ngIf="plans">
-      <ion-label position="stacked">Plan*</ion-label>
-      <ion-select formControlName="planId" placeholder="Select one" interface="popover">
-        <ion-select-option *ngFor="let plan of plans"
-                           [value]="plan.id">{{plan.description}}</ion-select-option>
-      </ion-select>
-    </ion-item>
+    <div [formGroup]="formService.form">
+
+      <div *ngIf="plans$ | async as plans">
+        <ion-item *ngIf="plans">
+          <ion-label position="stacked">Plan*</ion-label>
+          <ion-select formControlName="planId" placeholder="Select one" interface="popover">
+            <ion-select-option *ngFor="let plan of plans"
+                               [value]="plan.id">{{plan.description}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <ion-item>
+        <ion-label position="stacked">Start Date*</ion-label>
+        <ion-datetime formControlName="startDate" displayFormat="MMMM YYYY"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Period Price</ion-label>
+        <ion-input formControlName="periodPrice"></ion-input>
+      </ion-item>
+
+      <div *ngIf="planPaymentPeriodsService.entities$ | async as planPaymentPeriods">
+        <ion-item *ngIf="planPaymentPeriods">
+          <ion-label position="stacked">Payment Period*</ion-label>
+          <ion-select formControlName="planPaymentPeriodId" placeholder="Select one" interface="popover">
+            <ion-select-option *ngFor="let planPaymentPeriod of planPaymentPeriods"
+                               [value]="planPaymentPeriod.id">{{planPaymentPeriod.description}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+    </div>
+
   </div>
-
-  <ion-item>
-    <ion-label position="stacked">Start Date*</ion-label>
-    <ion-datetime formControlName="startDate" displayFormat="MMMM YYYY"></ion-datetime>
-  </ion-item>
-
-  <ion-item>
-    <ion-label position="stacked">Period Price</ion-label>
-    <ion-input formControlName="periodPrice"></ion-input>
-  </ion-item>
-
-  <div *ngIf="planPaymentPeriodsService.entities$ | async as planPaymentPeriods">
-    <ion-item *ngIf="planPaymentPeriods">
-      <ion-label position="stacked">Payment Period*</ion-label>
-      <ion-select formControlName="planPaymentPeriodId" placeholder="Select one" interface="popover">
-        <ion-select-option *ngFor="let planPaymentPeriod of planPaymentPeriods"
-                           [value]="planPaymentPeriod.id">{{planPaymentPeriod.description}}</ion-select-option>
-      </ion-select>
-    </ion-item>
+  <div class="action-footer">
+    <dd-entity-form-submit
+      [loading]="isLoading"
+      [disabled]="!formService.form.valid || isLoading"
+      label="Save"
+      (submitted)="submit()"
+    ></dd-entity-form-submit>
   </div>
-
-  <dd-entity-form-submit
-    [loading]="isLoading"
-    [disabled]="!formService.form.valid || isLoading"
-    label="Save"
-    (submitted)="submit()"
-  ></dd-entity-form-submit>
 </div>
+

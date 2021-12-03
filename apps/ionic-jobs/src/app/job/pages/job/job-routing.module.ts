@@ -20,6 +20,8 @@ import {JobInvoiceComponent} from "../../job-components/job-invoice/job-invoice.
 import {ProductsResolver} from "../../resolvers/products.resolver";
 import {SignOffComponent} from "../../job-components/sign-off/sign-off/sign-off.component";
 import {PreJobShampooReportComponent} from "../../job-components/pre-job/pre-job-shampoo-report/pre-job-shampoo-report.component";
+import {PreJobPoliciesComponent} from "../../job-components/pre-job/pre-job-policies/pre-job-policies.component";
+import {JobPaymentComponent} from "../../job-components/job-payment/job-payment.component";
 
 const routes: Routes = [
   {
@@ -69,6 +71,10 @@ const routes: Routes = [
             component: PreJobVacuumReportComponent
           },
           {
+            path: 'policies',
+            component: PreJobPoliciesComponent
+          },
+          {
             path: 'signature',
             component: PreJobSignatureComponent
           }
@@ -109,6 +115,10 @@ const routes: Routes = [
       {
         path: 'invoice',
         component: JobInvoiceComponent,
+      },
+      {
+        path: 'payment',
+        component: JobPaymentComponent,
       },
       {
         path: 'sign-off',

@@ -1,8 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {DocumentsService} from "../../store/entity/services/documents/documents.service";
-import {map} from "rxjs/operators";
-import {Document} from "@homecare/shared";
+import {first, map} from "rxjs/operators";
+import {Document, InvoicePaymentTypes} from "@homecare/shared";
+import {PopoverController} from "@ionic/angular";
+import {PopoverSelectComponent} from "../../../../../ionic-common/src/lib/components/popover-select/popover-select.component";
 
 @Component({
   selector: 'hc-document-gallery',
@@ -25,7 +27,8 @@ export class DocumentGalleryComponent implements OnInit {
 
   documents$: Observable<Document[]>;
 
-  constructor(public documentsService: DocumentsService) {
+  constructor(public documentsService: DocumentsService,
+              public popoverCtrl: PopoverController) {
   }
 
   ngOnInit(): void {
@@ -33,7 +36,6 @@ export class DocumentGalleryComponent implements OnInit {
     this.documents$ = this.documentsService.entities$.pipe(
       map(documents => {
         return documents.filter(document => {
-
 
 
           const keep = document.parentId == this.parentId &&
@@ -51,4 +53,33 @@ export class DocumentGalleryComponent implements OnInit {
 
   }
 
+  async select($event, document: Document) {
+    const popover = await this.popoverCtrl.create({
+      component: PopoverSelectComponent,
+      componentProps: {
+        options: [
+          {
+            label: 'Delete Document', value: 'delete'
+          }
+        ]
+      },
+      event: $event
+    });
+
+    popover.onWillDismiss().then(
+      (data: any) => {
+        console.log('onWillDismiss', data.data);
+        // this.openModal(data.data.option);
+
+        if (data?.data?.option?.value === 'delete'){
+          this.documentsService.delete({id: document.id} as Document).pipe(
+            first()
+          ).subscribe();
+        }
+
+      }
+    );
+
+    await popover.present();
+  }
 }

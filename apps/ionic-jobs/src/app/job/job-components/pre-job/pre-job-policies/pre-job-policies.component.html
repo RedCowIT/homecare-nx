@@ -1,0 +1,19 @@
+<div class="detail-with-footer">
+  <div class="detail-content">
+    <div *ngIf="policyItems$ | async as policyItems">
+
+      <ion-card *ngIf="policyItems">
+        <ion-card-header>
+          <ion-card-title>Policies</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <dd-accordion *ngIf="policyItems" [items]="policyItems"></dd-accordion>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+  </div>
+  <div class="detail-footer">
+    <hc-job-footer [buttonConfigs$]="footerButtons$"></hc-job-footer>
+  </div>
+</div>

@@ -1,14 +1,24 @@
 <div class="ion-page">
   <dd-modal-header [title]="'Add Product'"></dd-modal-header>
-  <ion-content class="ion-padding">
-    <div *ngIf="product$ | async as product">
-      <div *ngIf="product">
-        Add {{product.description}} for £{{product.defaultPrice}}?
+  <ion-content>
+
+    <div class="content-with-action-footer">
+
+      <div class="content">
+        <div *ngIf="product$ | async as product">
+          <div *ngIf="product" class="ion-padding">
+            Add {{product.description}} for £{{product.defaultPrice}}?
+          </div>
+        </div>
       </div>
-      <div class="ion-padding-top">
+
+      <div class="action-footer">
         <ion-button (click)="addProduct()">Yes</ion-button>
       </div>
+
     </div>
+
+
   </ion-content>
 </div>
 

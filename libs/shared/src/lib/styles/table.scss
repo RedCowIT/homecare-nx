@@ -1,0 +1,35 @@
+@import '~@swimlane/ngx-datatable/index.css';
+@import '~@swimlane/ngx-datatable/themes/material.scss';
+@import '~@swimlane/ngx-datatable/assets/icons.css';
+
+.ngx-datatable.material {
+  box-shadow: none;
+
+  .datatable-body-row {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  &.single-selection,
+  &.multi-selection,
+  &.multi-click-selection {
+    .datatable-body-row {
+      &.active,
+      &.active .datatable-row-group {
+        background-color: inherit;
+        color: inherit;
+      }
+
+      &.active:hover,
+      &.active:hover .datatable-row-group {
+        background-color: inherit;
+        color: inherit;
+      }
+
+      &.active:focus,
+      &.active:focus .datatable-row-group {
+        background-color: inherit;
+        color: inherit;
+      }
+    }
+  }
+}

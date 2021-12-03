@@ -23,6 +23,9 @@ import {PlanComponentsModule} from "../../../../plan/src/lib/plan-components/pla
 import { AppliancePlanInvoiceItemFormComponent } from './invoice/invoice-items/appliance-plan-invoice-item-form/appliance-plan-invoice-item-form.component';
 import { CustomerPlanInvoiceItemBaseComponent } from './invoice/invoice-items/customer-plan-invoice-item-base/customer-plan-invoice-item-base.component';
 import { InvoicePaymentFormComponent } from './invoice/invoice-payment-form/invoice-payment-form.component';
+import { GlobalPaymentRequestFormComponent } from './payment/global-payment-request-form/global-payment-request-form.component';
+import { GlobalPaymentModalComponent } from './payment/global-payment-modal/global-payment-modal.component';
+import { InvoiceListTableComponent } from './invoice/invoice-list-table/invoice-list-table.component';
 
 
 @NgModule({
@@ -42,7 +45,10 @@ import { InvoicePaymentFormComponent } from './invoice/invoice-payment-form/invo
     CustomerPlanInvoiceItemFormComponent,
     AppliancePlanInvoiceItemFormComponent,
     CustomerPlanInvoiceItemBaseComponent,
-    InvoicePaymentFormComponent
+    InvoicePaymentFormComponent,
+    GlobalPaymentRequestFormComponent,
+    GlobalPaymentModalComponent,
+    InvoiceListTableComponent
   ],
   imports: [
     CommonModule,
@@ -60,7 +66,9 @@ import { InvoicePaymentFormComponent } from './invoice/invoice-payment-form/invo
     QuoteTableComponent,
     InvoiceTableComponent,
     InvoiceNotesFormComponent,
-    InvoicePaymentFormComponent
+    InvoicePaymentFormComponent,
+    InvoiceListTableComponent,
+    GlobalPaymentRequestFormComponent
   ]
 })
 export class BillingComponentsModule {

@@ -2,6 +2,7 @@ export interface Invoice {
   id: number;
   appointmentId: number;
   invoiceNumber: string;
+  invoiceDate: string;
   customerId: number;
   customerAddressId: number;
   CustomerReference: string;

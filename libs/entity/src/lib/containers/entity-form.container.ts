@@ -77,7 +77,15 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
   }
 
   protected patchForm(value: any) {
-    this.formService.form.patchValue(value);
+    let patch: any = {};
+
+    if (this.groupName) {
+      patch[this.groupName] = value;
+    } else {
+      patch = value;
+    }
+
+    this.formService.form.patchValue(patch);
   }
 
   protected createDTO(): Partial<T> {

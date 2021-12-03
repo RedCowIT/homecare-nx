@@ -1,0 +1,139 @@
+<div class="content-with-action-footer">
+  <div class="content">
+
+    <div [formGroup]="formService.form">
+
+      <ion-item>
+        <ion-label position="stacked">Invoice No. (amend if invoice has multiple payments)</ion-label>
+        <ion-input formControlName="invoiceNumber"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Description</ion-label>
+        <ion-input formControlName="description"></ion-input>
+      </ion-item>
+
+      <ion-row>
+        <ion-col size="6">
+
+          <ion-item>
+            <ion-label position="stacked">Amount</ion-label>
+            <ion-input formControlName="amount" type="number"></ion-input>
+          </ion-item>
+
+        </ion-col>
+      </ion-row>
+
+
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input formControlName="email" type="email"></ion-input>
+      </ion-item>
+
+      <ion-row>
+        <ion-col size="6">
+
+          <ion-item>
+            <ion-label position="stacked">Phone</ion-label>
+            <ion-input formControlName="phone" type="tel"></ion-input>
+          </ion-item>
+
+        </ion-col>
+      </ion-row>
+
+
+      <div class="h3 ion-margin">Customer Address</div>
+
+      <ion-row>
+        <ion-col>
+
+          <ion-item>
+            <ion-label position="stacked">Address 1</ion-label>
+            <ion-input formControlName="customerAddress1"></ion-input>
+          </ion-item>
+
+        </ion-col>
+        <ion-col>
+
+          <ion-item>
+            <ion-label position="stacked">Address 2</ion-label>
+            <ion-input formControlName="customerAddress2"></ion-input>
+          </ion-item>
+
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+
+          <ion-item>
+            <ion-label position="stacked">City</ion-label>
+            <ion-input formControlName="customerCity"></ion-input>
+          </ion-item>
+
+        </ion-col>
+        <ion-col>
+
+          <ion-item>
+            <ion-label position="stacked">Postcode</ion-label>
+            <ion-input formControlName="customerPostcode"></ion-input>
+          </ion-item>
+
+        </ion-col>
+      </ion-row>
+
+      <div class="h3 ion-margin">Billing Address</div>
+
+      <ion-item>
+        <ion-label position="stacked">Same as Customer</ion-label>
+        <ion-toggle formControlName="addressSyncBilling"></ion-toggle>
+      </ion-item>
+
+      <div *ngIf="!formService.form.value.addressSyncBilling">
+        <ion-row>
+          <ion-col>
+
+            <ion-item>
+              <ion-label position="stacked">Address 1</ion-label>
+              <ion-input formControlName="billingAddress1"></ion-input>
+            </ion-item>
+
+          </ion-col>
+          <ion-col>
+
+            <ion-item>
+              <ion-label position="stacked">Address 2</ion-label>
+              <ion-input formControlName="billingAddress2"></ion-input>
+            </ion-item>
+
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+
+            <ion-item>
+              <ion-label position="stacked">City</ion-label>
+              <ion-input formControlName="billingCity"></ion-input>
+            </ion-item>
+
+          </ion-col>
+          <ion-col>
+
+            <ion-item>
+              <ion-label position="stacked">Postcode</ion-label>
+              <ion-input formControlName="billingPostcode"></ion-input>
+            </ion-item>
+
+          </ion-col>
+        </ion-row>
+      </div> <!-- addressSyncBilling -->
+
+    </div>
+
+  </div>
+  <div class="action-footer">
+    <ion-button [disabled]="!formService.form.valid">
+      Checkout {{formService.form.value.amount | currency:'GBP'}}</ion-button>
+  </div>
+</div>

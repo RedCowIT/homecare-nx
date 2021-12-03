@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'hc-add-button',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./add-button.component.scss']
 })
 export class AddButtonComponent implements OnInit {
+
+  @Input()
+  color: string;
 
   constructor() { }
 

@@ -12,6 +12,8 @@ import {PopoverSelectComponent} from './popover-select/popover-select.component'
 import { PopoverSelectButtonComponent } from './popover-select-button/popover-select-button.component';
 import { EntitySelectComponent } from './entity-select/entity-select.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import { AccordionComponent } from './accordion/accordion/accordion.component';
+import { AccordionItemComponent } from './accordion/accordion-item/accordion-item.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     PopoverSelectComponent,
     PopoverSelectButtonComponent,
     EntitySelectComponent,
+    AccordionComponent,
+    AccordionItemComponent,
   ],
   imports: [
     CommonModule,
@@ -39,7 +43,9 @@ import {ReactiveFormsModule} from "@angular/forms";
     ChecklistMenuItemComponent,
     IconTileComponent,
     PopoverSelectComponent,
-    EntitySelectComponent
+    EntitySelectComponent,
+    AccordionComponent,
+    AccordionItemComponent
   ]
 })
 export class IonicCommonComponentsModule {}

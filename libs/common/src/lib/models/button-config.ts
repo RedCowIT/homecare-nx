@@ -3,4 +3,6 @@ export interface ButtonConfig {
   class?: string;
   callback: () => void;
   slot?: 'start' | 'center' | 'end';
+  color?: string;
+  fill?: string;
 }

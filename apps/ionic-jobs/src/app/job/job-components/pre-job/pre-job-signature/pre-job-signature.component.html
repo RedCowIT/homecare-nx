@@ -1,26 +1,31 @@
 <div class="detail-with-footer">
   <div class="detail-content">
     <div *ngIf="currentJobService.appointment$ | async as appointment">
-      <div *ngIf="appointment" class="ion-padding">
 
-        <div class="title ion-margin-top">Customer Signature</div>
+      <ion-card *ngIf="appointment">
+        <ion-card-header>
+          <ion-card-title>Customer Signature</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
 
-        <div class="ion-margin-top">
+          <div class="ion-margin-top">
 
-          <dd-signature-pad
-            (done)="updateSignature($event)"
-            [format]="'base64'"
-          ></dd-signature-pad>
+            <dd-signature-pad
+              (done)="updateSignature($event)"
+              [format]="'base64'"
+            ></dd-signature-pad>
 
-        </div>
+          </div>
 
-        <div *ngIf="showError" class="ion-margin-top">
-          <ion-item color="danger">
-            Signature required
-          </ion-item>
-        </div>
+          <div *ngIf="showError" class="ion-margin-top">
+            <ion-item color="danger">
+              Signature required
+            </ion-item>
+          </div>
 
-      </div>
+        </ion-card-content>
+      </ion-card>
+
     </div>
   </div>
   <div class="detail-footer">

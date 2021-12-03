@@ -1,5 +1,7 @@
 <div *ngIf="documents$ | async as documents">
   <div *ngIf="documents">
-      <hc-document-thumbnail *ngFor="let document of documents" [document]="document"></hc-document-thumbnail>
+      <hc-document-thumbnail *ngFor="let document of documents" [document]="document"
+                             (click)="select($event, document)"
+      ></hc-document-thumbnail>
   </div>
 </div>

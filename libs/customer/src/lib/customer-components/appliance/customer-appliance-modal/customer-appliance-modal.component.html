@@ -1,6 +1,10 @@
 <div class="ion-page">
   <dd-modal-header [title]="title"></dd-modal-header>
   <ion-content>
-    <hc-customer-appliance-form [id]="id" [customerId]="customerId" (create)="close()" (update)="close()"></hc-customer-appliance-form>
+    <hc-customer-appliance-form
+      [id]="id"
+      [customerId]="customerId"
+      (create)="close()"
+      (update)="close()"></hc-customer-appliance-form>
   </ion-content>
 </div>

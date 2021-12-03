@@ -1,32 +1,33 @@
-<div [formGroup]="formService.form">
+<div class="content-with-action-footer">
+  <div class="content">
+    <div [formGroup]="formService.form">
 
-  <div *ngIf="products$ | async as products">
-    <ion-item *ngIf="products">
-      <ion-label position="stacked">Product</ion-label>
-      <ion-select formControlName="productId" placeholder="Select one" interface="action-sheet">
-        <ion-select-option *ngFor="let product of products"
-                           [value]="product.id">{{product.description}}</ion-select-option>
-      </ion-select>
-    </ion-item>
+      <div *ngIf="products$ | async as products">
+        <ion-item *ngIf="products">
+          <ion-label position="stacked">Product</ion-label>
+          <ion-select formControlName="productId" placeholder="Select one" interface="action-sheet">
+            <ion-select-option *ngFor="let product of products"
+                               [value]="product.id">{{product.description}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <ion-item>
+        <ion-label position="stacked">Quantity</ion-label>
+        <ion-input formControlName="qty" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Unit Price</ion-label>
+        <ion-input formControlName="unitPrice" type="number"></ion-input>
+      </ion-item>
+
+    </div>
   </div>
-
-  <ion-item>
-    <ion-label position="stacked">Quantity</ion-label>
-    <ion-input formControlName="qty" type="number"></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label position="stacked">Unit Price</ion-label>
-    <ion-input formControlName="unitPrice" type="number"></ion-input>
-  </ion-item>
-
-  <ion-item lines="none">
-
+  <div class="action-footer">
     <ion-button color="primary" size="default" (click)="save()" [disabled]="!formService.form.valid">
       Save
     </ion-button>
-
-  </ion-item>
-
-
+  </div>
 </div>
+

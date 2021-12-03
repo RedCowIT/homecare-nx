@@ -47,7 +47,7 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
 
     if (!this.isEditMode()) {
       this.patchForm({
-        appliance: {applianceTypeId: this.applianceTypeId}
+        applianceTypeId: this.applianceTypeId
       });
 
       this.findApplianceQuoteItemId().pipe(

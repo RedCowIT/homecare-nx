@@ -4,7 +4,7 @@ import {AppInitHandler} from '@homecare/shared';
 import {EntityDefinitionService} from "@ngrx/data";
 import {AppointmentEntity, appointmentEntityMetadata} from "@homecare/appointment";
 import {EntitySyncService} from "@homecare/entity";
-import {appDataIdEntityMetadata} from "@homecare/core";
+import {CoreEntity, coreEntityMetadata} from "@homecare/core";
 import {customerEntityMetadata} from "@homecare/customer";
 import {PlanEntity, planEntityMetadata} from "@homecare/plan";
 import {ProductEntity, productEntityMetadata} from "@homecare/product";
@@ -23,7 +23,7 @@ export class EntityInitService implements AppInitHandler {
    * All application entity meta data
    */
   static readonly entityMetadata = [
-    appDataIdEntityMetadata,
+    coreEntityMetadata,
     appointmentEntityMetadata,
     billingEntityMetadata,
     customerEntityMetadata,
@@ -36,6 +36,7 @@ export class EntityInitService implements AppInitHandler {
    * Entities we need to sync for working "offline".
    */
   static readonly syncEntities = [
+    CoreEntity.Policy,
     AppointmentEntity.AppointmentNoAnswerReason,
     AppointmentEntity.CallTypeClass,
     AppointmentEntity.CallType,
@@ -43,6 +44,7 @@ export class EntityInitService implements AppInitHandler {
     BillingEntity.QuoteItemType,
     BillingEntity.InvoiceItemType,
     BillingEntity.InvoicePaymentType,
+    BillingEntity.InvoiceStatus,
     PlanEntity.PlanPaymentPeriod,
     PlanEntity.PlanType,
     PlanEntity.Plan,

@@ -8,8 +8,13 @@
         <ion-card-content>
 
           <div class="ion-margin-top">
+
             <hc-customer-appliance-table [customerId]="appointment.customerId"></hc-customer-appliance-table>
-            <hc-add-customer-appliance [customerId]="appointment.customerId"></hc-add-customer-appliance>
+
+            <div class="ion-margin-top">
+              <hc-add-customer-appliance [customerId]="appointment.customerId"></hc-add-customer-appliance>
+            </div>
+
           </div>
 
         </ion-card-content>

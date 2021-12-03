@@ -100,7 +100,7 @@
   --detail-footer-height: 80px;
 
   --background: #F8F8F8;
-  --border-color: gray;
+  --border-color: rgba(0, 0, 0, 0.12);
   --footer-background-color: #EAEAEA;
   --inner-nav-color: #F2F2F2;
 
@@ -122,6 +122,10 @@
     padding: 5px;
   }
 
+  ion-button {
+    --box-shadow: none;
+  }
+
   .mobile {
     --master-width: 0;
     --detail-width: calc(100vw);
@@ -129,6 +133,10 @@
 
   ion-item {
     //--highlight-height: 2px;
+  }
+
+  ion-card {
+    box-shadow: 0 5px 8px 0 rgb(0 0 0 / 6%);
   }
 
   ion-item.ion-invalid.ion-touched  {

@@ -5,6 +5,7 @@ export * from './job';
 export * from './core';
 export * from './customer';
 export * from './document';
+export * from './payment';
 export * from './plan';
 export * from './product';
 export * from './quote';
