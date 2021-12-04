@@ -123,4 +123,18 @@ export class QuotePlanDetailFormComponent extends EntityFormContainer<QuotePlanD
     return of(null);
   }
 
+  protected doDelete(): Observable<string | number> {
+
+    return this.model$.pipe(
+      mergeMap(quotePlanDetail => {
+        return this.entityService.delete(quotePlanDetail.quoteItemId).pipe(
+          mergeMap(result => {
+            return this.quoteItemService.delete(quotePlanDetail.quoteItemId);
+          })
+        )
+      })
+    );
+
+  }
+
 }

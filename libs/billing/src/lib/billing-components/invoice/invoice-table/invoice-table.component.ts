@@ -36,8 +36,8 @@ export class InvoiceTableComponent implements OnInit {
   }
 
   async select(item) {
-    console.log('select', item);
-    await this.openModal(item.id);
+    console.log('select', item[0]);
+    await this.openModal(item[0].id);
   }
 
   async openModal(invoiceItemId) {

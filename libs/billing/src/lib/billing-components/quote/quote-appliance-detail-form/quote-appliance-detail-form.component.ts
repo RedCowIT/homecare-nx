@@ -121,4 +121,17 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
     return of(null);
   }
 
+  protected doDelete(): Observable<string | number> {
+
+    return this.model$.pipe(
+      mergeMap(quoteApplianceDetail => {
+        return this.entityService.delete(quoteApplianceDetail.quoteItemId).pipe(
+          mergeMap(result => {
+            return this.quoteItemService.delete(quoteApplianceDetail.quoteItemId);
+          })
+        )
+      })
+    );
+
+  }
 }

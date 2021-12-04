@@ -14,6 +14,9 @@
 
   </div>
   <div class="action-footer">
+
+    <ion-button *ngIf="formService.editMode" color="danger" (click)="deleteEntity()" class="mr-auto">Remove</ion-button>
+
     <dd-entity-form-submit
       [loading]="isLoading"
       [disabled]="!formService.form.valid || isLoading"

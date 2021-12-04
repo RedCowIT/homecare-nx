@@ -78,24 +78,41 @@ export class GlobalPaymentRequestFormComponent extends SubscribedContainer imple
     ).subscribe(sync => {
       if (sync) {
         const formValue = this.formService.form.value;
-        this.formService.form.patchValue({
-          billingAddress1: formValue.customerAddress1,
-          billingAddress2: formValue.customerAddress2,
-          billingAddress3: formValue.customerAddress3,
-          billingCity: formValue.customerCity,
-          billingPostcode: formValue.customerPostcode
-        });
-      } else {
-        this.formService.form.patchValue({
-          billingAddress1: '',
-          billingAddress2: '',
-          billingAddress3: '',
-          billingCity: '',
-          billingPostcode: ''
-        });
       }
-    })
+    });
+
+    this.formService.form.valueChanges.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe(formValue => {
+      console.log('Form value changes', formValue);
+      this.syncBillingAddress(formValue);
+    });
 
   }
 
+
+  syncBillingAddress(formValue: any) {
+
+    if (formValue.addressSyncBilling) {
+      this.formService.form.patchValue({
+        billingAddress1: formValue.customerAddress1,
+        billingAddress2: formValue.customerAddress2,
+        billingAddress3: formValue.customerAddress3,
+        billingCity: formValue.customerCity,
+        billingPostcode: formValue.customerPostcode
+      }, {
+        emitEvent: false
+      });
+    } else {
+      this.formService.form.patchValue({
+        billingAddress1: '',
+        billingAddress2: '',
+        billingAddress3: '',
+        billingCity: '',
+        billingPostcode: ''
+      }, {
+        emitEvent: false
+      });
+    }
+  }
 }

@@ -12,12 +12,16 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
 
   static readonly OPERATION_CREATE = 'create';
   static readonly OPERATION_UPDATE = 'update';
+  static readonly OPERATION_DELETE = 'delete';
 
   @Output()
   create = new EventEmitter<T>();
 
   @Output()
   update = new EventEmitter<T>();
+
+  @Output()
+  delete = new EventEmitter<T>();
 
   isSubmitted: boolean;
 
@@ -76,6 +80,20 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
     }
   }
 
+  public async deleteEntity() {
+
+    this.errors = null;
+
+    if (this.formService.editMode) {
+
+      await this.doOperation(
+        this.doDelete(),
+        EntityFormContainer.OPERATION_DELETE);
+
+    }
+  }
+
+
   protected patchForm(value: any) {
     let patch: any = {};
 
@@ -106,7 +124,14 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
     return this.entityService.add(model);
   }
 
-  protected async doOperation(operation$, operationType: 'create' | 'update') {
+  protected doDelete(): Observable<string | number> {
+    if (!this.entityService) {
+      throw new Error('SimpleForm subclasses must implement update or set a default entity service');
+    }
+    return this.entityService.delete(this.id);
+  }
+
+  protected async doOperation(operation$, operationType: 'create' | 'update' | 'delete') {
     operation$.pipe(
       catchHttpValidationErrors((errors: ApiValidationErrors) => {
         this.errors = errors.errors;
@@ -114,32 +139,32 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
       }),
       first()
     ).subscribe(entity => {
-      if (operationType === EntityFormContainer.OPERATION_CREATE) {
-        this.entityCreated(entity);
-      } else if (operationType === EntityFormContainer.OPERATION_UPDATE) {
-        this.entityUpdated(entity);
+
+      switch (operationType) {
+        case EntityFormContainer.OPERATION_CREATE:
+          this.entityCreated(entity);
+          break;
+        case EntityFormContainer.OPERATION_UPDATE:
+          this.entityUpdated(entity);
+          break;
+        case EntityFormContainer.OPERATION_DELETE:
+          this.entityDeleted(entity);
+          break;
+
       }
     });
   }
 
   protected async entityCreated(entity: T) {
-
     this.create.emit(entity);
-
-    // const message = this.getCreateSuccessMessage(entity);
-    // if (message) {
-    //   await this.presentSuccess(message);
-    // }
   }
 
   protected async entityUpdated(entity: T) {
-
     this.update.emit(entity);
+  }
 
-    // const message = this.getUpdateSuccessMessage(entity);
-    // if (message) {
-    //   await this.presentSuccess(message);
-    // }
+  protected async entityDeleted(entity: T) {
+    this.delete.emit(entity);
   }
 
   protected async presentSuccess(message: string) {

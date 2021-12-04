@@ -74,6 +74,7 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
     });
 
     if (this.invoiceItemId) {
+      this.formService.editMode = true;
       selectEntity(this.invoiceItemsService, this.invoiceItemId).pipe(first()).subscribe(invoiceItem => {
         this.formService.form.patchValue(invoiceItem);
       });

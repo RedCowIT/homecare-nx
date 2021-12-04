@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
+import {combineLatest, Observable} from "rxjs";
 import {
+  CommercialProduct, findByKey, firstByKey,
   firstItem,
   Product,
   QuoteItem,
@@ -9,8 +10,8 @@ import {
   selectEntity,
   selectEntityByKey
 } from "@homecare/shared";
-import {ProductsService} from "@homecare/product";
-import {first, map, mergeMap} from "rxjs/operators";
+import {CommercialProductsService, ProductsService} from "@homecare/product";
+import {filter, first, map, mergeMap} from "rxjs/operators";
 
 import {QuoteItemsService} from '../../../store/entity/services/quote/quote-items/quote-items.service';
 import {QuoteItemTypesService} from '../../../store/entity/services/quote/quote-item-types/quote-item-types.service';
@@ -32,7 +33,17 @@ export class QuoteProductDetailModalComponent implements OnInit {
 
   product$: Observable<Product>;
 
+  title = '';
+
+  productInfo$: Observable<{
+    title: string,
+    description: string,
+    image_1: string,
+    price: number
+  }>;
+
   constructor(public productsService: ProductsService,
+              public commercialProductsService: CommercialProductsService,
               public quoteItemsService: QuoteItemsService,
               public quoteItemTypesService: QuoteItemTypesService,
               public quoteProductDetailsService: QuoteProductDetailsService,
@@ -40,7 +51,30 @@ export class QuoteProductDetailModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.product$ = selectEntity(this.productsService, this.productId);
+
+    this.productInfo$ = combineLatest([this.product$, this.commercialProductsService.entities$]).pipe(
+      filter(([product, commercialProducts]) => {
+        return !!product && !!firstByKey(commercialProducts, 'productId', product.id)
+      }),
+      map(([product, commercialProducts]) => {
+
+        const commercialProduct = firstByKey(commercialProducts, 'productId', product.id);
+
+        return {
+          title: product.description,
+          description: commercialProduct.description,
+          image_1: commercialProduct.image_1,
+          price: product.defaultPrice
+        }
+
+      })
+    );
+
+    this.product$.pipe(first()).subscribe(product => {
+      this.title = product.description;
+    });
   }
 
   addProduct() {
@@ -66,5 +100,46 @@ export class QuoteProductDetailModalComponent implements OnInit {
         first()).subscribe(async () => {
       await this.modalCtrl.dismiss();
     });
+  }
+
+  getExistingQuoteProductDetail(): Observable<QuoteProductDetail> {
+
+    return combineLatest([
+      this.quoteItemsService.entitiesByQuoteId(this.quoteId),
+      this.quoteProductDetailsService.entities$
+    ]).pipe(
+      map(([quoteItems, quoteProductDetails]) => {
+
+        // get product details that match this id
+
+        const productDetailsMatch = findByKey(quoteProductDetails, 'productId', this.productId);
+
+        // get first match that has a quote item attached to this quote
+
+        if (!productDetailsMatch.length){
+          return null;
+        }
+
+        const quoteProductDetailsMatch = productDetailsMatch.filter(productDetails => {
+          return !!firstByKey(quoteItems, 'id', productDetails.quoteItemId);
+        });
+
+        return firstItem(quoteProductDetailsMatch);
+      })
+    );
+
+  }
+
+  remove(quoteProductDetail: QuoteProductDetail){
+
+    this.quoteProductDetailsService.delete(quoteProductDetail.id).pipe(
+      mergeMap(() => {
+        return this.quoteItemsService.delete(quoteProductDetail.quoteItemId)
+      }),
+      first()
+    ).subscribe(async () => {
+      await this.modalCtrl.dismiss();
+    });
+
   }
 }

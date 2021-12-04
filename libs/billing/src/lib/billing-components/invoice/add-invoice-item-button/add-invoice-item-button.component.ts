@@ -49,12 +49,13 @@ export class AddInvoiceItemButtonComponent implements OnInit {
     // )
   }
 
-  async openInvoiceItemMenu() {
+  async openInvoiceItemMenu($event) {
     const popover = await this.popoverCtrl.create({
       component: PopoverSelectComponent,
       componentProps: {
         options: this.invoiceItemOptions
-      }
+      },
+      event: $event
     });
 
     popover.onWillDismiss().then(

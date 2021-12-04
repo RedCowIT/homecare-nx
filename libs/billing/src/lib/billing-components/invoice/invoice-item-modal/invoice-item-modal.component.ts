@@ -63,15 +63,6 @@ export class InvoiceItemModalComponent implements OnInit {
 
       })
     );
-
-
-    // this.productCategoriesService.getAll().subscribe(result => {
-    //   console.log('result', result);
-    // });
-    //
-    // this.productCategoriesService.selectByDescription(ProductCategories.Service).subscribe(cat => {
-    //   console.log('Product Category', cat);
-    // });
   }
 
   ngOnInit(): void {
@@ -108,14 +99,20 @@ export class InvoiceItemModalComponent implements OnInit {
 
   initFromInvoiceItem() {
 
-    console.log('initFromInvoiceItem');
+    console.log('initFromInvoiceItem', {
+      invoiceId: this.invoiceId,
+      invoiceItemId: this.invoiceItemId
+    });
 
     // Get type from invoice item
     // Invoice Item > Product > Product Category
     // If Product Category === Service, then
     selectEntity(this.invoiceItemsService, this.invoiceItemId).pipe(
       mergeMap(invoiceItem => this.productsService.getByKey(invoiceItem.productId)),
-      mergeMap(product => selectEntity(this.productCategoriesService, product.categoryId)),
+      mergeMap(product => {
+        console.log('Product', product);
+        return selectEntity(this.productCategoriesService, product.categoryId);
+      }),
       mergeMap(productCategory => {
 
         console.log('product category', productCategory);
