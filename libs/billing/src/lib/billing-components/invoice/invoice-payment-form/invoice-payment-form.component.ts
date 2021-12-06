@@ -16,6 +16,7 @@ import {Observable} from "rxjs";
 import {PopoverSelectComponent} from "../../../../../../ionic-common/src/lib/components/popover-select/popover-select.component";
 import {PopoverController} from "@ionic/angular";
 import {SelectOption} from "@homecare/common";
+import {InvoicesService} from "@homecare/billing";
 
 @Component({
   selector: 'hc-invoice-payment-form',
@@ -47,6 +48,7 @@ export class InvoicePaymentFormComponent extends EntityFormContainer<InvoicePaym
   constructor(public formService: InvoicePaymentFormService,
               public entityService: InvoicePaymentsService,
               public invoicePaymentTypesService: InvoicePaymentTypesService,
+              public invoicesService: InvoicesService,
               public popoverCtrl: PopoverController) {
     super(formService, entityService);
   }
@@ -105,5 +107,17 @@ export class InvoicePaymentFormComponent extends EntityFormContainer<InvoicePaym
     await popover.present();
   }
 
+  addFullAmount() {
+    selectEntity(this.invoicesService, this.invoiceId).pipe(
+      first()
+    ).subscribe(invoice => {
 
+      if (invoice.grossAmount){
+        this.patchForm({
+          amount: invoice.grossAmount
+        });
+      }
+
+    });
+  }
 }

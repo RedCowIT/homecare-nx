@@ -1,0 +1,16 @@
+//@import "~@ng-select/ng-select/themes/default.theme.css";
+// ... or
+@import "~@ng-select/ng-select/themes/material.theme.css";
+
+.ng-select-wrap {
+  background: white;
+  padding-top: 10px;
+  ion-label {
+    font-size: 0.9rem;
+    padding-left: 15px;
+  }
+
+  .ng-select .ng-input > input, .ng-select .ng-value {
+    padding-left: 15px !important;
+  }
+}

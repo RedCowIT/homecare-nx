@@ -145,6 +145,8 @@ export class InvoiceItemModalComponent implements OnInit {
 
         }
 
+        return of(InvoiceItemTypes.Misc);
+
 
       }),
       first()

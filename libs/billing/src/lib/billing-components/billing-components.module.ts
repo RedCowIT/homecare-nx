@@ -4,7 +4,7 @@ import {QuoteApplianceDetailFormComponent} from './quote/quote-appliance-detail-
 import {QuoteApplianceDetailModalComponent} from './quote/quote-appliance-detail-modal/quote-appliance-detail-modal.component';
 import {IonicModule} from "@ionic/angular";
 import {IonicCommonComponentsModule} from "@homecare/ionic-common";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { QuoteTableComponent } from './quote/quote-table/quote-table.component';
 import {CommonComponentsModule} from "../../../../common/src/lib/components/common-components.module";
 import { QuoteProductDetailFormComponent } from './quote/quote-product-detail-form/quote-product-detail-form.component';
@@ -26,6 +26,7 @@ import { InvoicePaymentFormComponent } from './invoice/invoice-payment-form/invo
 import { GlobalPaymentRequestFormComponent } from './payment/global-payment-request-form/global-payment-request-form.component';
 import { GlobalPaymentModalComponent } from './payment/global-payment-modal/global-payment-modal.component';
 import { InvoiceListTableComponent } from './invoice/invoice-list-table/invoice-list-table.component';
+import {NgSelectModule} from "@ng-select/ng-select";
 
 
 @NgModule({
@@ -58,7 +59,9 @@ import { InvoiceListTableComponent } from './invoice/invoice-list-table/invoice-
     CommonComponentsModule,
     SharedComponentsModule,
     ProductComponentsModule,
-    PlanComponentsModule
+    PlanComponentsModule,
+    FormsModule,
+    NgSelectModule
   ],
   exports: [
     QuoteApplianceDetailModalComponent,

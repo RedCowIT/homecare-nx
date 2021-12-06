@@ -52,6 +52,7 @@ export class EntityInitService implements AppInitHandler {
     ProductEntity.ApplianceType,
     ProductEntity.ApplianceBrand,
     ProductEntity.CommercialProduct,
+    ProductEntity.Product,
     ProductEntity.Manufacturer,
     ProductEntity.ApplianceModel,
     ProductEntity.ProductCategory,

@@ -29,6 +29,9 @@ export class AddInvoiceItemButtonComponent implements OnInit {
     },
     {
       label: 'Repair Plan', value: InvoiceItemTypes.RepairPlan
+    },
+    {
+      label: 'All Products', value: InvoiceItemTypes.Misc
     }
   ];
 

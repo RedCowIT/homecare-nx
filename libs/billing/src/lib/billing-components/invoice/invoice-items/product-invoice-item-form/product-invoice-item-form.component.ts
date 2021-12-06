@@ -5,7 +5,7 @@ import {
   InvoiceItem,
   Product,
   ProductCategory,
-  selectEntity,
+  selectEntity, selectEntityByKey,
   SubscribedContainer
 } from "@homecare/shared";
 import {EMPTY, Observable} from "rxjs";
@@ -34,6 +34,9 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
   @Input()
   invoiceItemTypeId: number;
 
+  @Input()
+  productId: number;
+
   @Output()
   done = new EventEmitter<void>();
 
@@ -58,9 +61,15 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
 
     this.productCategory$ = selectEntity(this.productCategoriesService, this.categoryId);
 
-    this.products$ = this.productsService.getWithQuery({
-      'categoryId': `${this.categoryId}`
-    });
+    if (this.categoryId){
+      this.products$ = selectEntityByKey(this.productsService, 'categoryId', this.categoryId);
+    } else {
+      this.products$ = this.productsService.entities$;
+    }
+
+    // this.products$ = this.productsService.getWithQuery({
+    //   'categoryId': `${this.categoryId}`
+    // });
 
     this.formService.form.get('productId').valueChanges.pipe(
       mergeMap(productId => selectEntity(this.productsService, productId)),

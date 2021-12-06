@@ -3,13 +3,17 @@
     <div [formGroup]="formService.form">
 
       <div *ngIf="products$ | async as products">
-        <ion-item *ngIf="products">
-          <ion-label position="stacked">Product</ion-label>
-          <ion-select formControlName="productId" placeholder="Select one" interface="action-sheet">
-            <ion-select-option *ngFor="let product of products"
-                               [value]="product.id">{{product.description}}</ion-select-option>
-          </ion-select>
-        </ion-item>
+
+        <div *ngIf="products" class="ng-select-wrap">
+          <ion-label>Product</ion-label>
+          <ng-select [items]="products"
+                     bindLabel="description"
+                     bindValue="id"
+                     formControlName="productId"
+                      [clearable]="false">
+          </ng-select>
+        </div>
+
       </div>
 
       <ion-item>

@@ -22,7 +22,6 @@ import {Store} from "@ngrx/store";
 import {JobModule} from "./job/job.module";
 import {ApiUrlService} from "@homecare/common";
 import {environment} from "../environments/environment";
-import {BarRatingModule} from "ngx-bar-rating";
 
 function storageFactory(storage: ClientStorage): StorageService {
   return new StorageService(storage);

@@ -1,7 +1,7 @@
 <div [formGroup]="formService.form" class="d-flex">
   <div *ngIf="invoicePaymentType">
     <div class="label">{{invoicePaymentType.description}}</div>
-    <ion-input formControlName="amount" type="number"></ion-input>
+    <ion-input formControlName="amount" type="number" (dblclick)="addFullAmount()"></ion-input>
   </div>
   <div class="ion-margin-top ion-margin-start">
     <dd-entity-form-submit

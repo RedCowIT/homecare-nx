@@ -58,6 +58,7 @@
     "@ionic-native/status-bar": "^5.30.0",
     "@ionic/angular": "~5.6.0",
     "@ionic/storage-angular": "^3.0.6",
+    "@ng-select/ng-select": "^6.1.0",
     "@ngrx/data": "^11.1.1",
     "@ngrx/effects": "^11.1.1",
     "@ngrx/entity": "^11.1.1",

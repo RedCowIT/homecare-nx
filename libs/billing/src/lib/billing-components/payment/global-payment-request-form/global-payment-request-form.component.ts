@@ -73,14 +73,6 @@ export class GlobalPaymentRequestFormComponent extends SubscribedContainer imple
 
     });
 
-    this.formService.form.get('addressSyncBilling').valueChanges.pipe(
-      takeUntil(this.destroyed$)
-    ).subscribe(sync => {
-      if (sync) {
-        const formValue = this.formService.form.value;
-      }
-    });
-
     this.formService.form.valueChanges.pipe(
       takeUntil(this.destroyed$)
     ).subscribe(formValue => {

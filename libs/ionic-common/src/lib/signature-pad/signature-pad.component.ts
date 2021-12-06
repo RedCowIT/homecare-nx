@@ -35,7 +35,7 @@ export class SignaturePadComponent implements OnInit, AfterViewInit {
   @Output() done = new EventEmitter();
   @Output() cleared = new EventEmitter();
 
-  @Input() responsive = true;
+  @Input() responsive = false;
 
   constructor() {
   }
