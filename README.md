@@ -5,6 +5,18 @@
 Installing local capacitor-cli via npm for ionic-jobs causes rxjs incompatibility with shared node_modules.
 Use global capacitor-cli
 
+##Build
+###iOS
+To open XCode project from terminal:npm
+<pre>
+npx cap open ios
+</pre>
+####Build Environment
+<pre>
+npm run ios:build:staging
+npm run ios:build:production
+</pre>
+
 ## Generate a page
 
 Run `ng g @ionic/angular-toolkit:page module/pages/my-page --project my-project`
