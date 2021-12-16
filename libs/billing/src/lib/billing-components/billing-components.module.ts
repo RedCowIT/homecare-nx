@@ -5,28 +5,29 @@ import {QuoteApplianceDetailModalComponent} from './quote/quote-appliance-detail
 import {IonicModule} from "@ionic/angular";
 import {IonicCommonComponentsModule} from "@homecare/ionic-common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import { QuoteTableComponent } from './quote/quote-table/quote-table.component';
+import {QuoteTableComponent} from './quote/quote-table/quote-table.component';
 import {CommonComponentsModule} from "../../../../common/src/lib/components/common-components.module";
-import { QuoteProductDetailFormComponent } from './quote/quote-product-detail-form/quote-product-detail-form.component';
-import { QuoteProductDetailModalComponent } from './quote/quote-product-detail-modal/quote-product-detail-modal.component';
-import { QuotePlanDetailModalComponent } from './quote/quote-plan-detail-modal/quote-plan-detail-modal.component';
-import { QuotePlanDetailFormComponent } from './quote/quote-plan-detail-form/quote-plan-detail-form.component';
-import { InvoiceNotesFormComponent } from './invoice/invoice-notes-form/invoice-notes-form.component';
-import { InvoiceTableComponent } from './invoice/invoice-table/invoice-table.component';
+import {QuoteProductDetailFormComponent} from './quote/quote-product-detail-form/quote-product-detail-form.component';
+import {QuoteProductDetailModalComponent} from './quote/quote-product-detail-modal/quote-product-detail-modal.component';
+import {QuotePlanDetailModalComponent} from './quote/quote-plan-detail-modal/quote-plan-detail-modal.component';
+import {QuotePlanDetailFormComponent} from './quote/quote-plan-detail-form/quote-plan-detail-form.component';
+import {InvoiceNotesFormComponent} from './invoice/invoice-notes-form/invoice-notes-form.component';
+import {InvoiceTableComponent} from './invoice/invoice-table/invoice-table.component';
 import {SharedComponentsModule} from "@homecare/shared";
-import { AddInvoiceItemButtonComponent } from './invoice/add-invoice-item-button/add-invoice-item-button.component';
-import { InvoiceItemModalComponent } from './invoice/invoice-item-modal/invoice-item-modal.component';
+import {AddInvoiceItemButtonComponent} from './invoice/add-invoice-item-button/add-invoice-item-button.component';
+import {InvoiceItemModalComponent} from './invoice/invoice-item-modal/invoice-item-modal.component';
 import {ProductComponentsModule} from "../../../../product/src/lib/product-components/product-components.module";
 import {ProductInvoiceItemFormComponent} from "./invoice/invoice-items/product-invoice-item-form/product-invoice-item-form.component";
 import {CustomerPlanInvoiceItemFormComponent} from "./invoice/invoice-items/customer-plan-invoice-item-form/customer-plan-invoice-item-form.component";
 import {PlanComponentsModule} from "../../../../plan/src/lib/plan-components/plan-components.module";
-import { AppliancePlanInvoiceItemFormComponent } from './invoice/invoice-items/appliance-plan-invoice-item-form/appliance-plan-invoice-item-form.component';
-import { CustomerPlanInvoiceItemBaseComponent } from './invoice/invoice-items/customer-plan-invoice-item-base/customer-plan-invoice-item-base.component';
-import { InvoicePaymentFormComponent } from './invoice/invoice-payment-form/invoice-payment-form.component';
-import { GlobalPaymentRequestFormComponent } from './payment/global-payment-request-form/global-payment-request-form.component';
-import { GlobalPaymentModalComponent } from './payment/global-payment-modal/global-payment-modal.component';
-import { InvoiceListTableComponent } from './invoice/invoice-list-table/invoice-list-table.component';
+import {AppliancePlanInvoiceItemFormComponent} from './invoice/invoice-items/appliance-plan-invoice-item-form/appliance-plan-invoice-item-form.component';
+import {CustomerPlanInvoiceItemBaseComponent} from './invoice/invoice-items/customer-plan-invoice-item-base/customer-plan-invoice-item-base.component';
+import {InvoicePaymentFormComponent} from './invoice/invoice-payment-form/invoice-payment-form.component';
+import {GlobalPaymentRequestFormComponent} from './payment/global-payment-request-form/global-payment-request-form.component';
+import {GlobalPaymentModalComponent} from './payment/global-payment-modal/global-payment-modal.component';
+import {InvoiceListTableComponent} from './invoice/invoice-list-table/invoice-list-table.component';
 import {NgSelectModule} from "@ng-select/ng-select";
+import { FinancePlanInvoiceItemFormComponent } from './invoice/invoice-items/finance-plan-invoice-item-form/finance-plan-invoice-item-form.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import {NgSelectModule} from "@ng-select/ng-select";
     InvoicePaymentFormComponent,
     GlobalPaymentRequestFormComponent,
     GlobalPaymentModalComponent,
-    InvoiceListTableComponent
+    InvoiceListTableComponent,
+    FinancePlanInvoiceItemFormComponent,
   ],
   imports: [
     CommonModule,

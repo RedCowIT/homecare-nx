@@ -3,7 +3,8 @@ export enum CustomerEntity {
   CustomerAddress = 'CustomerAddress',
   CustomerAppliance = 'CustomerAppliance',
   CustomerPlan = 'CustomerPlan',
-  CustomerPlanAppliance = 'CustomerPlanAppliance'
+  CustomerPlanAppliance = 'CustomerPlanAppliance',
+  CustomerPlanFinance = 'CustomerPlanFinance'
 }
 
 export const customerEntityMetadata = {
@@ -11,5 +12,6 @@ export const customerEntityMetadata = {
   [CustomerEntity.CustomerAddress]: {},
   [CustomerEntity.CustomerAppliance]: {},
   [CustomerEntity.CustomerPlan]: {},
-  [CustomerEntity.CustomerPlanAppliance]: {}
+  [CustomerEntity.CustomerPlanAppliance]: {},
+  [CustomerEntity.CustomerPlanFinance]: {}
 }

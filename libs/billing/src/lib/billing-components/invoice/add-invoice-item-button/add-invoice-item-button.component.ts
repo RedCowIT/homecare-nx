@@ -31,6 +31,9 @@ export class AddInvoiceItemButtonComponent implements OnInit {
       label: 'Repair Plan', value: InvoiceItemTypes.RepairPlan
     },
     {
+      label: 'Hire Purchase Plan', value: InvoiceItemTypes.FinancePlan
+    },
+    {
       label: 'All Products', value: InvoiceItemTypes.Misc
     }
   ];
@@ -38,6 +41,7 @@ export class AddInvoiceItemButtonComponent implements OnInit {
   constructor(public popoverCtrl: PopoverController,
               public invoiceItemTypesService: InvoiceItemTypesService,
               public modalCtrl: ModalController) {
+
   }
 
   ngOnInit(): void {

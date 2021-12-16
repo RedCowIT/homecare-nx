@@ -4,9 +4,14 @@ import {LogHandlerConfig} from "./log-handler-config";
 import {LogHandler} from "./log-handler";
 import {ConsoleLogHandler} from "./console-log-handler";
 import {LogVerbosity} from "./log-verbosity";
+import {SerializedConsoleLogHandler} from "./serialized-console-log-handler";
+import {LogHandlers} from "./log-handlers";
+import {StoreLogHandler} from "./store-log-handler";
+import {Store} from "@ngrx/store";
 
 export class LogHandlerFactory {
-  public static createLogHandlers(logger: LoggerService,
+  public static createLogHandlers(store: Store,
+                                  logger: LoggerService,
                                   logHandlerConfigs = new Array<LogHandlerConfig>()): Logger {
 
     if (!logHandlerConfigs) {
@@ -15,8 +20,16 @@ export class LogHandlerFactory {
 
     for (const config of logHandlerConfigs) {
       switch (config.type) {
-        case 'console':
+        case LogHandlers.Console:
           logger.addLogHandler(config.key, LogHandlerFactory.createConsoleLogger(config));
+          break;
+
+        case LogHandlers.SerializedConsole:
+          logger.addLogHandler(config.key, LogHandlerFactory.createSerializedConsoleLogger(config));
+          break;
+
+        case LogHandlers.Store:
+          logger.addLogHandler(config.key, LogHandlerFactory.createStoreLogger(store, config));
           break;
 
         default:
@@ -32,9 +45,40 @@ export class LogHandlerFactory {
     handler.setVerbosity(LogVerbosity[config.level]);
     handler.enable(config.enabled);
 
-    console.log('createConsoleLogger', config);
     if (config.prefix){
       handler.setPrefix(config.prefix);
+    }
+
+    return handler;
+  }
+
+  public static createSerializedConsoleLogger(config: LogHandlerConfig): LogHandler {
+    const handler = new SerializedConsoleLogHandler();
+    handler.setVerbosity(LogVerbosity[config.level]);
+    handler.enable(config.enabled);
+
+    console.log('create serialized console', config);
+    if (config.prefix){
+      handler.setPrefix(config.prefix);
+    }
+
+    return handler;
+  }
+
+  public static createStoreLogger(store: Store, config: LogHandlerConfig): LogHandler {
+
+    console.log('Create store logger', config);
+
+    const handler = new StoreLogHandler(store);
+    handler.setVerbosity(LogVerbosity[config.level]);
+    handler.enable(config.enabled);
+
+    if (config.prefix){
+      handler.setPrefix(config.prefix);
+    }
+
+    if (config.options?.logLimit){
+      handler.setLogLimit(config.options.logLimit);
     }
 
     return handler;

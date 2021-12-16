@@ -22,7 +22,7 @@ export const adapter = createEntityAdapter<Job>({
 
 export const initialState: JobState = adapter.getInitialState({});
 
-const channelReducer = createReducer(
+const jobReducer = createReducer(
   initialState,
 
   on(addJob, (state, action) => adapter.upsertOne({
@@ -79,7 +79,7 @@ const channelReducer = createReducer(
 );
 
 export function reducer(state: JobState | undefined, action: Action) {
-  return channelReducer(state, action);
+  return jobReducer(state, action);
 }
 
 export const getJobState = createFeatureSelector<JobState>(FEATURE_KEY);

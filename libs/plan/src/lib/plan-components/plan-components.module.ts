@@ -6,6 +6,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import { AppliancePriceRangeSelectComponent } from './appliance/appliance-price-range-select/appliance-price-range-select.component';
 import {IonicCommonComponentsModule} from "@homecare/ionic-common";
 import { AppliancePlanFormComponent } from './appliance/appliance-plan-form/appliance-plan-form.component';
+import { FinancePlanFormComponent } from './finance/finance-plan-form/finance-plan-form.component';
 
 
 
@@ -13,7 +14,8 @@ import { AppliancePlanFormComponent } from './appliance/appliance-plan-form/appl
   declarations: [
     PlanPaymentPeriodSelectComponent,
     AppliancePriceRangeSelectComponent,
-    AppliancePlanFormComponent
+    AppliancePlanFormComponent,
+    FinancePlanFormComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +25,8 @@ import { AppliancePlanFormComponent } from './appliance/appliance-plan-form/appl
   ],
   exports: [
     PlanPaymentPeriodSelectComponent,
-    AppliancePlanFormComponent
+    AppliancePlanFormComponent,
+    FinancePlanFormComponent
   ]
 })
 export class PlanComponentsModule { }

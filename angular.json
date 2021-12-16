@@ -284,6 +284,14 @@
             },
             "ci": {
               "progress": false
+            },
+            "device": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/ionic-jobs/src/environments/environment.ts",
+                  "with": "apps/ionic-jobs/src/environments/environment.device.ts"
+                }
+              ]
             }
           }
         },

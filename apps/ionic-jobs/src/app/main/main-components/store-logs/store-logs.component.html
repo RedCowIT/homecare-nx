@@ -1,0 +1,14 @@
+<div class="ion-page">
+  <dd-modal-header [title]="'Log Viewer'"></dd-modal-header>
+  <ion-content class="ion-padding">
+    <div *ngIf="storeLogService.entities$ | async as storeLogs">
+      <div *ngIf="storeLogs">
+        <div *ngFor="let storeLog of storeLogs">
+          {{storeLog.date}}: {{storeLog.level}}: {{storeLog.message}}
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</div>
+
+

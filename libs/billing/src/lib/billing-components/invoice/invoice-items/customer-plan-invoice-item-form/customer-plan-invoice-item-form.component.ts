@@ -7,7 +7,7 @@ import {CustomerPlanInvoiceItemBaseComponent} from "../customer-plan-invoice-ite
 import {EntityFormService} from "@homecare/entity";
 
 /**
- * TODO: Create CustomerPlanInvoiceItemBaseComponent
+ * TODO: Standard Service Plans
  */
 @Component({
   selector: 'hc-customer-plan-invoice-item-form',

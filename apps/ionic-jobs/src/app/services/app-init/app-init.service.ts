@@ -7,6 +7,7 @@ import {LoggerService, LogHandlerFactory} from "@homecare/core";
 import {environment} from "../../../environments/environment";
 import {Platform} from "@ionic/angular";
 import {Storage} from '@ionic/storage-angular';
+import {Store} from "@ngrx/store";
 
 /**
  * Bootstraps application before any component loads
@@ -23,13 +24,14 @@ export class AppInitService implements AppInitHandler {
   constructor(private platform: Platform,
               private storage: Storage,
               private auth0Service: Auth0Service,
-              private logger: LoggerService) {
+              private logger: LoggerService,
+              private store: Store) {
 
   }
 
   init(): void {
 
-    LogHandlerFactory.createLogHandlers(this.logger, environment.logHandlers);
+    LogHandlerFactory.createLogHandlers(this.store, this.logger, environment.logHandlers);
 
     this.logger.debug('AppInitService.init');
 

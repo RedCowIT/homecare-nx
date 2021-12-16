@@ -185,4 +185,9 @@
   background: #F8F8F8;
 }
 
+ion-modal.fullscreen {
+  --width: calc(100vw);
+  --height: calc(100vh);
+}
+
 

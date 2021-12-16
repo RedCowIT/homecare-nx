@@ -84,17 +84,6 @@ export class InvoiceItemModalComponent implements OnInit {
 
     this.invoiceItemType$ = this.invoiceItemTypesService.selectByDescription(invoiceItemMeta[this.type].description);
 
-    switch (this.type) {
-      case InvoiceItemTypes.Service:
-
-        break;
-      case InvoiceItemTypes.ServicePlan:
-
-        break;
-      case InvoiceItemTypes.RepairPlan:
-
-        break;
-    }
   }
 
   initFromInvoiceItem() {
@@ -133,10 +122,11 @@ export class InvoiceItemModalComponent implements OnInit {
             }),
             map(planType => {
 
-              // TODO: HirePurchasePlan
               switch (planType.description) {
                 case PlanTypes.ApplianceRepairPlan:
                   return InvoiceItemTypes.RepairPlan;
+                case PlanTypes.Finance:
+                  return InvoiceItemTypes.FinancePlan;
                 default:
                   return InvoiceItemTypes.ServicePlan;
               }

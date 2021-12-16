@@ -1,13 +1,9 @@
-import {
-  ActionReducer,
-  ActionReducerMap,
-  createFeatureSelector,
-  createSelector,
-  MetaReducer
-} from '@ngrx/store';
+import {ActionReducerMap, MetaReducer} from '@ngrx/store';
 
+import {StoreLogState} from './store-log.reducer';
+import * as storeLogReducer from './store-log.reducer';
 
-export const storeFeatureKey = 'store';
+export const storeFeatureKey = 'core';
 
 export interface CoreState {
 
@@ -16,6 +12,5 @@ export interface CoreState {
 export const reducers: ActionReducerMap<CoreState> = {
 
 };
-
 
 export const metaReducers: MetaReducer<CoreState>[] = [];

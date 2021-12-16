@@ -4,4 +4,5 @@ export interface LogHandlerConfig {
   level: string;
   enabled: boolean;
   prefix?: string;
+  options?: any;
 }

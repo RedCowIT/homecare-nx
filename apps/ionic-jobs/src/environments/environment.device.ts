@@ -13,9 +13,8 @@ export const environment = {
     domain: 'homecaresc-dev.eu.auth0.com',
     loginUrl: '',
     clientId: 'iTkfQ2iU0PL7RUyKI8Dp2XCopmgsevJ6',
-    redirectUri: 'homecaresc://main',
-    // redirectUri: 'https://homecare.digi-dom.co.uk:8100/main',
-    logoutUri: 'https://homecare.digi-dom.co.uk:8100/logout-success',
+    redirectUri: 'https://homecareservicecentre.com/main',
+    logoutUri: 'https://homecareservicecentre.com/logout-success',
     audience: 'http://homecare-job-api.test',
   },
   debug: {
@@ -23,7 +22,7 @@ export const environment = {
   },
   logHandlers: [
     {
-      type: 'console',
+      type: 'serialized-console',
       key: 'console',
       enabled: true,
       level: 'trace',

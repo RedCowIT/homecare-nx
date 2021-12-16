@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "uk.co.homecareservicecentre",
+    "sha256_cert_fingerprints": ["A8:D5:8F:2D:91:13:D4:29:1C:34:86:FC:66:80:CD:32:0D:97:55:9F:38:36:D9:61:59:64:EC:35:BC:57:27:AE"] }
+}]

@@ -16,7 +16,7 @@ import {Observable} from "rxjs";
 import {PopoverSelectComponent} from "../../../../../../ionic-common/src/lib/components/popover-select/popover-select.component";
 import {PopoverController} from "@ionic/angular";
 import {SelectOption} from "@homecare/common";
-import {InvoicesService} from "@homecare/billing";
+import {InvoicesService} from "../../../store/entity/services/invoice/invoices/invoices.service";
 
 @Component({
   selector: 'hc-invoice-payment-form',

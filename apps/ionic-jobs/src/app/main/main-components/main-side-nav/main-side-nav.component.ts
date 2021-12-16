@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
+import {ModalController} from "@ionic/angular";
+import {StoreLogsComponent} from "../store-logs/store-logs.component";
 
 @Component({
   selector: 'hc-main-side-nav',
@@ -26,8 +28,17 @@ export class MainSideNavComponent implements OnInit {
     }
   ]
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, public modalCtrl: ModalController) { }
 
   ngOnInit(): void {
+  }
+
+  async openStoreLogs(){
+    const modal = await this.modalCtrl.create({
+      component: StoreLogsComponent,
+      cssClass: 'fullscreen'
+    });
+
+    await modal.present();
   }
 }

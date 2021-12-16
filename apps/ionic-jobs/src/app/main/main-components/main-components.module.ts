@@ -9,6 +9,8 @@ import {AppointmentComponentsModule} from "@homecare/appointment";
 import { MessagesComponent } from './messages/messages/messages.component';
 import { DocsComponent } from './docs/docs/docs.component';
 import {AuthComponentsModule} from "../../auth/components/auth-components.module";
+import { StoreLogsComponent } from './store-logs/store-logs.component';
+import {IonicCommonComponentsModule} from "@homecare/ionic-common";
 
 
 @NgModule({
@@ -17,18 +19,21 @@ import {AuthComponentsModule} from "../../auth/components/auth-components.module
     MainSideNavComponent,
     JobsComponent,
     MessagesComponent,
-    DocsComponent
+    DocsComponent,
+    StoreLogsComponent
   ],
     exports: [
         MainTabsComponent,
-        MainSideNavComponent
+        MainSideNavComponent,
+        StoreLogsComponent
     ],
     imports: [
         CommonModule,
         IonicModule,
         RouterModule,
         AppointmentComponentsModule,
-        AuthComponentsModule
+        AuthComponentsModule,
+        IonicCommonComponentsModule
     ]
 })
 export class MainComponentsModule {

@@ -1,14 +1,13 @@
 import {Component, NgZone} from '@angular/core';
 import {Platform} from '@ionic/angular';
-import {Browser, Plugins, StatusBarStyle} from '@capacitor/core';
 import {Auth0Service} from "@homecare/auth0";
 import {EntitySyncService} from "@homecare/entity";
 import {CoreEntity, PlatformService} from "@homecare/core";
 import {filter} from "rxjs/operators";
 
-const {StatusBar, SplashScreen} = Plugins;
-
-const {App} = Plugins;
+import {App} from '@capacitor/app';
+import {Browser} from "@capacitor/browser";
+import {SplashScreen} from "@ionic-native/splash-screen";
 
 @Component({
   selector: 'homecare-nx-root',
@@ -52,18 +51,21 @@ export class AppComponent {
   }
 
   private async initCapacitor(){
-    await StatusBar.setStyle({
-      style: StatusBarStyle.Dark,
-    });
+    // await StatusBar.setStyle({
+    //   style: StatusBarStyle.Dark,
+    // });
     await SplashScreen.hide();
   }
 
   private async handleUrlOpen(data: any){
 
-    await Browser.close();
+    // await Browser.close();
 
     if (this.auth0Service.isCallback(data.url)) {
+      console.log('Handling Auth0 Callback');
       this.auth0Service.handleCallback(data.url);
+    } else {
+      console.log('Not an Auth0 callback. Black hole.', data);
     }
 
     // Example url: https://beerswift.app/tabs/tab2

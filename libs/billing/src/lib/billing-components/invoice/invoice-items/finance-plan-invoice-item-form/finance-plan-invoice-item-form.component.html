@@ -1,0 +1,30 @@
+<div class="content-with-action-footer">
+
+  <div class="content">
+
+    <hc-finance-plan-form
+      [formGroup]="formService.form"
+      [formGroupNameKey]="'financePlan'"
+    ></hc-finance-plan-form>
+
+    <div [formGroup]="formService.form">
+
+      <div [formGroupName]="'customerPlan'">
+
+        <ion-item>
+          <ion-label position="stacked">Period Price</ion-label>
+          <ion-input formControlName="periodPrice"></ion-input>
+        </ion-item>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="action-footer">
+    <ion-button (click)="calculate()" [fill]="formService.form.valid ? 'outline' : 'solid'">Calculate</ion-button>
+    <ion-button *ngIf="formService.form.valid" (click)="save()">Save</ion-button>
+  </div>
+
+</div>

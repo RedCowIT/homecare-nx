@@ -27,6 +27,16 @@ export const environment = {
       enabled: true,
       level: 'trace',
       prefix: '[jobs]'
+    },
+    {
+      type: 'store',
+      key: 'store',
+      enabled: true,
+      level: 'trace',
+      prefix: '[jobs]',
+      options: {
+        logLimit: 100
+      }
     }
   ],
 };

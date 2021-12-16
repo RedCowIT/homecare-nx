@@ -47,6 +47,14 @@
         ></hc-appliance-plan-invoice-item-form>
       </div>
 
+      <div *ngSwitchCase="'HirePurchasePlan'" class="h-100">
+        <hc-finance-plan-invoice-item-form
+          [invoiceId]="invoiceId"
+          [invoiceItemTypeId]="invoiceItemType.id"
+          [invoiceItemId]="invoiceItemId"
+          (done)="close()"></hc-finance-plan-invoice-item-form>
+      </div>
+
       <div *ngSwitchCase="'Misc'" class="h-100">
         <hc-product-invoice-item-form [invoiceId]="invoiceId"
                                       [invoiceItemTypeId]="invoiceItemType.id"
