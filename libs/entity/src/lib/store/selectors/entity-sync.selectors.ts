@@ -1,5 +1,6 @@
 import {createSelector} from '@ngrx/store';
 import {getEntityState} from "../reducers";
+import {LoadingState} from "@homecare/shared";
 
 export const getEntitySyncState = createSelector(
   getEntityState,
@@ -20,8 +21,12 @@ export const selectEntitySyncPayloadEntityName = createSelector(
   s1 => s1.payloadEntityName
 );
 
-
 export const selectEntitySyncPayloadId = createSelector(
   getEntitySyncState,
   s1 => s1.payloadId
+);
+
+export const selectIsEntitySyncLoading = createSelector(
+  getEntitySyncState,
+  s1 => s1.callState === LoadingState.LOADING
 );

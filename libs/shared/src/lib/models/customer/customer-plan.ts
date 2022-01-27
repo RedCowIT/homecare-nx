@@ -8,4 +8,5 @@ export interface CustomerPlan {
   expiryDate: string;
   periodPrice: number;
   planPaymentPeriodId: number;
+  notes: string;
 }

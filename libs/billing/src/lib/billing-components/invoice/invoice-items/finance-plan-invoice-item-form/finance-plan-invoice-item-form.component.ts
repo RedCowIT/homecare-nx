@@ -6,6 +6,7 @@ import {CustomerPlanApplianceInvoiceItemService} from "../../../../services/form
 import {InvoiceItemsService} from "../../../../store/entity/services/invoice/invoice-items/invoice-items.service";
 import {CustomerPlanFinanceService} from "../../../../../../../customer/src/lib/store/entity/services/customer-plan-finance/customer-plan-appliances.service";
 import {CustomerPlanFinanceInvoiceItemFormService} from "../../../../services/form/invoice/customer-plan-finance-invoice-item-form/customer-plan-finance-invoice-item.service";
+import {InvoicesService} from "../../../../store/entity/services/invoice/invoices/invoices.service";
 
 @Component({
   selector: 'hc-finance-plan-invoice-item-form',
@@ -23,9 +24,10 @@ export class FinancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItem
               public planTypesService: PlanTypesService,
               public invoiceItemsService: InvoiceItemsService,
               public planPaymentPeriodsService: PlanPaymentPeriodsService,
+              public invoicesService: InvoicesService,
               public financePlanService: CustomerPlanFinanceService) {
 
-    super(plansService, customerPlansService, invoiceItemsService);
+    super(plansService, customerPlansService, invoicesService, invoiceItemsService);
 
   }
 

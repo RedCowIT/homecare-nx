@@ -6,10 +6,9 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../../environments/environment';
 import {reducers} from './reducers';
 import {StoreRouterConnectingModule} from '@ngrx/router-store';
-import {SimpleRouterStateSerializer} from '@homecare/core';
+import {ExtendedDataServiceFactory, SimpleRouterStateSerializer} from '@homecare/core';
 import {DefaultDataServiceConfig, DefaultDataServiceFactory, EntityDataModule} from '@ngrx/data';
-
-import {ExtendedDataServiceFactory} from '@homecare/core';
+import {AppEffects} from "./effects/app.effects";
 // import { storeFreeze } from 'ngrx-store-freeze';
 
 const defaultDataServiceConfig: DefaultDataServiceConfig = {
@@ -33,7 +32,7 @@ export const metaReducers: MetaReducer<any>[] = environment.production
         }
       }
     ),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AppEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule.forRoot({
       stateKey: 'router',

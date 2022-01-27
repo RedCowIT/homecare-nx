@@ -18,6 +18,9 @@ export const initialState: StoreLogState = adapter.getInitialState({
 });
 
 function createLog(level: 'info' | 'debug' | 'warn' | 'error' | 'trace', message: string, data?: any): StoreLog {
+  if (data){
+    data = {...data};
+  }
   return {
     id: guid(),
     level,

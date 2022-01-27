@@ -73,7 +73,7 @@ export class JobService {
 
         for (const appointmentCallType of appointmentCallTypes) {
           const callType = callTypeMap[appointmentCallType.callTypeId];
-
+console.log('appointmentCallType', {appointmentCallType, callType});
           if (!callType) {
             return false;
           }

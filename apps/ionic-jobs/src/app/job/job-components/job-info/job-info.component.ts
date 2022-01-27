@@ -5,6 +5,7 @@ import {JobService} from "../../services/job/job.service";
 import {CurrentJobService} from "../../services/current-job/current-job.service";
 import {BehaviorSubject} from "rxjs";
 import {ButtonConfig} from "@homecare/common";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'hc-job-info',
@@ -17,7 +18,8 @@ export class JobInfoComponent implements OnInit {
 
   constructor(public route: ActivatedRoute,
               public router: Router,
-              public currentJobService: CurrentJobService) {
+              public currentJobService: CurrentJobService,
+              public jobService: JobService) {
 
   }
 
@@ -27,7 +29,22 @@ export class JobInfoComponent implements OnInit {
         slot: 'end',
         label: 'Next',
         callback: async () => {
-          await this.router.navigateByUrl(`/job/${this.currentJobService.appointmentId}/pre-job`);
+
+          // if call types are NCO only, skip to quotes, otherwise pre job.
+
+          this.jobService.isNCOOnly(this.currentJobService.appointmentId).pipe(first()).subscribe(
+            async isNCOOnly => {
+              let url = '';
+              if (isNCOOnly) {
+                url = `/job/${this.currentJobService.appointmentId}/quote`;
+              } else {
+                url = `/job/${this.currentJobService.appointmentId}/pre-job`;
+              }
+
+              await this.router.navigateByUrl(url);
+            }
+          )
+
         }
       }
     ])

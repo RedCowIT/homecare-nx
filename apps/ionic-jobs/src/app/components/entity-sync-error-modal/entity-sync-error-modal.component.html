@@ -1,0 +1,17 @@
+<div class="ion-page">
+  <dd-modal-header [title]="'App Launch Error'" [isDanger]="true" [disableClose]="true"></dd-modal-header>
+  <ion-content class="ion-padding ion-text-center">
+    <p>
+      Failed to load app content from server.
+    </p>
+    <p>
+      Please check your internet connection and try again.
+    </p>
+    <div>
+      <div class="store-log-button">
+        <ion-button color="dark" fill="outline" (click)="openStoreLogs()">Logs</ion-button>
+      </div>
+      <ion-button (click)="retry()">Retry</ion-button>
+    </div>
+  </ion-content>
+</div>

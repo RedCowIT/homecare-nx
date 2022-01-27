@@ -10,10 +10,15 @@ export class JobCardListComponent implements OnInit {
 
   @Input()
   appointments: Appointment[]
-  
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit(): void {
+  }
+
+  refresh() {
+
   }
 
 }

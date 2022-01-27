@@ -1,11 +1,11 @@
-<div class="modal-header">
+<div class="modal-header" [ngClass]="{danger: isDanger}">
   <div class="modal-title">{{title}}</div>
   <div class="modal-actions">
     <ion-button *ngFor="let button of buttons" class="{{button.class}}" (click)="button.callback()" size="small">
       {{button.label}}
     </ion-button>
   </div>
-  <div class="modal-close">
+  <div *ngIf="!disableClose" class="modal-close">
     <ion-button (click)="closeModal()" color="clear" class="clear">
       <ion-icon name="close" slot="icon-only"></ion-icon>
     </ion-button>

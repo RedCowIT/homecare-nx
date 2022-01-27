@@ -9,7 +9,7 @@ import {
 } from "../actions/entity-sync.actions";
 import {StorageService} from "@homecare/storage";
 import {EntityCacheService} from "../../services/entity-cache/entity-cache.service";
-import {combineLatest, EMPTY, forkJoin, Observable, of} from "rxjs";
+import {combineLatest, EMPTY, forkJoin, Observable, of, throwError} from "rxjs";
 import {EntityCacheItem} from "../../models/entity-cache-item";
 import {Store} from "@ngrx/store";
 import {
@@ -140,7 +140,7 @@ export class EntitySyncEffects {
       throw new Error('Cannot validate entity cache item against empty entity name set');
     }
     if (!haveSameContents(entityNames, pluck(entityCacheItem.data as [], 'entityName'))) {
-      this.logger.warn('Cached entity name mismatch, abandoning cache init.', {entityNames, entityCacheItem});
+      this.logger.warn('Cached entity name mismatch, abandoning cache init.');
       return false;
     }
 
@@ -181,6 +181,10 @@ export class EntitySyncEffects {
         } else {
           return of(payloadId);
         }
+      }),
+      catchError(error => {
+        console.log('Rethrowing sync error');
+        return throwError(error);
       })
     )
 

@@ -61,8 +61,12 @@ export class CustomerApplianceTableService extends TableSourceService {
   }
 
   load() {
-    this.customerAppliancesService.load({
-      tag: 'CustomerApplianceTable'
-    });
+    this.customerAppliancesService.getWithQuery({
+        'customerId': `${this.customerId}`
+      },
+      {
+        tag: 'CustomerApplianceTable'
+      }
+    );
   }
 }

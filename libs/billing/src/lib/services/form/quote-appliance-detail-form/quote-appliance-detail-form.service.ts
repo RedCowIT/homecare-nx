@@ -19,7 +19,7 @@ export class QuoteApplianceDetailFormService extends EntityFormService {
         model: [null, Validators.required],
         serialNo: [null],
         priceRangeId: [null, Validators.required],
-        datePurchase: [null, Validators.required]
+        datePurchased: [null, Validators.required]
       })
     });
   }

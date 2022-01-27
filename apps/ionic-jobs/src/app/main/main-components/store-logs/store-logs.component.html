@@ -4,7 +4,7 @@
     <div *ngIf="storeLogService.entities$ | async as storeLogs">
       <div *ngIf="storeLogs">
         <div *ngFor="let storeLog of storeLogs">
-          {{storeLog.date}}: {{storeLog.level}}: {{storeLog.message}}
+          {{storeLog.date}}: {{storeLog.level}}: {{storeLog.message}}: {{stringify(storeLog.data)}}
         </div>
       </div>
     </div>

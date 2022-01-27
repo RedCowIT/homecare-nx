@@ -22,6 +22,8 @@ import {Store} from "@ngrx/store";
 import {JobModule} from "./job/job.module";
 import {ApiUrlService} from "@homecare/common";
 import {environment} from "../environments/environment";
+import {EntitySyncErrorModalComponent} from './components/entity-sync-error-modal/entity-sync-error-modal.component';
+import {AppComponentsModule} from "./components/app-components.module";
 
 function storageFactory(storage: ClientStorage): StorageService {
   return new StorageService(storage);
@@ -40,6 +42,7 @@ function cacheStoreServiceFactory(store: Store, storage: StorageService): CacheS
     HttpClientModule,
     AppRoutingModule,
     AppStoreModule,
+    AppComponentsModule,
     SharedModule,
     CoreModule,
     StorageModule,
@@ -50,9 +53,7 @@ function cacheStoreServiceFactory(store: Store, storage: StorageService): CacheS
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  exports: [
-
-  ],
+  exports: [],
   providers: [
     {provide: DataErrorService, useClass: AppDataErrorService},
     {provide: ErrorHandler, useClass: AppErrorService},
@@ -63,4 +64,5 @@ function cacheStoreServiceFactory(store: Store, storage: StorageService): CacheS
     {provide: ApiUrlService, useValue: new ApiUrlService(environment.api.baseUrl)},
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

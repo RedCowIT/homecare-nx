@@ -46,7 +46,7 @@ export class DocumentUploadComponent implements OnInit {
     formData.append('parentId', `${this.parentId}`);
     formData.append('subId', `${this.subId}`);
     formData.append('documentTypeId', `${this.documentTypeId}`);
-    formData.append('subDocumentTypeId', `${this.documentSubTypeId}`);
+    formData.append('documentSubTypeId', `${this.documentSubTypeId}`);
 
     this.isLoading = true;
 

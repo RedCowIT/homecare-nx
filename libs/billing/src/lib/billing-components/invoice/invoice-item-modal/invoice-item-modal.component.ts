@@ -6,7 +6,7 @@ import {
   InvoiceItemType,
   InvoiceItemTypes, PlanTypes,
   ProductCategories,
-  ProductCategory, selectEntity, selectFirstEntityByKey, servicePlanTypes
+  ProductCategory, selectEntity, selectFirstEntityByKey, selectOrFetchFirstEntityByKey, servicePlanTypes
 } from "@homecare/shared";
 import {InvoiceItemTypesService} from "../../../store/entity/services/invoice/invoice-item-types/invoice-item-types.service";
 import {Observable, of} from "rxjs";
@@ -17,6 +17,7 @@ import {first, map, mergeMap} from "rxjs/operators";
 import {InvoiceItemsService} from "../../../store/entity/services/invoice/invoice-items/invoice-items.service";
 import {CustomerPlansService} from "@homecare/customer";
 import {toTitleCase} from "@homecare/common";
+import {InvoicesService} from "../../../store/entity/services/invoice/invoices/invoices.service";
 
 @Component({
   selector: 'hc-invoice-item-modal',
@@ -50,6 +51,7 @@ export class InvoiceItemModalComponent implements OnInit {
               public planTypesService: PlanTypesService,
               public plansService: PlansService,
               public customerPlansService: CustomerPlansService,
+              public invoicesService: InvoicesService,
               public modalCtrl: ModalController) {
 
     this.serviceProductCategory$ = this.productCategoriesService.selectByDescription(ProductCategories.Service);
@@ -97,9 +99,9 @@ export class InvoiceItemModalComponent implements OnInit {
     // Invoice Item > Product > Product Category
     // If Product Category === Service, then
     selectEntity(this.invoiceItemsService, this.invoiceItemId).pipe(
-      mergeMap(invoiceItem => this.productsService.getByKey(invoiceItem.productId)),
+      mergeMap(invoiceItem => selectEntity(this.productsService, invoiceItem.productId)),
       mergeMap(product => {
-        console.log('Product', product);
+        console.log('Opening modal with product', product);
         return selectEntity(this.productCategoriesService, product.categoryId);
       }),
       mergeMap(productCategory => {
@@ -112,26 +114,35 @@ export class InvoiceItemModalComponent implements OnInit {
 
         if (productCategory.description === ProductCategories.Plan) {
 
-          return this.customerPlansService.getAll().pipe(
-            mergeMap(customerPlans => {
-              const customerPlan = firstByKey(customerPlans, 'invoiceItemId', this.invoiceItemId);
-              return selectEntity(this.plansService, customerPlan.planId);
-            }),
-            mergeMap(plan => {
-              return selectEntity(this.planTypesService, plan.planTypeId)
-            }),
-            map(planType => {
+          return selectEntity(this.invoicesService, this.invoiceId).pipe(
+            first(),
+            mergeMap(invoice => {
 
-              switch (planType.description) {
-                case PlanTypes.ApplianceRepairPlan:
-                  return InvoiceItemTypes.RepairPlan;
-                case PlanTypes.Finance:
-                  return InvoiceItemTypes.FinancePlan;
-                default:
-                  return InvoiceItemTypes.ServicePlan;
-              }
+              return selectOrFetchFirstEntityByKey(this.customerPlansService, 'invoiceItemId', this.invoiceItemId).pipe(
+                mergeMap(customerPlan => {
+                  return selectEntity(this.plansService, customerPlan.planId);
+                }),
+                mergeMap(plan => {
+                  return selectEntity(this.planTypesService, plan.planTypeId)
+                }),
+                map(planType => {
+
+                  console.log('Opening InvoiceItemModal with planType', planType);
+
+                  switch (planType.description) {
+                    case PlanTypes.ApplianceRepairPlan:
+                      return InvoiceItemTypes.RepairPlan;
+                    case PlanTypes.Finance:
+                      return InvoiceItemTypes.FinancePlan;
+                    default:
+                      return InvoiceItemTypes.ServicePlan;
+                  }
+                })
+              )
             })
           )
+
+
 
         }
 

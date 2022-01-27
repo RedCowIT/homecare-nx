@@ -16,7 +16,11 @@ export class DataErrorService {
 
   }
 
-  protected getErrors(response: HttpErrorResponse): void | string | string[] {
+  public handleDataServiceError(error: any): void {
+
+  }
+
+  protected getHttpErrors(response: HttpErrorResponse): void | string | string[] {
 
   }
 }

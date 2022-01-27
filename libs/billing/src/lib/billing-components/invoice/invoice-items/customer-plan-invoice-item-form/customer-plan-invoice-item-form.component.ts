@@ -5,6 +5,7 @@ import {CustomerPlanInvoiceItemService} from "../../../../services/form/invoice/
 import {InvoiceItemsService} from "../../../../store/entity/services/invoice/invoice-items/invoice-items.service";
 import {CustomerPlanInvoiceItemBaseComponent} from "../customer-plan-invoice-item-base/customer-plan-invoice-item-base.component";
 import {EntityFormService} from "@homecare/entity";
+import {InvoicesService} from "../../../../store/entity/services/invoice/invoices/invoices.service";
 
 /**
  * TODO: Standard Service Plans
@@ -20,8 +21,9 @@ export class CustomerPlanInvoiceItemFormComponent extends CustomerPlanInvoiceIte
   constructor(public plansService: PlansService,
               public customerPlansService: CustomerPlansService,
               public formService: CustomerPlanInvoiceItemService,
+              public invoicesService: InvoicesService,
               public invoiceItemsService: InvoiceItemsService) {
-    super(plansService, customerPlansService, invoiceItemsService);
+    super(plansService, customerPlansService, invoicesService, invoiceItemsService);
   }
 
   protected getFormService(): EntityFormService {

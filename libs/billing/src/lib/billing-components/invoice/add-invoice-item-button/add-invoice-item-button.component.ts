@@ -1,11 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SelectOption} from "@homecare/common";
 import {InvoiceItemTypesService} from "../../../store/entity/services/invoice/invoice-item-types/invoice-item-types.service";
 import {ModalController, PopoverController} from "@ionic/angular";
 import {PopoverSelectComponent} from "../../../../../../ionic-common/src/lib/components/popover-select/popover-select.component";
 import {InvoiceItemModalComponent} from "../invoice-item-modal/invoice-item-modal.component";
 import {InvoiceItemTypes} from "@homecare/shared";
-import {InvoiceTableComponent} from "../invoice-table/invoice-table.component";
 
 @Component({
   selector: 'hc-add-invoice-item-button',
@@ -67,8 +66,9 @@ export class AddInvoiceItemButtonComponent implements OnInit {
 
     popover.onWillDismiss().then(
       (data: any) => {
-        console.log('onWillDismiss', data.data);
-        this.openModal(data.data.option);
+        if (data?.role !== 'backdrop' && data?.data?.option){
+          this.openModal(data.data.option);
+        }
       }
     );
 

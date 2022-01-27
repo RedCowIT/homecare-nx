@@ -112,7 +112,7 @@ export class QuoteTableService extends TableSourceService {
 
   load() {
     this.quoteItemsService.getWithQuery({
-      quoteId: `this.quoteId`
+      quoteId: `${this.quoteId}`
     }, {tag: 'QuoteTable'});
   }
 

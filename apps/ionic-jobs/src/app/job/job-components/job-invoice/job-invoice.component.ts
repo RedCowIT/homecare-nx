@@ -28,9 +28,14 @@ export class JobInvoiceComponent implements OnInit {
       })
     ])
 
+    // check cache, then query, then create.
+
+
+
     this.currentJobService.invoice$.pipe(
       first()
     ).subscribe(invoice => {
+      console.log('JobInvoice.onInit', invoice);
       if (!invoice) {
         this.invoicesService.add({
           appointmentId: this.currentJobService.appointmentId

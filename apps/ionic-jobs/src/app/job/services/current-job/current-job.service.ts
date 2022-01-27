@@ -1,20 +1,20 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject, combineLatest, Observable} from "rxjs";
+import {BehaviorSubject, combineLatest, Observable, of} from "rxjs";
 import {
-  Appointment,
+  Appointment, AppointmentVisit,
   findIndexWithId,
-  firstByKey, Invoice,
+  firstByKey, firstItem, Invoice,
   Job,
   JobSection,
   PreJobSection,
   Quote,
-  selectEntityByKey
+  selectEntityByKey, selectOrFetchFirstEntityByKey
 } from "@homecare/shared";
-import {AppointmentsService} from "@homecare/appointment";
+import {AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
 import {Store} from "@ngrx/store";
 import {JobState} from "../../store/reducers/job.reducer";
 import {JobService} from "../job/job.service";
-import {first, map} from "rxjs/operators";
+import {first, map, mergeMap} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {QuoteSection} from "@homecare/shared";
 import {InvoicesService, QuotesService} from "@homecare/billing";
@@ -30,6 +30,8 @@ export class CurrentJobService {
 
   readonly appointment$: Observable<Appointment>;
 
+  readonly appointmentVisit$: Observable<AppointmentVisit>;
+
   readonly job$: Observable<Job>;
 
   readonly preJobSections$: Observable<PreJobSection>;
@@ -43,6 +45,7 @@ export class CurrentJobService {
   constructor(private store: Store<JobState>,
               private jobsService: JobService,
               private appointmentsService: AppointmentsService,
+              private appointmentVisitsService: AppointmentVisitsService,
               private quotesService: QuotesService,
               private invoicesService: InvoicesService,
               private router: Router) {
@@ -61,16 +64,16 @@ export class CurrentJobService {
       })
     );
 
-    this.quote$ = combineLatest([this.appointmentId$, this.quotesService.entities$]).pipe(
-      map(([appointmentId, quotes]) => {
-        return firstByKey(quotes, 'appointmentId', appointmentId);
-      })
+    this.appointmentVisit$ = this.appointmentId$.pipe(
+      mergeMap(appointmentId => selectOrFetchFirstEntityByKey(this.appointmentVisitsService, 'appointmentId', appointmentId))
     );
 
-    this.invoice$ = combineLatest([this.appointmentId$, this.invoicesService.entities$]).pipe(
-      map(([appointmentId, invoices]) => {
-        return firstByKey(invoices, 'appointmentId', appointmentId);
-      })
+    this.quote$ = this.appointmentId$.pipe(
+      mergeMap(appointmentId => selectOrFetchFirstEntityByKey(this.quotesService, 'appointmentId', appointmentId))
+    );
+
+    this.invoice$ = this.appointmentId$.pipe(
+      mergeMap(appointmentId => selectOrFetchFirstEntityByKey(this.invoicesService, 'appointmentId', appointmentId))
     );
   }
 

@@ -3,7 +3,7 @@ import {PlatformService} from "@homecare/core";
 import {QuotesService} from "@homecare/billing";
 import {Quote, selectEntityByKey} from "@homecare/shared";
 import {CurrentJobService} from "../../../services/current-job/current-job.service";
-import {first} from "rxjs/operators";
+import {filter, first} from "rxjs/operators";
 
 /**
  * Base Quote component
@@ -27,9 +27,22 @@ export class QuoteComponent implements OnInit {
       first()
     ).subscribe(quote => {
       if (!quote) {
-        this.quotesService.add({
-          appointmentId: this.currentJobService.appointmentId
-        } as Quote);
+
+        console.log('QuoteCmp.', quote);
+
+        this.currentJobService.appointment$.pipe(
+          filter(appointment => !!appointment),
+          first()
+        ).subscribe(
+          appointment => {
+            this.quotesService.add({
+              appointmentId: appointment.id,
+              customerId: appointment.customerId
+            } as Quote);
+          }
+        )
+
+
       }
     })
   }

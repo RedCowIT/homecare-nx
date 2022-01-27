@@ -11,6 +11,10 @@
   color: white;
 }
 
+.modal-header.danger {
+  background: var(--ion-color-danger);
+}
+
 .modal-title {
   font-weight: bold;
   font-size: 20px;

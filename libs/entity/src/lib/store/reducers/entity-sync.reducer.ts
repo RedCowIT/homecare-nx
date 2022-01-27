@@ -55,6 +55,7 @@ const entitySyncReducer = createReducer(
 
     return {
       ...state,
+      callState: LoadingState.LOADING,
       payloadEntityName: action.payloadEntityName
     };
 
@@ -100,6 +101,8 @@ const entitySyncReducer = createReducer(
   }),
 
   on(syncEntitiesError, (state, action) => {
+
+    console.log('syncEntities error', action.error);
 
     return {
       ...state,

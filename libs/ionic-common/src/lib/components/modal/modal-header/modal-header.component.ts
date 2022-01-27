@@ -16,9 +16,16 @@ export class ModalHeaderComponent implements OnInit {
   @Input()
   buttons: ButtonConfig[] = [];
 
+  @Input()
+  isDanger = false;
+
+  @Input()
+  disableClose = false;
+
   constructor(private modalCtrl: ModalController) { }
 
   ngOnInit(): void {
+    console.log('modal header', this.isDanger);
   }
 
   async closeModal(){

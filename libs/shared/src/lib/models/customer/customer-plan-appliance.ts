@@ -4,7 +4,7 @@ export interface CustomerPlanAppliance {
   applianceTypeId: number;
   brandId: number;
   model: string;
-  serial?: string;
+  serialNo?: string;
   underWarranty: boolean;
   warrantyLengthYears: number;
   datePurchased: string;

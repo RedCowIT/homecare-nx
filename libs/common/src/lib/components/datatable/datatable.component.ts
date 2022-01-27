@@ -1,13 +1,16 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TableSourceService} from "@homecare/common";
 import { ColumnMode, SelectionType } from '@swimlane/ngx-datatable';
+import {Subject, timer} from "rxjs";
+import {SubscribedContainer} from "@homecare/shared";
+import {debounce, takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'dd-datatable',
   templateUrl: './datatable.component.html',
   styleUrls: ['./datatable.component.scss']
 })
-export class DatatableComponent implements OnInit {
+export class DatatableComponent extends SubscribedContainer implements OnInit, AfterViewInit {
 
   selectionType = SelectionType.single;
 
@@ -29,10 +32,19 @@ export class DatatableComponent implements OnInit {
   @Output()
   selectRow = new EventEmitter<unknown>();
 
+  dispatchResize$ = new Subject();
+
   constructor() {
+    super();
   }
 
   ngOnInit(): void {
+    this.dispatchResize$.pipe(
+      debounce(() => timer(1000)),
+      takeUntil(this.destroyed$)
+    ).subscribe(() => {
+      console.log('DISPATCH RESIZE');
+    });
   }
 
   select(event){
@@ -41,10 +53,12 @@ export class DatatableComponent implements OnInit {
 
   /**
    * fix: ngrx-datatable does not stretch to 100% width on first init
+   * TODO: circular reference error
    */
-  ngAfterViewChecked() {
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 100);
+  ngAfterViewInit() {
+    this.dispatchResize$.next();
+    // setTimeout(() => {
+    //   window.dispatchEvent(new Event('resize'));
+    // }, 100);
   }
 }

@@ -4,7 +4,7 @@ import {
   CustomerPlan,
   InvoiceItem,
   Plan,
-  selectEntity,
+  selectEntity, selectFirstEntityByKey,
   SubscribedContainer
 } from "@homecare/shared";
 import {combineLatest, Observable} from "rxjs";
@@ -14,6 +14,7 @@ import {InvoiceItemsService} from "../../../../store/entity/services/invoice/inv
 import {first, map, mergeMap, takeUntil, tap} from "rxjs/operators";
 import {EntityFormService} from "@homecare/entity";
 import {FormGroup} from "@angular/forms";
+import {InvoicesService} from "../../../../store/entity/services/invoice/invoices/invoices.service";
 
 @Component({
   selector: 'hc-customer-plan-invoice-item-base',
@@ -46,8 +47,9 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
   errors: string[];
 
   constructor(public plansService: PlansService,
-                        public customerPlansService: CustomerPlansService,
-                        public invoiceItemsService: InvoiceItemsService) {
+              public customerPlansService: CustomerPlansService,
+              public invoicesService: InvoicesService,
+              public invoiceItemsService: InvoiceItemsService) {
     super();
   }
 
@@ -75,6 +77,37 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
       'invoiceItem': {id: this.invoiceItemId, invoiceId: this.invoiceId},
       'customerPlan': {invoiceId: this.invoiceId, invoiceItemId: this.invoiceItemId},
     });
+
+
+    if (this.invoiceItemId) {
+      selectEntity(this.invoiceItemsService, this.invoiceItemId).pipe(first()).subscribe(
+        invoiceItem => {
+          this.getFormService().form.patchValue({
+            'invoiceItem': {
+              productId: invoiceItem.productId,
+              productCode: invoiceItem.productCode,
+              qty: invoiceItem.qty,
+              unitPrice: invoiceItem.unitPrice
+            }
+          });
+        }
+      );
+
+      selectFirstEntityByKey(this.customerPlansService, 'invoiceItemId', this.invoiceItemId).pipe(first()).subscribe(
+        customerPlan => {
+          console.log('Setting customer plan', customerPlan);
+          if (customerPlan) {
+            this.getFormService().form.patchValue({
+              'customerPlan': customerPlan
+            });
+          } else {
+            console.warn('Orphan invoice item of plan type without a customer plan object');
+          }
+        }
+      );
+
+    }
+
 
   }
 
@@ -104,8 +137,6 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
 
     this.registerFormListeners();
 
-    // TODO: patch invoiceItem and customerPlan if edit mode
-
     this.plans$ = this.plansService.entities$.pipe(map(plans => {
       return plans.filter(plan => {
         return this.planTypes.includes(plan.planTypeId);
@@ -132,8 +163,13 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
     }
   }
 
+  /**
+   * Plans have zero unit price. The plan itself has a period price in separate model.
+   * @protected
+   */
   protected createInvoiceItem(): Observable<InvoiceItem> {
     const dto = this.getFormService().createDTO() as any;
+    dto.invoiceItem.unitPrice = 0;
     return this.invoiceItemsService.add(dto.invoiceItem as InvoiceItem).pipe(tap(
       invoiceItem => {
         this.getFormService().form.patchValue({
@@ -146,8 +182,22 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
   }
 
   protected createCustomerPlan(): Observable<CustomerPlan> {
-    const dto = this.getFormService().createDTO() as any;
-    return this.customerPlansService.add(dto.customerPlan as CustomerPlan);
+
+    return selectEntity(this.invoicesService, this.invoiceId).pipe(
+      first(),
+      mergeMap(invoice => {
+
+        if (!invoice) {
+          throw new Error('Missing invoice: ' + this.invoiceId);
+        }
+
+        const dto = this.getFormService().createDTO() as any;
+        dto.customerPlan.customerId = invoice.customerId;
+
+        return this.customerPlansService.add(dto.customerPlan as CustomerPlan);
+      })
+    );
+
   }
 
   protected doCreate() {
@@ -166,6 +216,19 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
   }
 
   protected doUpdate() {
+
+    const dto = this.getFormService().createDTO() as any;
+    this.invoiceItemsService.update(dto.invoiceItem as InvoiceItem).pipe(
+      mergeMap(() => {
+        return this.customerPlansService.update(dto.customerPlan as CustomerPlan);
+      }),
+      catchHttpValidationErrors(errors => {
+        console.log('errors', errors);
+        this.errors = errors;
+      })
+    ).subscribe(() => {
+      this.done.emit();
+    });
 
   }
 }

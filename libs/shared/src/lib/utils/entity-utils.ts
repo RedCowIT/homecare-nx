@@ -1,7 +1,7 @@
 import {Dictionary} from "@ngrx/entity";
 import {EntityCollectionServiceBase} from "@ngrx/data";
-import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
+import {combineLatest, Observable, of} from "rxjs";
+import {map, mergeMap} from "rxjs/operators";
 import {findByKey, firstItem} from "./array-utils";
 
 export function entityMapValues<T>(dictionary: Dictionary<T>, keys: any[]) {
@@ -29,4 +29,36 @@ export function selectEntityByKey<T>(entityService: EntityCollectionServiceBase<
 
 export function selectFirstEntityByKey<T>(entityService: EntityCollectionServiceBase<T>, key: string, value: any): Observable<T> {
   return selectEntityByKey(entityService, key, value).pipe(map(entities => firstItem(entities)));
+}
+
+export function selectOrFetchFirstEntityByKey<T>(entityService: EntityCollectionServiceBase<T>, key: string, value: any): Observable<T> {
+
+  return selectFirstEntityByKey(entityService, key, value).pipe(
+    mergeMap(entity => {
+      if (entity) {
+        return of(entity);
+      }
+      const query: any = {};
+      query[key] = `${value}`;
+      return entityService.getWithQuery(query).pipe(map(entities => firstItem(entities)));
+    })
+  )
+
+}
+
+export function joinEntityLoading(entityServices: EntityCollectionServiceBase<any>[]): Observable<boolean> {
+  const loading$ = [];
+  for (const entityService of entityServices){
+    loading$.push(entityService.loading$);
+  }
+  return combineLatest(loading$).pipe(
+    map(loadings => {
+      for (const loading of loadings){
+        if (loading){
+          return true;
+        }
+      }
+      return false;
+    })
+  );
 }

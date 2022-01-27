@@ -21,6 +21,7 @@ export class CustomerPlanApplianceInvoiceItemService extends EntityFormService {
       }),
       customerPlan: this.fb.group({
         id: undefined,
+        customerId: [null],
         planId: [null, Validators.required],
         invoiceId: [null, Validators.required],
         invoiceItemId: [null],
@@ -36,8 +37,8 @@ export class CustomerPlanApplianceInvoiceItemService extends EntityFormService {
         applianceTypeId: [null, Validators.required],
         brandId: [null, Validators.required],
         model: [null, Validators.required],
-        serial: [null],
-        datePurchase: [null, Validators.required],
+        serialNo: [null],
+        datePurchased: [null, Validators.required],
         priceRangeId: [null, Validators.required]
       })
     });

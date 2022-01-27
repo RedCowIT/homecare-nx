@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Actions, createEffect} from '@ngrx/effects';
 import {filter, map} from 'rxjs/operators';
 import {DataServiceError, EntityAction, ofEntityOp, OP_ERROR} from '@ngrx/data';
-import {dataError, httpError} from '../actions/data-error.actions';
+import {dataServiceError, entityError, httpError} from '../actions/data-error.actions';
 import {HttpErrorResponse} from '@angular/common/http';
 
 /**
@@ -28,6 +28,8 @@ export class EntityErrorEffects {
         if (error) {
           if (error instanceof DataServiceError) {
 
+            // Http Error
+
             if (error.error instanceof HttpErrorResponse) {
               return httpError({
                 httpResponse: error.error,
@@ -35,11 +37,18 @@ export class EntityErrorEffects {
               });
             }
 
+            // Other DataService error (can still be server related, i.e. empty response)
+
+            return dataServiceError({
+              error: error,
+              originalAction: action.payload.data.originalAction
+            });
+
           }
         }
 
         // Catch all error
-        return dataError({
+        return entityError({
           error: error,
           originalAction: action.payload.data.originalAction,
         });

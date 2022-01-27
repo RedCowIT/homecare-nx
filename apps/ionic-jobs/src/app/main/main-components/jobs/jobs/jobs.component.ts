@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {PlatformService} from "@homecare/core";
 import {AppointmentsService} from "@homecare/appointment";
+import {JobsLoaderService} from "../../../../job/services/jobs-loader/jobs-loader.service";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'hc-jobs',
@@ -9,9 +11,21 @@ import {AppointmentsService} from "@homecare/appointment";
 })
 export class JobsComponent implements OnInit {
 
-  constructor(public platform: PlatformService, public appointmentsService: AppointmentsService) { }
+  constructor(public platform: PlatformService,
+              public appointmentsService: AppointmentsService,
+              public jobLoaderService: JobsLoaderService) { }
 
   ngOnInit(): void {
+  }
+
+  refresh(){
+    this.jobLoaderService.loading$.pipe(first()).subscribe(
+      isLoading => {
+        if (!isLoading) {
+          this.jobLoaderService.loadAll();
+        }
+      }
+    )
   }
 
 }

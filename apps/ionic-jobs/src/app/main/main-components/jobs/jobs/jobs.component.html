@@ -8,6 +8,28 @@
 
     <ng-template #tablet>
       <hc-job-card-list [appointments]="appointments"></hc-job-card-list>
+
+      <div class="ion-padding ion-text-center">
+        <ion-button color="medium" (click)="refresh()">
+          <ion-icon slot="start" name="refresh"></ion-icon>
+          Refresh
+        </ion-button>
+      </div>
+
+      <div *ngIf="jobLoaderService.loading$ | async as isLoading" class="ion-padding ion-text-center">
+        <div *ngIf="isLoading else notLoading">
+          <dd-spinner [show]="true"></dd-spinner>
+        </div>
+        <ng-template #notLoading>
+          <div *ngIf="!appointments?.length">
+            <div>
+              <ion-item color="dark">
+                There are currently no appointments scheduled for today. Tap Refresh to check for updates.
+              </ion-item>
+            </div>
+          </div>
+        </ng-template>
+      </div>
     </ng-template>
 
   </div>

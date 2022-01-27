@@ -1,6 +1,9 @@
 import {Injectable} from "@angular/core";
 import {Store} from "@ngrx/store";
 import {initEntitySync, registerEntity, unregisterEntity} from "../../store/actions/entity-sync.actions";
+import {Observable} from "rxjs";
+import {selectIsEntitySyncLoading} from "../../store/selectors/entity-sync.selectors";
+import {tap} from "rxjs/operators";
 
 /**
  * Load entities from remote API and sync to cache.
@@ -14,8 +17,10 @@ import {initEntitySync, registerEntity, unregisterEntity} from "../../store/acti
 })
 export class EntitySyncService {
 
-  constructor(private store: Store) {
+  readonly isLoading$: Observable<boolean>;
 
+  constructor(private store: Store) {
+    this.isLoading$ = this.store.select(selectIsEntitySyncLoading);
   }
 
   registerEntity(entityName: string) {
@@ -31,7 +36,7 @@ export class EntitySyncService {
     }));
   }
 
-  init(payloadEntityName: string){
+  init(payloadEntityName: string) {
     this.store.dispatch(initEntitySync({payloadEntityName}));
   }
 }

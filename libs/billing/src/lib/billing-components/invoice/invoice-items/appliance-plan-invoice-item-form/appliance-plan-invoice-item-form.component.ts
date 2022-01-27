@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {
-  catchHttpValidationErrors,
-  CustomerPlanAppliance,
+  catchHttpValidationErrors, CustomerPlan,
+  CustomerPlanAppliance, InvoiceItem,
   Plan,
   PlanTypes,
-  selectFirstEntityByKey
+  selectFirstEntityByKey, selectOrFetchFirstEntityByKey
 } from "@homecare/shared";
 import {combineLatest, Observable} from "rxjs";
 import {ApplianceRepairPlanService, PlanPaymentPeriodsService, PlansService, PlanTypesService} from "@homecare/plan";
@@ -14,6 +14,7 @@ import {first, map, mergeAll, mergeMap, tap} from "rxjs/operators";
 import {CustomerPlanApplianceInvoiceItemService} from "../../../../services/form/invoice/customer-plan-appliance-invoice-item-form/customer-plan-appliance-invoice-item.service";
 import {CustomerPlanInvoiceItemBaseComponent} from "../customer-plan-invoice-item-base/customer-plan-invoice-item-base.component";
 import {EntityFormService} from "@homecare/entity";
+import {InvoicesService} from "../../../../store/entity/services/invoice/invoices/invoices.service";
 
 @Component({
   selector: 'hc-appliance-plan-invoice-item-form',
@@ -30,11 +31,12 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
               public customerPlanAppliancesService: CustomerPlanAppliancesService,
               public formService: CustomerPlanApplianceInvoiceItemService,
               public planTypesService: PlanTypesService,
+              public invoicesService: InvoicesService,
               public invoiceItemsService: InvoiceItemsService,
               public planPaymentPeriodsService: PlanPaymentPeriodsService,
               public applianceRepairPlanService: ApplianceRepairPlanService) {
 
-    super(plansService, customerPlansService, invoiceItemsService);
+    super(plansService, customerPlansService, invoicesService, invoiceItemsService);
 
   }
 
@@ -90,7 +92,7 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
       }
     )
 
-    // TODO: if invoice item, patch appliance plan
+    this.patchCustomerAppliancePlan();
 
 
   }
@@ -122,7 +124,30 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
 
   }
 
+  patchCustomerAppliancePlan() {
+
+    const customerPlanId = this.getForm().value.customerPlan?.id;
+
+    if (customerPlanId) {
+
+      selectOrFetchFirstEntityByKey(this.customerPlanAppliancesService, 'customerPlanId', customerPlanId).pipe(
+        first()
+      ).subscribe(appliancePlan => {
+
+        if (appliancePlan) {
+          this.getForm().patchValue({
+            'appliancePlan': appliancePlan
+          });
+        }
+
+      });
+
+    }
+
+  }
+
   protected doCreate() {
+
     this.createInvoiceItem().pipe(
       mergeMap(invoiceItem => {
         return this.createCustomerPlan();
@@ -135,7 +160,7 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
           }
         });
 
-        const dto = this.getFormService().createDTO({formGroupName: 'appliancePlan'});
+        const dto = this.getFormService().createDTO({groupName: 'appliancePlan'});
 
         return this.customerPlanAppliancesService.add(dto as CustomerPlanAppliance);
 
@@ -151,6 +176,22 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
   }
 
   protected doUpdate() {
+
+    const dto = this.getFormService().createDTO() as any;
+    this.invoiceItemsService.update(dto.invoiceItem as InvoiceItem).pipe(
+      mergeMap(() => {
+        return this.customerPlansService.update(dto.customerPlan as CustomerPlan);
+      }),
+      mergeMap(() => {
+        return this.customerPlanAppliancesService.update(dto.appliancePlan as CustomerPlanAppliance);
+      }),
+      catchHttpValidationErrors(errors => {
+        console.log('errors', errors);
+        this.errors = errors;
+      })
+    ).subscribe(() => {
+      this.done.emit();
+    });
 
   }
 }

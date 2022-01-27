@@ -1,5 +1,6 @@
 export interface AppointmentVisit {
   id: number;
+  appointmentId: number;
   customerId: number;
   customerComments: string;
   shampooComments: string;

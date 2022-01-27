@@ -13,4 +13,7 @@ export class StoreLogsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  stringify(data: any){
+    return JSON.stringify(data);
+  }
 }

@@ -24,7 +24,7 @@ export class AppDataErrorService extends DataErrorService {
 
     super.handleHttpError(error);
 
-    this.logger.error('AppDataErrorService.handleHttpError', error);
+    this.logger.error('DataHttpError', error);
 
     switch (error.status) {
       case 401:
@@ -41,6 +41,14 @@ export class AppDataErrorService extends DataErrorService {
       default:
         this.unhandledHttpError(error);
     }
+  }
+
+
+  handleDataServiceError(error: any) {
+
+    this.logger.error('DataServiceError', error);
+
+    this.serverError(error);
   }
 
   /**
@@ -65,7 +73,7 @@ export class AppDataErrorService extends DataErrorService {
   private async serverError(error: HttpErrorResponse) {
     const toast = await this.toastCtrl.create({
       color: 'danger',
-      message: 'There was an issue talking to our servers, please refresh and try again. (' + error.status + ')',
+      message: 'There was an issue talking to our servers, please try again. (' + error.status + ')',
       buttons: [
         {
           icon: 'close',
@@ -84,6 +92,7 @@ export class AppDataErrorService extends DataErrorService {
    */
   private unhandledHttpError(error: HttpErrorResponse) {
 
+    console.log('unhandled http error');
 
   }
 }

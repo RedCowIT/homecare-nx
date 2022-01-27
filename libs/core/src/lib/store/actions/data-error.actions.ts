@@ -10,7 +10,12 @@ export const httpError = createAction(
   props<{ httpResponse: HttpErrorResponse, originalAction: Action }>()
 );
 
-export const dataError = createAction(
-  '[Data] Error',
+export const dataServiceError = createAction(
+  '[DataService] Error',
+  props<{ error: any, originalAction: Action }>()
+);
+
+export const entityError = createAction(
+  '[Entity] Error',
   props<{ error: any, originalAction: Action }>()
 );

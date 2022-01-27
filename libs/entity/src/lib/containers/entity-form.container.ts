@@ -1,5 +1,5 @@
 import {EMPTY, Observable} from "rxjs";
-import {first, takeUntil, tap} from "rxjs/operators";
+import {filter, first, takeUntil, tap} from "rxjs/operators";
 import {EntityCollectionServiceBase} from "@ngrx/data";
 import {ApiValidationErrors, catchHttpValidationErrors, EntityContainer} from "@homecare/shared";
 import {EntityFormService} from "@homecare/entity";
@@ -48,7 +48,11 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
     console.log('EntityForm.onInit', {id: this.id});
 
     if (this.isEditMode()) {
-      this.model$.pipe(first()).subscribe(model => {
+      this.model$.pipe(
+        filter(model => !!model),
+        first(),
+        takeUntil(this.destroyed$)
+      ).subscribe(model => {
 
         console.log('EntityForm.patchForm', model);
 
