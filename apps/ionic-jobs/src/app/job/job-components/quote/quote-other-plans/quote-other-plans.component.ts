@@ -3,7 +3,7 @@ import {BehaviorSubject, combineLatest, Observable} from "rxjs";
 import {ButtonConfig} from "@homecare/common";
 import {CurrentJobService} from "../../../services/current-job/current-job.service";
 import {createFooterBackButton, createFooterNextButton} from "../../../support/footer-button-factory";
-import {findByKey, firstItem, QuoteSection} from "@homecare/shared";
+import {findByKey, firstItem, PlanTypes, QuoteSection} from "@homecare/shared";
 import {first, map} from "rxjs/operators";
 import {PlanTypesService} from "@homecare/plan";
 import {QuoteManagerService} from "../../../../../../../../libs/billing/src/lib/services/quote-manager/quote-manager.service";
@@ -48,7 +48,10 @@ export class QuoteOtherPlansComponent implements OnInit {
     ]).pipe(
       map(([planTypes, quotePlanDetails]) => {
 
-        return planTypes.map(planType => {
+        return planTypes.filter(planType => {
+          return planType.description !== PlanTypes.ApplianceRepairPlan &&
+            planType.description !== PlanTypes.Finance
+        }).map(planType => {
 
           const quoteDetailsMatch = findByKey(quotePlanDetails, 'planTypeId', planType.id);
 

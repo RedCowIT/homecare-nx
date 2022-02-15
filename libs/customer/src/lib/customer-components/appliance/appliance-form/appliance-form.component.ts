@@ -1,19 +1,18 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ApplianceModelsService} from "../../../store/entity/services/appliance-models.service";
 
 import {AbstractControl, FormGroup} from "@angular/forms";
 import {first, takeUntil, tap} from "rxjs/operators";
 import {
-  ApplianceModel,
-  doesApplianceTypeUseModelLookup,
+  ApplianceModel, doesCustomerApplianceTypeUseModelLookup,
   Manufacturer,
   selectEntity,
   selectEntityByKey,
   SubscribedContainer
 } from "@homecare/shared";
 import {BooleanValue} from "@homecare/common";
-import {ApplianceTypesService} from "../../../store/entity/services/appliance-types.service";
-import {ManufacturersService} from "../../../store/entity/services/manufacturers.service";
+import {CustomerApplianceTypesService} from "../../../store/entity/services/customer-appliance-types/customer-appliance-types.service";
+import {ApplianceModelsService, ManufacturersService} from "@homecare/product";
+
 
 @Component({
   selector: 'hc-appliance-form',
@@ -34,7 +33,7 @@ export class ApplianceFormComponent extends SubscribedContainer implements OnIni
 
   applianceModels: ApplianceModel[];
 
-  constructor(public applianceTypesService: ApplianceTypesService,
+  constructor(public customerApplianceTypesService: CustomerApplianceTypesService,
               public applianceModelsService: ApplianceModelsService,
               public manufacturersService: ManufacturersService) {
     super();
@@ -66,8 +65,8 @@ export class ApplianceFormComponent extends SubscribedContainer implements OnIni
       return;
     }
 
-    selectEntity(this.applianceTypesService, applianceTypeId).pipe(first()).subscribe(applianceType => {
-      this.usesModelLookup = {value: doesApplianceTypeUseModelLookup(applianceType)};
+    selectEntity(this.customerApplianceTypesService, applianceTypeId).pipe(first()).subscribe(applianceType => {
+      this.usesModelLookup = {value: doesCustomerApplianceTypeUseModelLookup(applianceType)};
     });
   }
 

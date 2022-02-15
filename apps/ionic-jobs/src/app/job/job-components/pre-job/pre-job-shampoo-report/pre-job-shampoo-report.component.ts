@@ -7,6 +7,8 @@ import {CurrentJobService} from "../../../services/current-job/current-job.servi
 import {createFooterBackButton, createFooterNextButton} from "../../../support/footer-button-factory";
 import {PreJobSection} from "@homecare/shared";
 import {ShampooReportFormComponent} from "../../../../../../../../libs/appointment/src/lib/appointment-components/pre-job/shampoo-report-form/shampoo-report-form.component";
+import {AppointmentVisitsService} from "@homecare/appointment";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'hc-pre-job-shampoo-report',
@@ -22,7 +24,8 @@ export class PreJobShampooReportComponent implements OnInit {
 
   constructor(public route: ActivatedRoute,
               public router: Router,
-              public currentJobService: CurrentJobService) {
+              public currentJobService: CurrentJobService,
+              public appointmentVisitsService: AppointmentVisitsService) {
 
   }
 
@@ -35,7 +38,13 @@ export class PreJobShampooReportComponent implements OnInit {
       createFooterNextButton(async () => {
 
         if (this.shampooReportForm.validate()){
-          this.currentJobService.completePreJobSection(PreJobSection.ShampooReport);
+
+          this.shampooReportForm.save().pipe(first()).subscribe(
+            () => {
+              this.currentJobService.completePreJobSection(PreJobSection.ShampooReport);
+            }
+          )
+
         }
 
       })

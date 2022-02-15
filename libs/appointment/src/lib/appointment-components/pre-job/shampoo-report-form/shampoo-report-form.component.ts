@@ -1,8 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EntityFormContainer} from "@homecare/entity";
-import {AppointmentVisit} from "@homecare/shared";
+import {AppointmentVisit, selectEntity} from "@homecare/shared";
 import {AppointmentVisitsService} from "../../../store/entity/services/appointment-visits/appointment-visits.service";
 import {ShampooReportFormService} from "../../../services/form/shampoo-report-form/shampoo-report-form.service";
+import {Observable, of, throwError} from "rxjs";
+import {catchError, first, mergeMap} from "rxjs/operators";
 
 @Component({
   selector: 'hc-shampoo-report-form',
@@ -12,8 +14,8 @@ import {ShampooReportFormService} from "../../../services/form/shampoo-report-fo
 })
 export class ShampooReportFormComponent extends EntityFormContainer<AppointmentVisit> implements OnInit {
 
-  @Input()
-  appointmentId: number;
+  // @Input()
+  // appointmentId: number;
 
   constructor(public formService: ShampooReportFormService,
               public entityService: AppointmentVisitsService) {
@@ -22,6 +24,25 @@ export class ShampooReportFormComponent extends EntityFormContainer<AppointmentV
 
   ngOnInit() {
     super.ngOnInit();
-    this.patchForm({appointmentId: this.appointmentId});
+    // this.patchForm({appointmentId: this.appointmentId});
+  }
+
+  save(): Observable<AppointmentVisit> {
+
+    return this.model$.pipe(
+      first(),
+      mergeMap(appointmentVisit => {
+
+        const dto = this.createDTO();
+
+        return this.entityService.update({
+          ...appointmentVisit,
+          shampooComments: dto.shampooComments
+        });
+
+      }),
+      catchError(error => throwError(error))
+    );
+
   }
 }

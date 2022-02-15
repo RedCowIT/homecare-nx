@@ -7,7 +7,16 @@
     </div>
 
     <ng-template #tablet>
-      <hc-job-card-list [appointments]="appointments"></hc-job-card-list>
+
+      <div *ngIf="appointments.length === 0; else hasAppointments" class="ion-padding">
+        <ion-item color="light" lines="full">
+          No appointments for today.
+        </ion-item>
+      </div>
+
+      <ng-template #hasAppointments>
+        <hc-job-card-list [appointments]="appointments"></hc-job-card-list>
+      </ng-template>
 
       <div class="ion-padding ion-text-center">
         <ion-button color="medium" (click)="refresh()">

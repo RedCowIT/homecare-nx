@@ -18,26 +18,23 @@ export class AppErrorService extends ErrorHandler {
 
   handleError(err: any): void {
 
-    this.logger.error('Unhandled error', err);
+    try {
+      console.error('ErrorService.handleError', typeof err, err);
 
-    // try {
-    //   console.error('ErrorService.handleError', typeof err, err);
-    //
-    //   this.reportError('Unhandled error', err);
-    //
-    //   // Call parent handleError method for debug
-    //   super.handleError(err);
-    //
-    // } catch (e) {
-    //   console.error('Last defence: error handling error!');
-    // }
+      this.reportError('Unhandled error', err);
+
+      // Call parent handleError method for debug
+      super.handleError(err);
+
+    } catch (e) {
+      console.error('Last defence: error handling error!');
+    }
   }
 
   private reportError(message: string, data: any) {
 
-    // const errorString = ErrorUtils.errorMessage(message, data);
-    //
-    // this.logger.error(errorString, data);
+    this.logger.error(message, data);
+
     //
     // this.firebase.trackEvent({
     //   category: 'error',

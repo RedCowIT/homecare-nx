@@ -35,7 +35,7 @@ export const environment = {
       level: 'trace',
       prefix: '[jobs]',
       options: {
-        logLimit: 100
+        logLimit: 500
       }
     }
   ],

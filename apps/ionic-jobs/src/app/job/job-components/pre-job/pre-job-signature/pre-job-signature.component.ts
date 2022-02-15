@@ -40,7 +40,7 @@ export class PreJobSignatureComponent implements OnInit {
 
           this.showError = false;
 
-          selectEntity(this.appointmentVisitsService, this.currentJobService.appointmentId)
+          this.currentJobService.appointmentVisit$
             .pipe(first())
             .subscribe(appointmentVisit => {
 
@@ -51,14 +51,10 @@ export class PreJobSignatureComponent implements OnInit {
                 return;
               }
 
-              this.appointmentVisitsService.entityMap$.pipe(
-                mergeMap(appointmentVisitMap => {
-                  return this.appointmentVisitsService.upsert(appointmentVisitMap[this.currentJobService.appointmentId]);
-                }),
-                first()
-              ).subscribe(async () => {
+              this.appointmentVisitsService.update(appointmentVisit).pipe(first()).subscribe(async () => {
                 await this.currentJobService.completePreJobSection(PreJobSection.Signature);
               });
+
             });
 
         }
@@ -76,7 +72,7 @@ export class PreJobSignatureComponent implements OnInit {
       preInspectionSignatureJSON: data
     });
 
-    if (data){
+    if (data) {
       this.showError = false;
     }
   }

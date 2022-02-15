@@ -43,7 +43,14 @@ export class DocumentGalleryComponent implements OnInit {
             document.documentTypeId == this.documentTypeId &&
             document.documentSubTypeId == this.documentSubTypeId;
 
-          console.log('document', {subType: this.documentSubTypeId, document, keep});
+          console.log('document', {
+            filter: {
+              parentId: this.parentId,
+              subId: this.subId,
+              documentTypeId: this.documentTypeId,
+              documentSubTypeId: this.documentSubTypeId
+            }, document, keep
+          });
 
           return keep;
 
@@ -71,7 +78,7 @@ export class DocumentGalleryComponent implements OnInit {
         console.log('onWillDismiss', data.data);
         // this.openModal(data.data.option);
 
-        if (data?.data?.option?.value === 'delete'){
+        if (data?.data?.option?.value === 'delete') {
           this.documentsService.delete({id: document.id} as Document).pipe(
             first()
           ).subscribe();

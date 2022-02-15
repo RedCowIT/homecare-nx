@@ -9,4 +9,6 @@ export interface Appointment {
   bookingDateTime: string;
   notes: string;
   priceAgreed: number;
+  rebooked: boolean;
+  invoiced: boolean;
 }

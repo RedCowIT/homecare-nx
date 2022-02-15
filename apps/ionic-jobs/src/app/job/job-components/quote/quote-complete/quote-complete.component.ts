@@ -52,7 +52,7 @@ export class QuoteCompleteComponent implements OnInit {
     this.currentJobService.quote$.pipe(
       mergeMap(quote => {
         return this.quotesService.update({
-          id: quote.id,
+          ...quote,
           accepted: true
         }).pipe(
           catchError(error => {

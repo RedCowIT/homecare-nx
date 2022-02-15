@@ -58,9 +58,9 @@ export class InvoiceListTableService extends TableSourceService {
   }
 
   load() {
-    this.invoicesService.getAll(
-      {
-        tag: 'InvoiceListTable'
-      });
+    // this.invoicesService.getAll(
+    //   {
+    //     tag: 'InvoiceListTable'
+    //   });
   }
 }

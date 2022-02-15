@@ -1,4 +1,4 @@
-<div *ngIf="appointment$ | async as appointment">
+<div *ngIf="appointment$ | async as appointment" [ngClass]="{rebooked: appointment.rebooked}">
   <ion-card *ngIf="appointment">
     <ion-card-header>
       <hc-job-date-header [date]="appointment.bookingDateTime"></hc-job-date-header>
@@ -28,12 +28,21 @@
         </div>
       </div>
 
-      <div class="card-buttons d-flex ion-justify-content-end">
-        <hc-no-answer-button [appointmentId]="appointment.id"></hc-no-answer-button>
-        <ion-button (click)="openJob()" class="ion-margin-start">
-          Start
-        </ion-button>
+      <div *ngIf="appointment?.rebooked; else jobActions">
+        <div class="card-buttons d-flex ion-justify-content-end">
+          <ion-badge class="rebooked-badge" color="danger">Rebooked</ion-badge>
+        </div>
       </div>
+
+      <ng-template #jobActions>
+        <div class="card-buttons d-flex ion-justify-content-end">
+          <hc-no-answer-button [appointmentId]="appointment.id"></hc-no-answer-button>
+          <ion-button (click)="openJob()" class="ion-margin-start">
+            Start
+          </ion-button>
+        </div>
+      </ng-template>
+
     </ion-card-content>
   </ion-card>
 </div>

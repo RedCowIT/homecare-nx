@@ -1,5 +1,6 @@
 import {Policy} from "@homecare/shared";
 import {createStringKeyComparer} from "@homecare/common";
+import {CustomerEntity} from "@homecare/customer";
 
 export enum ProductEntity {
   ApplianceModel = 'ApplianceModel',

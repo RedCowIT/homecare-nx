@@ -4,7 +4,7 @@ import {AppInitHandler} from '@homecare/shared';
 import {EntityDefinitionService} from "@ngrx/data";
 import {AppointmentEntity, appointmentEntityMetadata} from "@homecare/appointment";
 import {EntitySyncService} from "@homecare/entity";
-import {CoreEntity, coreEntityMetadata} from "@homecare/core";
+import {coreEntityMetadata} from "@homecare/core";
 import {CustomerEntity, customerEntityMetadata} from "@homecare/customer";
 import {PlanEntity, planEntityMetadata} from "@homecare/plan";
 import {ProductEntity, productEntityMetadata} from "@homecare/product";
@@ -44,6 +44,7 @@ export class EntityInitService implements AppInitHandler {
     BillingEntity.InvoiceItemType,
     BillingEntity.InvoicePaymentType,
     BillingEntity.InvoiceStatus,
+    CustomerEntity.CustomerApplianceType,
     PlanEntity.PlanPaymentPeriod,
     PlanEntity.PlanType,
     PlanEntity.Plan,
@@ -56,8 +57,7 @@ export class EntityInitService implements AppInitHandler {
     ProductEntity.ApplianceModel,
     ProductEntity.ProductCategory,
     DocumentEntity.DocumentType,
-    DocumentEntity.DocumentSubType,
-    // CustomerEntity.CustomerApplianceType
+    DocumentEntity.DocumentSubType
   ];
 
   constructor(private entityDefinitionService: EntityDefinitionService,

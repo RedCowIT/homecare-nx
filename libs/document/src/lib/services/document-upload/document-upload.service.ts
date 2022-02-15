@@ -3,14 +3,17 @@ import {Observable} from "rxjs";
 import {Document} from "@homecare/shared";
 import {HttpClient} from "@angular/common/http";
 import {ApiUrlService} from "@homecare/common";
-import {map} from "rxjs/operators";
+import {map, tap} from "rxjs/operators";
+import {DocumentsService} from "../../store/entity/services/documents/documents.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentUploadService {
 
-  constructor(protected httpClient: HttpClient, protected apiUrlService: ApiUrlService) {
+  constructor(protected httpClient: HttpClient,
+              protected apiUrlService: ApiUrlService,
+              protected documentsService: DocumentsService) {
   }
 
   upload(formData: FormData): Observable<Document> {
@@ -19,6 +22,11 @@ export class DocumentUploadService {
       map((response: any) => {
         console.log('Upload response', response);
         return response?.data as Document;
+      }),
+      tap(document => {
+        if (document){
+          this.documentsService.addOneToCache(document);
+        }
       })
     );
 

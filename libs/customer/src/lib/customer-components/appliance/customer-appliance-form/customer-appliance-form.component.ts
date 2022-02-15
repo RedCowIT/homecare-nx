@@ -1,18 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EntityFormContainer} from "@homecare/entity";
-import {
-  ApplianceModel,
-  CustomerAppliance,
-  doesApplianceTypeUseModelLookup,
-  Manufacturer,
-  selectEntity,
-  selectEntityByKey
-} from "@homecare/shared";
+import {CustomerAppliance} from "@homecare/shared";
 import {CustomerAppliancesService} from "../../../store/entity/services/customer-appliances/customer-appliances.service";
 import {CustomerApplianceFormService} from "../../../services/form/customer-appliance-form/customer-appliance-form.service";
-import {ApplianceModelsService, ApplianceTypesService, ManufacturersService} from "@homecare/product";
-import {BooleanValue} from "@homecare/common";
-import {first, takeUntil, tap} from "rxjs/operators";
+import {CustomerApplianceTypesService} from "../../../store/entity/services/customer-appliance-types/customer-appliance-types.service";
 
 @Component({
   selector: 'hc-customer-appliance-form',
@@ -30,7 +21,7 @@ export class CustomerApplianceFormComponent extends EntityFormContainer<Customer
 
   constructor(public formService: CustomerApplianceFormService,
               public entityService: CustomerAppliancesService,
-              public applianceTypesService: ApplianceTypesService) {
+              public customerApplianceTypesService: CustomerApplianceTypesService) {
 
     super(formService, entityService);
 

@@ -15,10 +15,12 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {CustomerContactFormComponent} from './customer-contact-form/customer-contact-form.component';
 import {PlanComponentsModule} from "../../../../plan/src/lib/plan-components/plan-components.module";
 import {ProductComponentsModule} from "../../../../product/src/lib/product-components/product-components.module";
+import {ApplianceFormComponent} from "./appliance/appliance-form/appliance-form.component";
 
 
 @NgModule({
   declarations: [
+    ApplianceFormComponent,
     CustomerNameComponent,
     CustomerAddressComponent,
     CustomerPlanListComponent,
@@ -39,6 +41,7 @@ import {ProductComponentsModule} from "../../../../product/src/lib/product-compo
     ProductComponentsModule
   ],
   exports: [
+    ApplianceFormComponent,
     CustomerNameComponent,
     CustomerAddressComponent,
     CustomerPlanListComponent,
