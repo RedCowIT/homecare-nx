@@ -1,6 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {setCacheStoreItem, setCacheStoreItemError, setCacheStoreItemSuccess} from "../actions/cache-store.actions";
+import {
+  removeCacheStoreItem, removeCacheStoreItemSuccess,
+  setCacheStoreItem,
+  setCacheStoreItemError,
+  setCacheStoreItemSuccess
+} from "../actions/cache-store.actions";
 import {catchError, map, switchMap} from "rxjs/operators";
 import {from, of} from "rxjs";
 import {CacheStoreService} from "../../services/cache/cache-store.service";
@@ -20,7 +25,24 @@ export class CacheStoreEffects {
           catchError(error => {
             return of(setCacheStoreItemError({error}))
           })
-        )
+        );
+
+      })
+    );
+  });
+
+  removeCacheStoreItem$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(removeCacheStoreItem),
+      switchMap(action => {
+
+        return from(this.storageService.clear(action.key)).pipe(
+          map(() => removeCacheStoreItemSuccess({key: action.key})),
+          catchError(error => {
+            return of(null)
+          })
+        );
+
       })
     );
   });

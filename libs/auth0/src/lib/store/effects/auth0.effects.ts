@@ -45,6 +45,7 @@ export class Auth0Effects {
           })
         );
 
+
       }
 
     })
@@ -104,11 +105,11 @@ export class Auth0Effects {
 
         // window.location.href = url;
 
-        console.log('using browser auth url', url);
+        // console.log('using browser auth url', url);
         // window.location.href = url;
         // window.open(url, '_system');
         await Browser.open({url: url});
-      })
+      });
 
       // this.auth0ClientService.login(action.targetPath);
 

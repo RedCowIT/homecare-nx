@@ -24,5 +24,6 @@ module.exports = {
     '<rootDir>/libs/common',
     '<rootDir>/libs/ionic-common',
     '<rootDir>/libs/document',
+    '<rootDir>/libs/auth',
   ],
 };

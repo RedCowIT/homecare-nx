@@ -4,7 +4,11 @@ const config: CapacitorConfig = {
   appId: 'uk.co.homecareservicecentre',
   appName: 'Homecare',
   webDir: 'www',
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
+  server: {
+    androidScheme: 'https',
+    hostname: 'homecareservicecentre.com'
+  }
 };
 
 export default config;

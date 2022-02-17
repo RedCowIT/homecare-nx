@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {Auth0Service} from "@homecare/auth0";
+import {Component, OnInit} from '@angular/core';
+import {TokenAuthService} from "@homecare-nx/auth";
 
 @Component({
   selector: 'hc-logout',
@@ -8,10 +8,10 @@ import {Auth0Service} from "@homecare/auth0";
 })
 export class LogoutPage implements OnInit {
 
-  constructor(private auth0Service: Auth0Service) { }
+  constructor(private authService: TokenAuthService) { }
 
   ngOnInit() {
-    this.auth0Service.logout();
+    this.authService.logout();
   }
 
 }

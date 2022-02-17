@@ -18,11 +18,17 @@ export class EntitySyncErrorService {
 
   async handleError(error) {
 
-    const modal = await this.modalCtrl.create({
-      component: EntitySyncErrorModalComponent,
-      backdropDismiss: false
-    });
+    console.log('ENTITY SYNC ERROR', error);
 
-    await modal.present();
+    if (error?.status !== 401){
+      const modal = await this.modalCtrl.create({
+        component: EntitySyncErrorModalComponent,
+        backdropDismiss: false
+      });
+
+      await modal.present();
+    }
+
+
   }
 }

@@ -42,7 +42,8 @@
       "@homecare/ionic-shared": ["libs/ionic-shared/src/index.ts"],
       "@homecare/common": ["libs/common/src/index.ts"],
       "@homecare/ionic-common": ["libs/ionic-common/src/index.ts"],
-      "@homecare-nx/document": ["libs/document/src/index.ts"]
+      "@homecare-nx/document": ["libs/document/src/index.ts"],
+      "@homecare-nx/auth": ["libs/auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

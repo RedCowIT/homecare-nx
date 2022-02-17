@@ -1,13 +1,13 @@
-import {combineLatest, from, Observable} from 'rxjs';
+import {combineLatest, from, Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {AppInitFactory, AppInitHandler} from '@homecare/shared';
 import {filter, first, tap} from 'rxjs/operators';
-import {Auth0Service} from '@homecare/auth0';
 import {LoggerService, LogHandlerFactory} from "@homecare/core";
 import {environment} from "../../../environments/environment";
 import {Platform} from "@ionic/angular";
 import {Storage} from '@ionic/storage-angular';
 import {Store} from "@ngrx/store";
+import {TokenAuthService} from "@homecare-nx/auth";
 
 /**
  * Bootstraps application before any component loads
@@ -21,11 +21,15 @@ import {Store} from "@ngrx/store";
 })
 export class AppInitService implements AppInitHandler {
 
+  private storage$: Observable<Storage>;
+
   constructor(private platform: Platform,
               private storage: Storage,
-              private auth0Service: Auth0Service,
+              private authService: TokenAuthService,
               private logger: LoggerService,
               private store: Store) {
+
+    this.storage$ = from(this.storage.create());
 
   }
 
@@ -35,35 +39,55 @@ export class AppInitService implements AppInitHandler {
 
     this.logger.debug('AppInitService.init');
 
-    this.platform.ready().then(async () => {
-      if (this.platform.is('capacitor')) {
-        this.logger.debug('Capacitor ready');
+    combineLatest([this.storage$, of(this.platform.ready())]).pipe(
+      first()
+    ).subscribe(([storage, platformReady]) => {
+
+      console.log('PLATFORM READY', storage, platformReady);
+
+      if (this.platform.is('capacitor')){
+
       }
 
-      this.auth0Service.init();
-    });
+      this.authService.init();
+
+    })
+    //
+    // this.platform.ready().then(async () => {
+    //
+    //   if (this.platform.is('capacitor')) {
+    //     this.logger.debug('Capacitor ready');
+    //   }
+    //
+    //
+    //
+    //   // this.authService.init();
+    // });
 
   }
 
 
   waitUntilInitialized(): Observable<any> {
 
-    const storage$ = from(this.storage.create());
 
-    const authReady$ = this.auth0Service.isInitialised$.pipe(
+    const authReady$ = this.authService.isInitialised$.pipe(
       filter(authReady => {
         return authReady;
       })
     );
 
-    return combineLatest([storage$, authReady$]).pipe(
-      tap(([storage, authenticated]) => {
+    return combineLatest([this.storage$, authReady$]).pipe(
+      tap(([storage, authReady]) => {
 
-        this.logger.debug('AppInitService.initialized', {authenticated});
+        // this.logger.debug('AppInitService.initialized', {authenticated});
+        //
+        // if (authenticated) {
+        //   this.authenticated();
+        // } else {
+        //   this.unauthenticated();
+        // }
 
-        if (authenticated) {
-          this.authenticated();
-        }
+        return authReady;
       }),
       first()
     );
@@ -74,6 +98,10 @@ export class AppInitService implements AppInitHandler {
    * User is authenticated, trigger async loads. Result is not waited on.
    */
   private authenticated() {
+
+  }
+
+  private unauthenticated(){
 
   }
 

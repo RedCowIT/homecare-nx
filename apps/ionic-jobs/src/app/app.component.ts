@@ -1,14 +1,13 @@
 import {Component, NgZone} from '@angular/core';
 import {LoadingController, Platform} from '@ionic/angular';
-import {Auth0Service} from "@homecare/auth0";
 import {EntitySyncService} from "@homecare/entity";
 import {CoreEntity, PlatformService} from "@homecare/core";
-import {filter, tap} from "rxjs/operators";
+import {distinct, distinctUntilChanged, filter} from "rxjs/operators";
 
 import {App} from '@capacitor/app';
-import {Browser} from "@capacitor/browser";
 import {SplashScreen} from "@ionic-native/splash-screen";
-import {selectIsEntitySyncLoading} from "../../../../libs/entity/src/lib/store/selectors/entity-sync.selectors";
+import {TokenAuthService} from "@homecare-nx/auth";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'homecare-nx-root',
@@ -23,9 +22,10 @@ export class AppComponent {
     public platformService: PlatformService,
     private platform: Platform,
     private zone: NgZone,
-    private auth0Service: Auth0Service,
+    private authService: TokenAuthService,
     private entitySyncService: EntitySyncService,
-    private loadingCtrl: LoadingController) {
+    private loadingCtrl: LoadingController,
+    private router: Router) {
     this.initializeApp().then(() => {
     });
   }
@@ -45,12 +45,11 @@ export class AppComponent {
       }
     });
 
-    this.auth0Service.isAuthenticated$.pipe(
+    this.authService.isAuthenticated$.pipe(
       filter(isAuthenticated => isAuthenticated)
-    ).subscribe(() => {
+    ).subscribe((isAuthenticated) => {
       this.entitySyncService.init(CoreEntity.AppDataId);
     });
-
 
     this.entitySyncService.isLoading$.subscribe(async isLoading => {
 
@@ -68,7 +67,7 @@ export class AppComponent {
           });
 
           // if this.isLoading has changed during async pause, dismiss.
-          if (!this.isLoading){
+          if (!this.isLoading) {
             await this.dismissLoader();
             return;
           }
@@ -77,7 +76,7 @@ export class AppComponent {
 
           // if this.isLoading has changed after async pause, dismiss
 
-          if (!this.isLoading){
+          if (!this.isLoading) {
             await this.dismissLoader();
             return;
           }
@@ -109,12 +108,12 @@ export class AppComponent {
 
     // await Browser.close();
 
-    if (this.auth0Service.isCallback(data.url)) {
-      console.log('Handling Auth0 Callback');
-      this.auth0Service.handleCallback(data.url);
-    } else {
-      console.log('Not an Auth0 callback. Black hole.', data);
-    }
+    // if (this.auth0Service.isCallback(data.url)) {
+    //   console.log('Handling Auth0 Callback');
+    //   this.auth0Service.handleCallback(data.url);
+    // } else {
+    //   console.log('Not an Auth0 callback. Black hole.', data);
+    // }
 
     // Example url: https://beerswift.app/tabs/tab2
     // slug = /tabs/tab2
