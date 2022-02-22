@@ -8,13 +8,13 @@ import {
   JobSection,
   PreJobSection,
   Quote,
-  selectEntityByKey, selectOrFetchFirstEntityByKey
+  selectEntityByKey, selectOrFetchEntity, selectOrFetchFirstEntityByKey
 } from "@homecare/shared";
 import {AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
 import {Store} from "@ngrx/store";
 import {JobState} from "../../store/reducers/job.reducer";
 import {JobService} from "../job/job.service";
-import {first, map, mergeMap} from "rxjs/operators";
+import {filter, first, map, mergeMap} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {QuoteSection} from "@homecare/shared";
 import {InvoicesService, QuotesService} from "@homecare/billing";
@@ -51,6 +51,7 @@ export class CurrentJobService {
               private router: Router) {
 
     this.job$ = combineLatest([this.appointmentId$, this.jobsService.entityMap$]).pipe(
+      filter(([appointmentId, appointmentMap]) => !!appointmentId),
       map(([appointmentId, jobMap]) => {
         // console.log('job$', appointmentId, jobMap);
         return jobMap[appointmentId];
@@ -58,6 +59,7 @@ export class CurrentJobService {
     );
 
     this.appointment$ = combineLatest([this.appointmentId$, this.appointmentsService.entityMap$]).pipe(
+      filter(([appointmentId, appointmentMap]) => !!appointmentId),
       map(([appointmentId, appointmentMap]) => {
         // console.log('appointment$', appointmentId, appointmentMap);
         return appointmentMap[appointmentId];
@@ -65,20 +67,27 @@ export class CurrentJobService {
     );
 
     this.appointmentVisit$ = this.appointmentId$.pipe(
-      mergeMap(appointmentId => selectOrFetchFirstEntityByKey(this.appointmentVisitsService, 'appointmentId', appointmentId))
+      filter(appointmentId => !!appointmentId),
+      mergeMap(appointmentId => selectOrFetchEntity(this.appointmentVisitsService, appointmentId))
     );
 
     this.quote$ = this.appointmentId$.pipe(
+      filter(appointmentId => !!appointmentId),
       mergeMap(appointmentId => selectOrFetchFirstEntityByKey(this.quotesService, 'appointmentId', appointmentId))
     );
 
     this.invoice$ = this.appointmentId$.pipe(
+      filter(appointmentId => !!appointmentId),
       mergeMap(appointmentId => selectOrFetchFirstEntityByKey(this.invoicesService, 'appointmentId', appointmentId))
     );
   }
 
   setAppointmentId(appointmentId: number) {
-    // console.log('setAppointmentId', appointmentId);
+
+    if (this.appointmentId === appointmentId){
+      return;
+    }
+
     this.jobsService.addJob(appointmentId);
     this.appointmentId = appointmentId;
     this.appointmentId$.next(appointmentId);

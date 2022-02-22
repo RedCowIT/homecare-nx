@@ -1,19 +1,25 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {
-  firstByKey,
+  firstByKey, firstItem,
   InvoiceItem,
   invoiceItemMeta,
   InvoiceItemType,
-  InvoiceItemTypes, PlanTypes,
+  InvoiceItemTypes,
+  PlanTypes,
   ProductCategories,
-  ProductCategory, selectEntity, selectFirstEntityByKey, selectOrFetchFirstEntityByKey, servicePlanTypes
+  ProductCategory,
+  selectEntity, selectEntityByKey,
+  selectFirstEntityByKey,
+  selectOrFetchEntity,
+  selectOrFetchFirstEntityByKey,
+  servicePlanTypes
 } from "@homecare/shared";
 import {InvoiceItemTypesService} from "../../../store/entity/services/invoice/invoice-item-types/invoice-item-types.service";
 import {Observable, of} from "rxjs";
 import {ProductCategoriesService, ProductsService} from "@homecare/product";
 import {ModalController} from "@ionic/angular";
 import {PlansService, PlanTypesService} from "@homecare/plan";
-import {first, map, mergeMap} from "rxjs/operators";
+import {catchError, first, map, mergeMap} from "rxjs/operators";
 import {InvoiceItemsService} from "../../../store/entity/services/invoice/invoice-items/invoice-items.service";
 import {CustomerPlansService} from "@homecare/customer";
 import {toTitleCase} from "@homecare/common";
@@ -118,41 +124,49 @@ export class InvoiceItemModalComponent implements OnInit {
             first(),
             mergeMap(invoice => {
 
-              return selectOrFetchFirstEntityByKey(this.customerPlansService, 'invoiceItemId', this.invoiceItemId).pipe(
-                mergeMap(customerPlan => {
-                  return selectEntity(this.plansService, customerPlan.planId);
-                }),
-                mergeMap(plan => {
-                  return selectEntity(this.planTypesService, plan.planTypeId)
-                }),
-                map(planType => {
+              console.log('Selecting customer plan for invoice item', this.invoiceItemId);
 
-                  console.log('Opening InvoiceItemModal with planType', planType);
+              return selectEntityByKey(this.customerPlansService, 'customerId', invoice.customerId).pipe(
+                map(customerPlans => firstByKey(customerPlans, 'invoiceItemId', this.invoiceItemId))
+              );
 
-                  switch (planType.description) {
-                    case PlanTypes.ApplianceRepairPlan:
-                      return InvoiceItemTypes.RepairPlan;
-                    case PlanTypes.Finance:
-                      return InvoiceItemTypes.FinancePlan;
-                    default:
-                      return InvoiceItemTypes.ServicePlan;
-                  }
-                })
-              )
-            })
-          )
+            }),
+            mergeMap(customerPlan => {
 
+              console.log('customerPlan', customerPlan);
 
+              return selectEntity(this.plansService, customerPlan.planId);
 
+            }),
+            mergeMap(plan => {
+              return selectEntity(this.planTypesService, plan.planTypeId)
+            }),
+            map(planType => {
+
+              console.log('Opening InvoiceItemModal with planType', planType);
+
+              switch (planType.description) {
+                case PlanTypes.ApplianceRepairPlan:
+                  return InvoiceItemTypes.RepairPlan;
+                case PlanTypes.Finance:
+                  return InvoiceItemTypes.FinancePlan;
+                default:
+                  return InvoiceItemTypes.ServicePlan;
+              }
+            }));
         }
 
         return of(InvoiceItemTypes.Misc);
 
-
       }),
+      catchError(error => {
+
+          console.error('Failed to load invoice modal', error);
+          return of(null);
+        }
+      ),
       first()
     ).subscribe(type => {
-      console.log('initFromInvoiceItem() use type', type);
       this.type = type;
       this.initFromType();
     })
@@ -161,4 +175,5 @@ export class InvoiceItemModalComponent implements OnInit {
   async close() {
     await this.modalCtrl.dismiss();
   }
+
 }

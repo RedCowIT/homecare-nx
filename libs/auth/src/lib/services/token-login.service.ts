@@ -28,6 +28,8 @@ export class TokenLoginService {
 
   login(username: string, password: string): Observable<string> {
 
+    console.log('Calling login: ' + this.url());
+
     return this.httpClient.post(this.url(), {
       username, password
     }).pipe(

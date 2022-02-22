@@ -5,7 +5,7 @@ import {
   AppointmentVisit,
   firstByKey,
   firstItem, joinEntityLoading,
-  QuoteItemTypes,
+  QuoteItemTypes, selectOrFetchEntity,
   selectOrFetchFirstEntityByKey
 } from "@homecare/shared";
 import {CustomerAddressesService, CustomerPlansService, CustomersService} from "@homecare/customer";
@@ -23,6 +23,7 @@ import {
   QuotesService
 } from "@homecare/billing";
 import {PolicyService} from "@homecare/core";
+import {QuoteManagerService} from "../../../../../../../libs/billing/src/lib/services/quote-manager/quote-manager.service";
 
 
 /**
@@ -50,21 +51,9 @@ export class JobsLoaderService {
               private quoteItemTypesService: QuoteItemTypesService,
               private quoteApplianceDetailsService: QuoteApplianceDetailsService,
               private quoteProductDetailsService: QuoteProductDetailsService,
-              private quotePlanDetailsService: QuotePlanDetailsService
+              private quotePlanDetailsService: QuotePlanDetailsService,
+              private quoteManagerService: QuoteManagerService
   ) {
-  }
-
-  loadAll() {
-    this.appointmentsService.getAll().pipe(
-      tap(appointments => {
-
-        for (const appointment of appointments) {
-          this.loadAppointmentRelations(appointment);
-        }
-
-      })
-    ).subscribe();
-
     this.loading$ = joinEntityLoading([
       this.appointmentsService,
       this.appointmentVisitsService,
@@ -83,75 +72,30 @@ export class JobsLoaderService {
       this.quotePlanDetailsService,
       this.policiesService
     ]);
+  }
 
-    // this.loading$ = combineLatest([
-    //   this.appointmentsService.loading$,
-    //   this.appointmentVisitsService.loading$,
-    //   this.customersService.loading$,
-    //   this.customerAddressesService.loading$,
-    //   this.customerPlansService.loading$,
-    //   this.appointmentCallTypesService.loading$,
-    //   this.documentsService.loading$,
-    //   this.invoicesService.loading$,
-    //   this.invoiceItemsService.loading$,
-    //   this.quoteItemTypesService.loading$,
-    //   this.quotesService.loading$,
-    //   this.quoteItemsService.loading$,
-    //   this.quoteApplianceDetailsService.loading$,
-    //   this.quoteProductDetailsService.loading$,
-    //   this.quotePlanDetailsService.loading$,
-    //   this.policiesService.loading$,
-    // ]).pipe(
-    //   map(([
-    //          appointmentsLoading,
-    //          appointmentVisitsLoading,
-    //          customersLoading,
-    //          customerAddressesLoading,
-    //          customerPlansLoading,
-    //          appointmentCallTypesLoading,
-    //          documentsLoading,
-    //          invoicesLoading,
-    //          invoiceItemsLoading,
-    //          quoteItemTypesLoading,
-    //          quotesLoading,
-    //          quoteItemsLoading,
-    //          quoteApplianceDetailsLoading,
-    //          quoteProductDetailsLoading,
-    //          quotePlanDetailsLoading,
-    //          policiesLoading
-    //        ]) => {
-    //
-    //     return appointmentsLoading ||
-    //       appointmentVisitsLoading ||
-    //       customersLoading ||
-    //       customerAddressesLoading ||
-    //       customerPlansLoading ||
-    //       appointmentCallTypesLoading ||
-    //       documentsLoading ||
-    //       invoicesLoading ||
-    //       invoiceItemsLoading ||
-    //       quoteItemTypesLoading ||
-    //       quotesLoading ||
-    //       quoteItemsLoading ||
-    //       quoteApplianceDetailsLoading ||
-    //       quoteProductDetailsLoading ||
-    //       quotePlanDetailsLoading ||
-    //       policiesLoading;
-    //   })
-    // );
+  loadAll() {
+
+    this.appointmentsService.getAll().pipe(
+      tap(appointments => {
+
+        for (const appointment of appointments) {
+          this.loadAppointmentRelations(appointment);
+        }
+
+      })
+    ).subscribe();
+
+
   }
 
   loadAppointmentRelations(appointment: Appointment) {
 
-    selectOrFetchFirstEntityByKey(this.appointmentVisitsService, 'appointmentId', appointment.id).pipe(
+    console.log('loadAppointmentRelations', appointment);
+
+    selectOrFetchEntity(this.appointmentVisitsService, appointment.id).pipe(
       first()
-    ).subscribe(visit => {
-      if (!visit) {
-        this.appointmentVisitsService.add({
-          id: appointment.id
-        } as AppointmentVisit);
-      }
-    });
+    ).subscribe(visit => {});
 
     this.customersService.getByKey(appointment.customerId);
 
@@ -180,66 +124,9 @@ export class JobsLoaderService {
       }
     });
 
-    this.quoteItemTypesService.entities$
-      .pipe(
-        filter(quoteItemTypes => quoteItemTypes?.length > 0),
-        mergeMap(quoteItemTypes => {
-          const quotes$ = this.quotesService.getWithQuery({
-            appointmentId: `${appointment.id}`
-          });
-          return forkJoin([of(quoteItemTypes), quotes$]);
-        }),
-        mergeMap(([quoteItemTypes, quotes]) => {
-          const quote = firstItem(quotes);
-          if (!quote) {
-            return forkJoin([of(quoteItemTypes), of([])]);
-          }
-          const quoteItems$ = this.quoteItemsService.getWithQuery({
-            quoteId: `${quote.id}`
-          });
-          return forkJoin([of(quoteItemTypes), quoteItems$]);
-        }),
-        mergeMap(([quoteItemTypes, quoteItems]) => {
+    this.quoteManagerService.loadAppointmentQuote(appointment.id).pipe(first()).subscribe();
 
-          const quoteItemDetails = [];
-          for (const quoteItem of quoteItems) {
 
-            const quoteItemType = firstByKey(quoteItemTypes, 'id', quoteItem.quoteItemTypeId);
-            if (!quoteItemType){
-              throw new Error('Missing quote item type with id: ' + quoteItem.quoteItemTypeId);
-            }
-            console.log('Found quoteItem', quoteItem, quoteItemType);
-
-            switch (quoteItemType.description){
-              case QuoteItemTypes.Appliance:
-                quoteItemDetails.push(this.quoteApplianceDetailsService.getWithQuery({
-                  quoteItemId: `${quoteItem.id}`
-                }));
-                break;
-              case QuoteItemTypes.Product:
-                quoteItemDetails.push(this.quoteProductDetailsService.getWithQuery({
-                  quoteItemId: `${quoteItem.id}`
-                }));
-                break;
-              case QuoteItemTypes.Plan:
-                quoteItemDetails.push(this.quotePlanDetailsService.getWithQuery({
-                  quoteItemId: `${quoteItem.id}`
-                }));
-                break;
-            }
-          }
-          return forkJoin(quoteItemDetails);
-        }),
-        first(),
-        catchError(error => {
-          console.error('Quotes failed to load.')
-          return throwError(error);
-        })
-      ).subscribe();
-
-    this.policiesService.getWithQuery({
-      customerId: `${appointment.customerId}`
-    });
 
   }
 }

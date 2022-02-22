@@ -1,7 +1,7 @@
 <div class="tile" [ngClass]="{highlight: highlight}" (click)="select.emit(this)">
   <div class="tile-content">
     <div *ngIf="icon && icon !== ''">
-      <ion-icon [name]="icon" size="large"></ion-icon>
+      <ion-icon [name]="icon"></ion-icon>
     </div>
     <div class="label">{{label}}</div>
     <div *ngIf="badge" class="badge">

@@ -8,6 +8,11 @@
         </ion-card-header>
         <ion-card-content>
           <dd-accordion *ngIf="policyItems" [items]="policyItems"></dd-accordion>
+          <div *ngIf="policyService.loading$ | async as loading">
+            <div class="ion-margin ion-text-center ion-padding">
+              <dd-spinner [show]="true"></dd-spinner>
+            </div>
+          </div>
         </ion-card-content>
       </ion-card>
 

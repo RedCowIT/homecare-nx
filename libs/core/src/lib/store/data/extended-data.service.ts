@@ -8,7 +8,7 @@ import {map, timeout} from 'rxjs/operators';
  * Maps all API responses to return data payload
  *
  * Default ngrx/data expects raw payloads, e.g. [1,2,3];
- * Engagewall API returns nested payload {data: [1,2,...]}.
+ * API returns nested payload {data: [1,2,...]}.
  *
  * This extension marshals that mapping.
  */
@@ -25,6 +25,10 @@ export class ExtendedDataservice<T> extends DefaultDataService<T> {
 
     // TODO: if data has count_only
 
+    // Remove trailing slash
+    if (url.charAt(url.length - 1) === '/'){
+      url = url.substr(0, url.length - 1);
+    }
 
     return super.execute(method, url, data, options).pipe(
       map(res => {

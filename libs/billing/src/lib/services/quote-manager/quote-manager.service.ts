@@ -1,20 +1,22 @@
 import {
-  findByKey, firstItem,
+  findByKey, firstByKey, firstItem,
   pluckIds,
   QuoteApplianceDetail,
-  QuoteItem,
+  QuoteItem, QuoteItemTypes,
   QuotePlanDetail,
-  QuoteProductDetail
+  QuoteProductDetail, selectOrFetchEntity
 } from "@homecare/shared";
-import {combineLatest, Observable, of} from "rxjs";
+import {combineLatest, forkJoin, Observable, of, throwError} from "rxjs";
 import {Injectable} from "@angular/core";
-import {QuoteApplianceDetailsService} from '../../store/entity/services/quote/quote-appliance-details/quote-appliance-details.service';;
+import {QuoteApplianceDetailsService} from '../../store/entity/services/quote/quote-appliance-details/quote-appliance-details.service';
+
 import {QuotePlanDetailsService} from '../../store/entity/services/quote/quote-plan-details/quote-plan-details.service';
 import {QuoteProductDetailsService} from '../../store/entity/services/quote/quote-product-details/quote-product-details.service';
 import {QuotesService} from "../../store/entity/services/quote/quotes/quotes.service";
 import {QuoteItemsService} from '../../store/entity/services/quote/quote-items/quote-items.service';
-import {first, map, mergeMap} from "rxjs/operators";
+import {catchError, filter, first, map, mergeMap} from "rxjs/operators";
 import {QuoteApplianceDetailModalComponent} from "../../billing-components/quote/quote-appliance-detail-modal/quote-appliance-detail-modal.component";
+import {QuoteItemTypesService} from "../../store/entity/services/quote/quote-item-types/quote-item-types.service";
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +27,8 @@ export class QuoteManagerService {
               private quoteItemsService: QuoteItemsService,
               private quoteApplianceDetailsService: QuoteApplianceDetailsService,
               private quoteProductDetailsService: QuoteProductDetailsService,
-              private quotePlanDetailsService: QuotePlanDetailsService) {
+              private quotePlanDetailsService: QuotePlanDetailsService,
+              private quoteItemTypesService: QuoteItemTypesService) {
   }
 
   getAppointmentQuoteItems(appointmentId: number): Observable<QuoteItem[]> {
@@ -112,6 +115,68 @@ export class QuoteManagerService {
         return findByKey(quoteProductDetails, 'productId', productId);
       })
     );
+  }
+
+  loadAppointmentQuote(appointmentId: number): Observable<boolean> {
+
+    return this.quotesService.getWithQuery({
+      appointmentId: `${appointmentId}`
+    }).pipe(
+      mergeMap(quotes => {
+        const quote = firstItem(quotes);
+        if (!quote) {
+          return of(true);
+        }
+        return this.quoteItemsService.getWithQuery({
+          quoteId: `${quote.id}`
+        });
+      }),
+      mergeMap((quoteItems: QuoteItem[]) => {
+        console.log('QuoteManager.loadAppointmentQuote', quoteItems);
+        return combineLatest([of(quoteItems), this.quoteItemTypesService.entityMap$]);
+      }),
+      mergeMap(([quoteItems, quoteItemTypeMap]) => {
+
+        console.log('QuoteManager.loading quote item details');
+
+        const quoteItemDetails = [];
+        for (const quoteItem of quoteItems) {
+
+          const quoteItemType = quoteItemTypeMap[quoteItem.quoteItemTypeId];
+          if (!quoteItemType) {
+            throw new Error('Missing quote item type with id: ' + quoteItem.quoteItemTypeId);
+          }
+          console.log('Found quoteItem', quoteItem, quoteItemType);
+
+          switch (quoteItemType.description) {
+            case QuoteItemTypes.Appliance:
+              quoteItemDetails.push(this.quoteApplianceDetailsService.getWithQuery({
+                quoteItemId: `${quoteItem.id}`
+              }));
+              break;
+            case QuoteItemTypes.Product:
+              quoteItemDetails.push(this.quoteProductDetailsService.getWithQuery({
+                quoteItemId: `${quoteItem.id}`
+              }));
+              break;
+            case QuoteItemTypes.Plan:
+              quoteItemDetails.push(this.quotePlanDetailsService.getWithQuery({
+                quoteItemId: `${quoteItem.id}`
+              }));
+              break;
+          }
+        }
+
+        return forkJoin(quoteItemDetails);
+      }),
+      mergeMap(() => of(true)),
+      catchError(error => {
+        console.error('Quote load error', error);
+        return throwError(error);
+      })
+    );
+
+
   }
 
 }

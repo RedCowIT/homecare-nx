@@ -32,16 +32,16 @@ export class JobInvoiceComponent implements OnInit {
 
 
 
-    this.currentJobService.invoice$.pipe(
-      first()
-    ).subscribe(invoice => {
-      console.log('JobInvoice.onInit', invoice);
-      if (!invoice) {
-        this.invoicesService.add({
-          appointmentId: this.currentJobService.appointmentId
-        } as Invoice);
-      }
-    })
+    // this.currentJobService.invoice$.pipe(
+    //   first()
+    // ).subscribe(invoice => {
+    //   console.log('JobInvoice.onInit', invoice);
+    //   if (!invoice) {
+    //     this.invoicesService.add({
+    //       appointmentId: this.currentJobService.appointmentId
+    //     } as Invoice);
+    //   }
+    // });
   }
 
 }

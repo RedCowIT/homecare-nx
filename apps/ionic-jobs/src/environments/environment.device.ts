@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   api: {
     domain: 'staging-laravel.homecareservicecentre.co.uk:8443',
-    baseUrl: 'https://staging-laravel.homecareservicecentre.co.uk:8443/',
-    timeout: 10
+    baseUrl: 'https://staging-laravel.homecareservicecentre.co.uk:8443',
+    timeout: 10000
   },
   auth: {
     domain: 'homecaresc-dev.eu.auth0.com',
@@ -27,6 +27,16 @@ export const environment = {
       enabled: true,
       level: 'trace',
       prefix: '[jobs]'
+    },
+    {
+      type: 'store',
+      key: 'store',
+      enabled: true,
+      level: 'trace',
+      prefix: '[jobs]',
+      options: {
+        logLimit: 500
+      }
     }
   ],
 };

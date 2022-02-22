@@ -6,7 +6,7 @@ import {Policy, PreJobSection} from "@homecare/shared";
 import {BehaviorSubject, Observable} from "rxjs";
 import {ButtonConfig} from "@homecare/common";
 import {PolicyService} from "@homecare/core";
-import {map} from "rxjs/operators";
+import {first, map} from "rxjs/operators";
 
 @Component({
   selector: 'hc-pre-job-policies',
@@ -27,6 +27,14 @@ export class PreJobPoliciesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.currentJobService.appointment$.pipe(first()).subscribe(
+      appointment => {
+        this.policyService.getWithQuery({
+          customerId: `${appointment.customerId}`
+        });
+      }
+    );
 
     this.policyItems$ = this.policyService.entities$.pipe(
       map((policies: Policy[]) => {

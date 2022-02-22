@@ -24,6 +24,7 @@ export class ShampooReportFormComponent extends EntityFormContainer<AppointmentV
 
   ngOnInit() {
     super.ngOnInit();
+    console.log('ShampooReportForm', this.formService.form.value);
     // this.patchForm({appointmentId: this.appointmentId});
   }
 
@@ -34,6 +35,8 @@ export class ShampooReportFormComponent extends EntityFormContainer<AppointmentV
       mergeMap(appointmentVisit => {
 
         const dto = this.createDTO();
+
+        console.log('Update appointmentVisit', appointmentVisit);
 
         return this.entityService.update({
           ...appointmentVisit,

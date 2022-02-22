@@ -34,7 +34,11 @@ export class PreJobSideNavComponent implements OnInit {
       map(jobMap => jobMap[this.appointmentId]),
       filter(job => !!job),
       map(job => {
-        // console.log('item.job', job);
+
+        if (!job.preJobSections?.length){
+          return [];
+        }
+
         return job.preJobSections.map(jobSection => {
 
           return {

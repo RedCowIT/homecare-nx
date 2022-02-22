@@ -9,7 +9,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/job/job.module').then(m => m.JobPageModule),
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
-    resolve: [JobsResolver]
+    resolve: []
   }
 ];
 

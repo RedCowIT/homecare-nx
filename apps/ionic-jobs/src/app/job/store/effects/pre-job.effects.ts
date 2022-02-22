@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {addJob, completeJobSection} from "../actions/job.actions";
+import {addJob, addJobSuccess, completeJobSection} from "../actions/job.actions";
 import {catchError, filter, map, mergeMap, withLatestFrom} from "rxjs/operators";
 import {
   CallType,
@@ -27,7 +27,7 @@ export class PreJobEffects {
 
   addJob$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(addJob),
+      ofType(addJobSuccess),
       mergeMap(action => {
         return this.createPreJobSections(action.appointmentId).pipe(
           map(preJobSections => {
@@ -49,6 +49,8 @@ export class PreJobEffects {
       map(([action, jobMap]) => {
 
         const job = {...jobMap[action.appointmentId]};
+
+        console.log('Completing prejob section', job);
 
         const sections = job.preJobSections.map(preJobSection => {
           return {...preJobSection};
@@ -111,6 +113,8 @@ export class PreJobEffects {
             status: ChecklistItemStatus.Disabled
           }
         ];
+
+        console.log('creating pre job sections', callTypes);
 
         if (callTypes){
           if (containsItemWithKey(callTypes, 'carpet', true)) {

@@ -300,9 +300,9 @@
           "options": {
             "browserTarget": "ionic-jobs:build",
             "port": 8100,
-            "host": "homecare.digi-dom.co.uk",
-            "sslKey": "./ssl/star-digidom.key",
-            "sslCert": "./ssl/STAR_digi-dom_co_uk.crt"
+            "host": "localhost",
+//            "sslKey": "./ssl/star-digidom.key",
+//            "sslCert": "./ssl/STAR_digi-dom_co_uk.crt"
           },
           "configurations": {
             "production": {

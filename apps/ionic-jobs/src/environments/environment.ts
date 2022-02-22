@@ -5,8 +5,10 @@
 export const environment = {
   production: false,
   api: {
-    domain: 'homecare-job-api.test',
-    baseUrl: 'https://homecare-job-api.test',
+    // domain: 'homecare-job-api.test',
+    // baseUrl: 'https://homecare-job-api.test',
+    domain: 'staging-laravel.homecareservicecentre.co.uk:8443',
+    baseUrl: 'https://staging-laravel.homecareservicecentre.co.uk:8443',
     timeout: 10000
   },
   auth: {

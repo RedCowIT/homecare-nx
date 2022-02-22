@@ -13,46 +13,13 @@ import {
   selectIsEntitySyncLoading
 } from "../../../../../../libs/entity/src/lib/store/selectors/entity-sync.selectors";
 import {Store} from "@ngrx/store";
+import {addJobError} from "../../job/store/actions/job.actions";
+import {Router} from "@angular/router";
+import {LoggerService} from "@homecare/core";
 
 
 @Injectable()
 export class AppEffects {
-
-
-
-  // loading$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType
-  //   )
-  // }, {dispatch: false});
-
-  // initEntitySync$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(initEntitySync, syncEntities),
-  //     tap(async (action) => {
-  //       this.loading = await this.loadingCtrl.create({
-  //         message: 'Connecting to server...',
-  //         duration: 10000
-  //       });
-  //       await this.loading.present();
-  //     }),
-  //   );
-  // }, {dispatch: false});
-  //
-  // initEntitySyncSuccess$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(syncEntitiesSuccess),
-  //     tap(async (action) => {
-  //
-  //       console.log('SYNC SUCCESS', this.loading);
-  //
-  //       if (this.loading) {
-  //         await this.loading.dismiss();
-  //       }
-  //
-  //     }),
-  //   );
-  // }, {dispatch: false});
 
   entitySyncError$ = createEffect(() => {
     return this.actions$.pipe(
@@ -63,14 +30,25 @@ export class AppEffects {
     );
   }, {dispatch: false});
 
+  addJobError$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(addJobError),
+      tap(async (action) => {
+        this.logger.error('AddJobError', action.error);
+        await this.router.navigateByUrl('/main/jobs');
+      }),
+    );
+  }, {dispatch: false});
+
   constructor(private actions$: Actions,
               private store$: Store,
               private auth0Service: Auth0Service,
               private entitySyncErrorService: EntitySyncErrorService,
-              private loadingCtrl: LoadingController) {
+              private router: Router,
+              private loadingCtrl: LoadingController,
+              private logger: LoggerService) {
 
     console.log('APP EFFECTS CTOR');
-
 
 
   }

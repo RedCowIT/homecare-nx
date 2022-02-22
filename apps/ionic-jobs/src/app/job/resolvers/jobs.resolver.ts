@@ -16,7 +16,11 @@ export class JobsResolver implements Resolve<boolean> {
 
     console.log('jobs resolver');
 
-    this.jobsLoaderService.loadAll();
+    try {
+      this.jobsLoaderService.loadAll();
+    } catch (error){
+       console.error('Error loading all job relations');
+    }
 
     return of(true);
   }

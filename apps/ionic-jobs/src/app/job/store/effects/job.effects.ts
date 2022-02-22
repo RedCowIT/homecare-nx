@@ -1,14 +1,25 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {addJob, completeJobSection, setJobSections} from "../actions/job.actions";
-import {catchError, filter, map, mergeMap, withLatestFrom} from "rxjs/operators";
-import {findById, findIndexWithId, JobSection, JobSectionStatus} from "@homecare/shared";
+import {addJob, addJobError, addJobSuccess, completeJobSection, setJobSections} from "../actions/job.actions";
+import {catchError, filter, first, map, mergeMap, withLatestFrom} from "rxjs/operators";
+import {
+  Appointment,
+  AppointmentVisit,
+  findById, findByKey,
+  findIndexWithId,
+  JobSection,
+  JobSectionStatus,
+  selectOrFetchEntity,
+  selectOrFetchFirstEntityByKey
+} from "@homecare/shared";
 import {JobService} from "../../services/job/job.service";
 import {ChecklistItemStatus} from "@homecare/common";
 import {combineLatest, Observable, of, throwError} from "rxjs";
-import {completePreJobSection, setPreJobSections} from "../actions/pre-job.actions";
 import {getJobMap} from "../selectors/job.selectors";
 import {Store} from "@ngrx/store";
+import {AppointmentCallTypesService, AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
+import {QuoteManagerService} from "../../../../../../../libs/billing/src/lib/services/quote-manager/quote-manager.service";
+import {CustomerPlansService} from "@homecare/customer";
 
 
 @Injectable()
@@ -18,39 +29,48 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(addJob),
       mergeMap(action => {
-        return this.createJobSections(action.appointmentId).pipe(
-          map(jobSections => {
-            return setJobSections({appointmentId: action.appointmentId, jobSections});
-          }),
-          catchError(error => {
-            return throwError(error);
-          })
-        )
+        return selectOrFetchEntity(this.appointmentsService, action.appointmentId)
+          .pipe(
+            mergeMap(appointment => {
+              return this.initAppointmentVisit(appointment).pipe(
+                first(),
+                map(() => appointment)
+              );
+            }),
+            mergeMap(appointment => {
+              return this.initAppointmentCallTypes(appointment).pipe(
+                first(),
+                map(() => appointment)
+              );
+            }),
+            mergeMap(appointment => {
+              return this.quoteManagerService.loadAppointmentQuote(appointment.id).pipe(
+                first(),
+                map(() => appointment)
+              );
+            }),
+            mergeMap(appointment => {
+              return this.initCustomerPlans(appointment).pipe(
+                first(),
+                map(() => appointment)
+              );
+            }),
+            mergeMap(appointment => {
+              return this.createJobSections(appointment.id).pipe(
+                first(),
+                map(jobSections => {
+                  return addJobSuccess({appointmentId: appointment.id, jobSections});
+                })
+              );
+            }),
+            catchError(error => {
+              console.error("ADD JOB ERROR", error);
+              return of(addJobError({error}));
+            })
+          )
       })
     );
   });
-
-  // initJobSections = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(initJobSections),
-  //     withLatestFrom(this.jobsService.entityMap$),
-  //     map(([action, jobMap]) => {
-  //
-  //       const job = {...jobMap[action.appointmentId]};
-  //
-  //       const sections = [
-  //         {
-  //           id: JobSection.Info,
-  //           status: ChecklistItemStatus.Enabled
-  //         }
-  //       ];
-  //
-  //       job.sections = sections;
-  //
-  //       return updateJob({job})
-  //     })
-  //   );
-  // });
 
   completeJobSection$ = createEffect(() => {
     return this.actions$.pipe(
@@ -85,12 +105,16 @@ export class JobEffects {
 
   constructor(private store$: Store,
               private actions$: Actions,
-              private jobsService: JobService) {
+              private jobsService: JobService,
+              private appointmentsService: AppointmentsService,
+              private appointmentVisitsService: AppointmentVisitsService,
+              private appointmentCallTypesService: AppointmentCallTypesService,
+              private quoteManagerService: QuoteManagerService,
+              private customerPlansService: CustomerPlansService) {
   }
 
   private createJobSections(appointmentId: number):
     Observable<JobSectionStatus[]> {
-
 
     return combineLatest([
       this.jobsService.isNCOOnly(appointmentId)
@@ -104,7 +128,7 @@ export class JobEffects {
           }
         ];
 
-        if (!isNCOOnly){
+        if (!isNCOOnly) {
           sections.push({
             id: JobSection.PreJob,
             status: ChecklistItemStatus.Enabled
@@ -142,6 +166,51 @@ export class JobEffects {
 
       })
     )
+  }
+
+  private initAppointmentVisit(appointment: Appointment): Observable<AppointmentVisit> {
+
+    console.log('initApppintmentVisit', appointment);
+
+    return selectOrFetchEntity(this.appointmentVisitsService, appointment.id).pipe(
+      mergeMap(appointmentVisit => {
+        if (!appointmentVisit) {
+          console.log('Adding appointment visit');
+          return this.appointmentVisitsService.add({
+            id: appointment.id,
+          } as AppointmentVisit);
+        }
+        console.log('Returning appointmentVisit');
+        return of(appointmentVisit);
+      }),
+      first()
+    )
+  }
+
+  private initAppointmentCallTypes(appointment: Appointment) {
+
+    return this.appointmentCallTypesService.entities$.pipe(
+      mergeMap(callTypes => {
+        const appointmentCallTypes = findByKey(callTypes, 'appointmentId', appointment.id);
+        if (appointmentCallTypes?.length > 0) {
+          return of(appointmentCallTypes);
+        } else {
+          return this.appointmentCallTypesService.getWithQuery({
+            appointmentId: `${appointment.id}`
+          }).pipe(
+            catchError(error => throwError(error))
+          );
+        }
+      })
+    )
+  }
+
+  private initCustomerPlans(appointment: Appointment) {
+
+    return this.customerPlansService.getWithQuery({
+      customerId: `${appointment.customerId}`
+    });
+
   }
 
 }

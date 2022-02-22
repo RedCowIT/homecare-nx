@@ -1,8 +1,8 @@
 import {Action, createFeatureSelector, createReducer, on} from '@ngrx/store';
 import {createEntityAdapter, EntityState, Update} from '@ngrx/entity';
-import {Job} from "@homecare/shared";
-import {addJob, setJobSections} from "../actions/job.actions";
-import {completePreJobSection, setPreJobSections} from "../actions/pre-job.actions";
+import {Job, LoadingState} from "@homecare/shared";
+import {addJob, addJobSuccess, setJobSections} from "../actions/job.actions";
+import {setPreJobSections} from "../actions/pre-job.actions";
 import {setQuoteSections} from "../actions/quote.actions";
 
 
@@ -26,10 +26,27 @@ const jobReducer = createReducer(
   initialState,
 
   on(addJob, (state, action) => adapter.upsertOne({
-    appointmentId: action.appointmentId
+    appointmentId: action.appointmentId,
+    loadState: LoadingState.LOADING
   }, {
     ...state
   })),
+
+  on(addJobSuccess, (state, action) => {
+
+    const job: Update<Job> = {
+      id: action.appointmentId,
+      changes: {
+        jobSections: action.jobSections,
+        loadState: LoadingState.LOADED
+      }
+    };
+
+    return adapter.updateOne(job, {
+      ...state
+    });
+
+  }),
 
   on(setJobSections, (state, action) => {
 

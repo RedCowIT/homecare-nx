@@ -6,9 +6,19 @@ export const addJob = createAction(
   props<{ appointmentId: number }>()
 );
 
+export const addJobSuccess = createAction(
+  '[Job] Add Job Success',
+  props<{ appointmentId: number, jobSections: JobSectionStatus[] }>()
+);
+
 export const removeJob = createAction(
   '[Job] Remove Job',
   props<{ appointmentId: number }>()
+);
+
+export const addJobError = createAction(
+  '[Job] Add Job Error',
+  props<{ error: any }>()
 );
 
 export const setJobSections = createAction(
