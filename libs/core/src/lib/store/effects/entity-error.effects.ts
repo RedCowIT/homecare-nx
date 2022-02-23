@@ -50,7 +50,7 @@ export class EntityErrorEffects {
         // Catch all error
         return entityError({
           error: error,
-          originalAction: action.payload.data.originalAction,
+          originalAction: action.payload.data?.originalAction,
         });
 
       })

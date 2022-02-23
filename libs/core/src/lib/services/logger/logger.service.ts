@@ -27,54 +27,82 @@ export class LoggerService extends Logger {
   }
 
   trace(message?: any, ...optionalParams: any[]): void {
-    if (!this.isEnabled) {
-      return;
+    try {
+      if (!this.isEnabled) {
+        return;
+      }
+
+      for (const handler of this.getHandlers()) {
+        handler.trace(message, ...optionalParams);
+      }
+    } catch (e){
+      // noop
     }
 
-    for (const handler of this.getHandlers()) {
-      handler.trace(message, ...optionalParams);
-    }
   }
 
   debug(message?: any, ...optionalParams: any[]): void {
-    if (!this.isEnabled) {
-      return;
+
+    try {
+      if (!this.isEnabled) {
+        return;
+      }
+
+      for (const handler of this.getHandlers()) {
+        handler.debug(message, ...optionalParams);
+      }
+    } catch (e){
+      // noop
     }
 
-    for (const handler of this.getHandlers()) {
-      handler.debug(message, ...optionalParams);
-    }
   }
 
   info(message?: any, ...optionalParams: any[]): void {
 
-    if (!this.isEnabled) {
-      return;
+    try {
+      if (!this.isEnabled) {
+        return;
+      }
+
+      for (const handler of this.getHandlers()) {
+        handler.info(message, ...optionalParams);
+      }
+    } catch (e){
+      // noop
     }
 
-    for (const handler of this.getHandlers()) {
-      handler.info(message, ...optionalParams);
-    }
   }
 
   warn(message?: any, ...optionalParams: any[]): void {
-    if (!this.isEnabled) {
-      return;
+
+    try {
+      if (!this.isEnabled) {
+        return;
+      }
+
+      for (const handler of this.getHandlers()) {
+        handler.warn(message, ...optionalParams);
+      }
+    } catch (e){
+      // noop
     }
 
-    for (const handler of this.getHandlers()) {
-      handler.warn(message, ...optionalParams);
-    }
   }
 
   error(message?: any, ...optionalParams: any[]): void {
-    if (!this.isEnabled) {
-      return;
+
+    try {
+      if (!this.isEnabled) {
+        return;
+      }
+
+      for (const handler of this.getHandlers()) {
+        handler.error(message, ...optionalParams);
+      }
+    } catch (e){
+      // noop
     }
 
-    for (const handler of this.getHandlers()) {
-      handler.error(message, ...optionalParams);
-    }
   }
 
   getHandlers(): LogHandler[] {

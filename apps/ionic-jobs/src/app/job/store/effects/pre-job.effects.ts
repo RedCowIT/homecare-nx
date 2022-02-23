@@ -17,9 +17,10 @@ import {
 import {JobService} from "../../services/job/job.service";
 import {ChecklistItemStatus} from "@homecare/common";
 import {completePreJobSection, setPreJobSections} from "../actions/pre-job.actions";
-import {Observable, throwError} from "rxjs";
+import {Observable, of, throwError} from "rxjs";
 import {getJobMap} from "../selectors/job.selectors";
 import {Store} from "@ngrx/store";
+import {LoggerService} from "@homecare/core";
 
 
 @Injectable()
@@ -34,7 +35,8 @@ export class PreJobEffects {
             return setPreJobSections({appointmentId: action.appointmentId, preJobSections});
           }),
           catchError(error => {
-            return throwError(error);
+            this.loggerService.error('Failed to create pre job sections', error);
+            return of(null);
           })
         );
       })
@@ -48,26 +50,32 @@ export class PreJobEffects {
       filter(([action, jobMap]) => !!jobMap[action.appointmentId]),
       map(([action, jobMap]) => {
 
-        const job = {...jobMap[action.appointmentId]};
+        try {
+          const job = {...jobMap[action.appointmentId]};
 
-        console.log('Completing prejob section', job);
+          console.log('Completing prejob section', job);
 
-        const sections = job.preJobSections.map(preJobSection => {
-          return {...preJobSection};
-        });
+          const sections = job.preJobSections.map(preJobSection => {
+            return {...preJobSection};
+          });
 
-        const index = findIndexWithId(sections, action.sectionId);
+          const index = findIndexWithId(sections, action.sectionId);
 
-        const section = findById(sections, action.sectionId);
-        section.status = ChecklistItemStatus.Complete;
+          const section = findById(sections, action.sectionId);
+          section.status = ChecklistItemStatus.Complete;
 
-        if (index < sections.length - 1) {
-          if (sections[index + 1].status == ChecklistItemStatus.Disabled) {
-            sections[index + 1].status = ChecklistItemStatus.Enabled;
+          if (index < sections.length - 1) {
+            if (sections[index + 1].status == ChecklistItemStatus.Disabled) {
+              sections[index + 1].status = ChecklistItemStatus.Enabled;
+            }
           }
-        }
 
-        return setPreJobSections({appointmentId: action.appointmentId, preJobSections: sections});
+          return setPreJobSections({appointmentId: action.appointmentId, preJobSections: sections});
+        }
+        catch (error){
+          this.loggerService.error('Failed to complete pre job section', error);
+          return setPreJobSections({appointmentId: action.appointmentId, preJobSections: []});
+        }
 
       })
     );
@@ -90,6 +98,7 @@ export class PreJobEffects {
 
   constructor(private actions$: Actions,
               private jobsService: JobService,
+              private loggerService: LoggerService,
               private store$: Store) {
   }
 

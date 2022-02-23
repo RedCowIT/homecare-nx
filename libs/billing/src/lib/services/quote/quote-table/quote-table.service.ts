@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, TemplateRef} from '@angular/core';
 import {TableSourceService} from "@homecare/common";
 import {combineLatest} from "rxjs";
 import {map} from "rxjs/operators";
@@ -38,14 +38,17 @@ export class QuoteTableService extends TableSourceService {
     super();
   }
 
-  init(quoteId: number) {
+  init(quoteId: number, cellTemplates: { [index: string]: TemplateRef<unknown> }) {
 
     this.quoteId = quoteId;
 
     this.columns = [
       {prop: 'description', flexGrow: 4},
       {prop: 'quantity', flexGrow: 1},
-      {prop: 'quote', name: 'Cost', flexGrow: 1, headerClass: "ion-text-end", cellClass: 'ion-text-end'}
+      {
+        prop: 'quote', name: 'Cost', flexGrow: 1, headerClass: "ion-text-end", cellClass: 'ion-text-end',
+        cellTemplate: cellTemplates['value']
+      }
     ];
 
     const maps$ = combineLatest([

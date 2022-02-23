@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
-import {Auth0Service} from "@homecare/auth0";
 import {DataErrorService, LoggerService} from "@homecare/core";
+import {TokenAuthService} from "@homecare-nx/auth";
 
 /**
  * App Data Error Service for handling server side errors
@@ -13,7 +13,7 @@ import {DataErrorService, LoggerService} from "@homecare/core";
 })
 export class AppDataErrorService extends DataErrorService {
 
-  constructor(private authService: Auth0Service,
+  constructor(private authService: TokenAuthService,
               private toastCtrl: ToastController,
               private router: Router,
               private logger: LoggerService) {
@@ -60,7 +60,7 @@ export class AppDataErrorService extends DataErrorService {
     console.error('unauthorized');
 
     this.authService.logout();
-    this.router.navigateByUrl('/logout');
+
   }
 
   /**

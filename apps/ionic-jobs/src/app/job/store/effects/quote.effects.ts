@@ -20,6 +20,7 @@ import {Observable, of, throwError} from "rxjs";
 import {getJobMap} from "../selectors/job.selectors";
 import {Store} from "@ngrx/store";
 import {completeQuoteSection, setQuoteSections} from "../actions/quote.actions";
+import {LoggerService} from "@homecare/core";
 
 
 @Injectable()
@@ -34,7 +35,8 @@ export class QuoteEffects {
             return setQuoteSections({appointmentId: action.appointmentId, quoteSections});
           }),
           catchError(error => {
-            return throwError(error);
+            this.logger.error('Failed creating quote sections', error);
+            return of(null);
           })
         );
       })
@@ -48,24 +50,29 @@ export class QuoteEffects {
       filter(([action, jobMap]) => !!jobMap[action.appointmentId]),
       map(([action, jobMap]) => {
 
-        const job = {...jobMap[action.appointmentId]};
+        try {
+          const job = {...jobMap[action.appointmentId]};
 
-        const sections = job.quoteSections.map(quoteSection => {
-          return {...quoteSection};
-        });
+          const sections = job.quoteSections.map(quoteSection => {
+            return {...quoteSection};
+          });
 
-        const index = findIndexWithId(sections, action.sectionId);
+          const index = findIndexWithId(sections, action.sectionId);
 
-        const section = findById(sections, action.sectionId);
-        section.status = ChecklistItemStatus.Complete;
+          const section = findById(sections, action.sectionId);
+          section.status = ChecklistItemStatus.Complete;
 
-        if (index < sections.length - 1) {
-          if (sections[index + 1].status == ChecklistItemStatus.Disabled) {
-            sections[index + 1].status = ChecklistItemStatus.Enabled;
+          if (index < sections.length - 1) {
+            if (sections[index + 1].status == ChecklistItemStatus.Disabled) {
+              sections[index + 1].status = ChecklistItemStatus.Enabled;
+            }
           }
-        }
 
-        return setQuoteSections({appointmentId: action.appointmentId, quoteSections: sections});
+          return setQuoteSections({appointmentId: action.appointmentId, quoteSections: sections});
+        } catch (error){
+          this.logger.error('Failed completing quote section', error);
+          return setQuoteSections({appointmentId: action.appointmentId, quoteSections: []});
+        }
 
       })
     );
@@ -88,6 +95,7 @@ export class QuoteEffects {
 
   constructor(private actions$: Actions,
               private jobsService: JobService,
+              private logger: LoggerService,
               private store$: Store) {
   }
 

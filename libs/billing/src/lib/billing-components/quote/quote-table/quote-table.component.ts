@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ModalController} from "@ionic/angular";
 import {QuoteTableService} from "../../../services/quote/quote-table/quote-table.service";
 import {QuoteItemsService} from "../../../store/entity/services/quote/quote-items/quote-items.service";
@@ -23,10 +23,12 @@ import {QuoteSummaryService} from "../../../services/quote/quote-summary/quote-s
   styleUrls: ['./quote-table.component.scss'],
   providers: [QuoteTableService, QuoteSummaryService]
 })
-export class QuoteTableComponent implements OnInit {
+export class QuoteTableComponent implements OnInit, AfterViewInit {
 
   @Input()
   quoteId: number;
+
+  @ViewChild('valueTemplate') valueTmpl: TemplateRef<any> | undefined;
 
   constructor(public quoteTableService: QuoteTableService,
               private modalCtrl: ModalController,
@@ -37,9 +39,12 @@ export class QuoteTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.quoteTableService.init(this.quoteId);
-    this.quoteTableService.load();
 
+  }
+
+  ngAfterViewInit() {
+    this.quoteTableService.init(this.quoteId, {value:this.valueTmpl});
+    this.quoteTableService.load();
     this.quoteSummaryService.init(this.quoteId);
   }
 

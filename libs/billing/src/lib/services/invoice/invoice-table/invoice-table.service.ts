@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, TemplateRef, ViewChild} from '@angular/core';
 import {combineLatest} from "rxjs";
 import {map} from "rxjs/operators";
 import {InvoiceItemsService} from "../../../store/entity/services/invoice/invoice-items/invoice-items.service";
@@ -15,7 +15,7 @@ export class InvoiceTableService extends TableSourceService {
     super();
   }
 
-  init(invoiceId: number) {
+  init(invoiceId: number, cellTemplates: { [index: string]: TemplateRef<unknown> }) {
 
     this.invoiceId = invoiceId;
 
@@ -23,7 +23,8 @@ export class InvoiceTableService extends TableSourceService {
       {prop: 'code', flexGrow: 1},
       {prop: 'description', flexGrow: 4},
       {prop: 'qty', flexGrow: 1},
-      {prop: 'unitPrice', name: 'Cost', flexGrow: 1, headerClass: "ion-text-end", cellClass: 'ion-text-end'}
+      {prop: 'unitPrice', name: 'Cost', flexGrow: 1, headerClass: "ion-text-end", cellClass: 'ion-text-end',
+      cellTemplate: cellTemplates['value']}
     ];
 
     this.rows$ = combineLatest([

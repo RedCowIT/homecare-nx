@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {InvoiceTableService} from "../../../services/invoice/invoice-table/invoice-table.service";
 import {InvoiceItemModalComponent} from "../invoice-item-modal/invoice-item-modal.component";
 import {ModalController} from "@ionic/angular";
@@ -10,10 +10,12 @@ import {InvoiceSummaryService} from "../../../services/invoice/invoice-summary/i
   styleUrls: ['./invoice-table.component.scss'],
   providers: [InvoiceTableService, InvoiceSummaryService]
 })
-export class InvoiceTableComponent implements OnInit {
+export class InvoiceTableComponent implements OnInit, AfterViewInit {
 
   @Input()
   invoiceId: number;
+
+  @ViewChild('valueTemplate') valueTmpl: TemplateRef<any> | undefined;
 
   constructor(public invoiceTableService: InvoiceTableService,
               public invoiceSummaryService: InvoiceSummaryService,
@@ -21,10 +23,16 @@ export class InvoiceTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.invoiceTableService.init(this.invoiceId);
+
+  }
+
+  ngAfterViewInit() {
+    this.invoiceTableService.init(this.invoiceId, {value: this.valueTmpl});
     this.invoiceSummaryService.init(this.invoiceId);
     this.load();
   }
+
+
 
   async openInvoiceItemMenu() {
 

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {BehaviorSubject, throwError} from "rxjs";
+import {BehaviorSubject, of, throwError} from "rxjs";
 import {ButtonConfig} from "@homecare/common";
 import {CurrentJobService} from "../../../services/current-job/current-job.service";
 import {createFooterBackButton, createFooterNextButton} from "../../../support/footer-button-factory";
@@ -51,14 +51,20 @@ export class QuoteCompleteComponent implements OnInit {
 
     this.currentJobService.quote$.pipe(
       mergeMap(quote => {
-        return this.quotesService.update({
-          ...quote,
-          accepted: true
-        }).pipe(
-          catchError(error => {
-            return throwError(error);
-          })
-        )
+
+        if (quote.accepted){
+          return of(quote);
+        } else {
+          return this.quotesService.update({
+            ...quote,
+            accepted: true
+          }).pipe(
+            catchError(error => {
+              return throwError(error);
+            })
+          )
+        }
+
       }),
       first()
     ).subscribe(quote => {

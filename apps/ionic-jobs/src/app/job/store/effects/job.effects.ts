@@ -5,12 +5,14 @@ import {catchError, filter, first, map, mergeMap, withLatestFrom} from "rxjs/ope
 import {
   Appointment,
   AppointmentVisit,
-  findById, findByKey,
-  findIndexWithId, firstByKey,
+  findById,
+  findByKey,
+  findIndexWithId,
+  firstByKey,
   JobSection,
-  JobSectionStatus, selectEntity, selectEntityByKey,
-  selectOrFetchEntity,
-  selectOrFetchFirstEntityByKey
+  JobSectionStatus,
+  selectEntity,
+  selectOrFetchEntity
 } from "@homecare/shared";
 import {JobService} from "../../services/job/job.service";
 import {ChecklistItemStatus} from "@homecare/common";
@@ -20,6 +22,7 @@ import {Store} from "@ngrx/store";
 import {AppointmentCallTypesService, AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
 import {QuoteManagerService} from "../../../../../../../libs/billing/src/lib/services/quote-manager/quote-manager.service";
 import {CustomerPlansService, CustomersService} from "@homecare/customer";
+import {LoggerService} from "@homecare/core";
 
 
 @Injectable()
@@ -70,7 +73,7 @@ export class JobEffects {
               );
             }),
             catchError(error => {
-              console.error("ADD JOB ERROR", error);
+              this.loggerService.error("Add job error", error);
               return of(addJobError({error}));
             })
           )
@@ -117,7 +120,8 @@ export class JobEffects {
               private appointmentCallTypesService: AppointmentCallTypesService,
               private quoteManagerService: QuoteManagerService,
               private customerPlansService: CustomerPlansService,
-              private customersService: CustomersService) {
+              private customersService: CustomersService,
+              private loggerService: LoggerService) {
   }
 
   private createJobSections(appointmentId: number):

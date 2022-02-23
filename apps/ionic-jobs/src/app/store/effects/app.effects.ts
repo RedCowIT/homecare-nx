@@ -30,7 +30,11 @@ export class AppEffects {
     return this.actions$.pipe(
       ofType(initEntitySyncError, syncEntitiesError),
       tap(async (action) => {
-        await this.entitySyncErrorService.handleError(action.error);
+        try {
+          await this.entitySyncErrorService.handleError(action.error);
+        } catch (e) {
+          this.logger.error('Error handling entity sync error', e);
+        }
       }),
     );
   }, {dispatch: false});
@@ -49,7 +53,12 @@ export class AppEffects {
     return this.actions$.pipe(
       ofType(authActions.logout),
       tap(async (action) => {
-        this.resetData();
+        try {
+          this.resetData();
+        }
+        catch (e){
+          this.logger.error('Error handling logout', e);
+        }
       }),
     );
   }, {dispatch: false});

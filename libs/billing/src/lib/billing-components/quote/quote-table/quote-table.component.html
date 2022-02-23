@@ -8,3 +8,7 @@
     <strong>Cost:</strong> {{quoteSummary.gross | currency: 'GBP' }}
   </div>
 </div>
+
+<ng-template #valueTemplate let-value="value" let-row="row">
+  {{value | currency: 'GBP'}}
+</ng-template>

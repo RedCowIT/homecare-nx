@@ -3,6 +3,7 @@ import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {tap} from 'rxjs/operators';
 import {dataServiceError, httpError} from '../actions/data-error.actions';
 import {DataErrorService} from '../../services/data-error/data-error.service';
+import {LoggerService} from "@homecare/core";
 
 
 
@@ -13,7 +14,12 @@ export class DataErrorEffects {
     return this.actions$.pipe(
       ofType(httpError),
       tap(action => {
-        this.dataErrorService.handleHttpError(action.httpResponse);
+        try {
+          this.dataErrorService.handleHttpError(action.httpResponse);
+        }
+        catch (error){
+          this.logger.error('Failed handling http error', error);
+        }
       })
     );
   }, {dispatch: false});
@@ -22,12 +28,18 @@ export class DataErrorEffects {
     return this.actions$.pipe(
       ofType(dataServiceError),
       tap(action => {
-        this.dataErrorService.handleDataServiceError(action.error);
+        try {
+          this.dataErrorService.handleDataServiceError(action.error);
+        } catch (error){
+          this.logger.error('Failed handling data service error', error);
+        }
       })
     );
   }, {dispatch: false});
 
-  constructor(private actions$: Actions, private dataErrorService: DataErrorService) {
+  constructor(private actions$: Actions,
+              private dataErrorService: DataErrorService,
+              private logger: LoggerService) {
   }
 
 }

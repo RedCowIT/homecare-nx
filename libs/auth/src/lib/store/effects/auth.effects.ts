@@ -5,8 +5,10 @@ import {combineLatest, of} from "rxjs";
 import {authActions} from "../actions";
 import {TokenAuthService} from "../../services/token-auth.service";
 import {TokenLoginService} from "../../services/token-login.service";
-import {loginError} from "../actions/auth.actions";
-import {Router} from "@angular/router";
+import {initAuthError, loginError} from "../actions/auth.actions";
+import {ActivatedRoute, Router} from "@angular/router";
+import {LoggerService} from "@homecare/core";
+import {lastItem} from "@homecare/shared";
 
 
 @Injectable()
@@ -25,6 +27,10 @@ export class AuthEffects {
             authActions.setAuth({isAuthenticated: authenticated, token}),
             authActions.initAuthSuccess()
           );
+        }),
+        catchError(error => {
+          this.logger.error('Failed to initAuth', error);
+          return of(initAuthError({error}));
         })
       );
 
@@ -55,7 +61,6 @@ export class AuthEffects {
     ofType(authActions.loginSuccess),
     map(action => {
 
-      console.log('Login success');
       return this.router.navigateByUrl('/');
 
     })
@@ -65,7 +70,13 @@ export class AuthEffects {
     ofType(authActions.logout),
     map(async action => {
 
-      this.loginService.logout();
+      try {
+        this.loginService.logout();
+      } catch (e) {
+        this.logger.error('Error handling logout', e);
+      }
+
+      console.log('Last URL', lastItem(this.route.snapshot.url));
 
       await this.router.navigateByUrl('/login');
 
@@ -75,7 +86,9 @@ export class AuthEffects {
   constructor(private actions$: Actions,
               private authService: TokenAuthService,
               private loginService: TokenLoginService,
-              private router: Router) {
+              private logger: LoggerService,
+              private router: Router,
+              private route: ActivatedRoute) {
   }
 
 }

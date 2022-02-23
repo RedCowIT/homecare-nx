@@ -9,19 +9,26 @@
 <hc-add-invoice-item-button [invoiceId]="invoiceId" (update)="load()"></hc-add-invoice-item-button>
 
 <div *ngIf="invoiceSummaryService.invoiceSummary$ | async as invoiceSummary">
-  <div *ngIf="invoiceSummary" class="quote-summary ion-text-end">
+  <div *ngIf="invoiceSummary" class="invoice-summary ion-text-end">
 
-    <div>
-      <strong>Net</strong> {{invoiceSummary.net | currency: 'GBP' }}
-    </div>
-
-    <div>
-      <strong>VAT</strong> {{invoiceSummary.vat | currency: 'GBP' }}
-    </div>
-
-    <div>
-      <strong>Gross</strong> {{invoiceSummary.gross | currency: 'GBP' }}
-    </div>
+    <table>
+      <tr>
+        <td><strong>Net</strong></td>
+        <td>{{invoiceSummary.net | currency: 'GBP' }}</td>
+      </tr>
+      <tr>
+        <td><strong>VAT</strong></td>
+        <td>{{invoiceSummary.vat | currency: 'GBP' }}</td>
+      </tr>
+      <tr>
+        <td><strong>Gross</strong></td>
+        <td>{{invoiceSummary.gross | currency: 'GBP' }}</td>
+      </tr>
+    </table>
 
   </div>
 </div>
+
+<ng-template #valueTemplate let-value="value" let-row="row">
+  {{value | currency: 'GBP'}}
+</ng-template>
