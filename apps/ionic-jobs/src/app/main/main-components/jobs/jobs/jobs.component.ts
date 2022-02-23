@@ -3,6 +3,8 @@ import {PlatformService} from "@homecare/core";
 import {AppointmentsService} from "@homecare/appointment";
 import {JobsLoaderService} from "../../../../job/services/jobs-loader/jobs-loader.service";
 import {first} from "rxjs/operators";
+import {Observable} from "rxjs";
+import {Appointment} from "@homecare/shared";
 
 @Component({
   selector: 'hc-jobs',
@@ -11,11 +13,14 @@ import {first} from "rxjs/operators";
 })
 export class JobsComponent implements OnInit {
 
+  appointments$: Observable<Appointment[]>;
+
   constructor(public platform: PlatformService,
               public appointmentsService: AppointmentsService,
               public jobLoaderService: JobsLoaderService) { }
 
   ngOnInit(): void {
+    this.appointments$ = this.appointmentsService.entities$;
   }
 
   refresh(){

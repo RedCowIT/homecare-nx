@@ -4,6 +4,7 @@ import {map} from "rxjs/operators";
 import {ApplianceModelsService, ApplianceTypesService, ManufacturersService} from "@homecare/product";
 import {combineLatest} from "rxjs";
 import {Injectable} from "@angular/core";
+import {CustomerApplianceTypesService} from "../store/entity/services/customer-appliance-types/customer-appliance-types.service";
 
 @Injectable()
 export class CustomerApplianceTableService extends TableSourceService {
@@ -14,7 +15,7 @@ export class CustomerApplianceTableService extends TableSourceService {
 
   constructor(private customerAppliancesService: CustomerAppliancesService,
               private manufacturersService: ManufacturersService,
-              private applianceTypesService: ApplianceTypesService,
+              private applianceTypesService: CustomerApplianceTypesService,
               private applianceModelsService: ApplianceModelsService) {
     super();
   }

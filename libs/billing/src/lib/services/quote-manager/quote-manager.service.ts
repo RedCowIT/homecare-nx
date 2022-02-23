@@ -137,6 +137,10 @@ export class QuoteManagerService {
       }),
       mergeMap(([quoteItems, quoteItemTypeMap]) => {
 
+        if (!quoteItems?.length){
+          return of(null);
+        }
+
         console.log('QuoteManager.loading quote item details');
 
         const quoteItemDetails = [];

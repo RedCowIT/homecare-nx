@@ -17,12 +17,14 @@ export class ProductsResolver implements Resolve<boolean> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 
-    return this.commercialProductsService.getAll().pipe(
-      mergeMap((commercialProducts: CommercialProduct[]) => {
-        const productIds = pluck(commercialProducts, 'productId');
-        return this.productsService.getWithQuery({ids: productIds})
-      }),
-      map(() => true)
-    );
+    return of(true);
+
+    // return this.commercialProductsService.getAll().pipe(
+    //   mergeMap((commercialProducts: CommercialProduct[]) => {
+    //     const productIds = pluck(commercialProducts, 'productId');
+    //     return this.productsService.getWithQuery({ids: productIds})
+    //   }),
+    //   map(() => true)
+    // );
   }
 }

@@ -6,9 +6,9 @@ import {
   Appointment,
   AppointmentVisit,
   findById, findByKey,
-  findIndexWithId,
+  findIndexWithId, firstByKey,
   JobSection,
-  JobSectionStatus,
+  JobSectionStatus, selectEntity, selectEntityByKey,
   selectOrFetchEntity,
   selectOrFetchFirstEntityByKey
 } from "@homecare/shared";
@@ -19,7 +19,7 @@ import {getJobMap} from "../selectors/job.selectors";
 import {Store} from "@ngrx/store";
 import {AppointmentCallTypesService, AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
 import {QuoteManagerService} from "../../../../../../../libs/billing/src/lib/services/quote-manager/quote-manager.service";
-import {CustomerPlansService} from "@homecare/customer";
+import {CustomerPlansService, CustomersService} from "@homecare/customer";
 
 
 @Injectable()
@@ -45,6 +45,12 @@ export class JobEffects {
             }),
             mergeMap(appointment => {
               return this.quoteManagerService.loadAppointmentQuote(appointment.id).pipe(
+                first(),
+                map(() => appointment)
+              );
+            }),
+            mergeMap(appointment => {
+              return this.initCustomer(appointment).pipe(
                 first(),
                 map(() => appointment)
               );
@@ -110,7 +116,8 @@ export class JobEffects {
               private appointmentVisitsService: AppointmentVisitsService,
               private appointmentCallTypesService: AppointmentCallTypesService,
               private quoteManagerService: QuoteManagerService,
-              private customerPlansService: CustomerPlansService) {
+              private customerPlansService: CustomerPlansService,
+              private customersService: CustomersService) {
   }
 
   private createJobSections(appointmentId: number):
@@ -172,7 +179,20 @@ export class JobEffects {
 
     console.log('initApppintmentVisit', appointment);
 
-    return selectOrFetchEntity(this.appointmentVisitsService, appointment.id).pipe(
+    return selectEntity(this.appointmentVisitsService, appointment.id).pipe(
+      mergeMap(appointmentVisit => {
+        if (appointmentVisit) {
+          return of(appointmentVisit);
+        }
+
+        return this.appointmentVisitsService.getWithQuery({
+          appointmentId: `${appointment.id}`
+        }).pipe(
+          map(appointmentVisits => {
+            return firstByKey(appointmentVisits, 'id', appointment.id)
+          })
+        );
+      }),
       mergeMap(appointmentVisit => {
         if (!appointmentVisit) {
           console.log('Adding appointment visit');
@@ -184,7 +204,21 @@ export class JobEffects {
         return of(appointmentVisit);
       }),
       first()
-    )
+    );
+    //
+    // return selectOrFetchEntity(this.appointmentVisitsService, appointment.id).pipe(
+    //   mergeMap(appointmentVisit => {
+    //     if (!appointmentVisit) {
+    //       console.log('Adding appointment visit');
+    //       return this.appointmentVisitsService.add({
+    //         id: appointment.id,
+    //       } as AppointmentVisit);
+    //     }
+    //     console.log('Returning appointmentVisit');
+    //     return of(appointmentVisit);
+    //   }),
+    //   first()
+    // )
   }
 
   private initAppointmentCallTypes(appointment: Appointment) {
@@ -210,6 +244,12 @@ export class JobEffects {
     return this.customerPlansService.getWithQuery({
       customerId: `${appointment.customerId}`
     });
+
+  }
+
+  private initCustomer(appointment: Appointment) {
+
+    return selectOrFetchEntity(this.customersService, appointment.customerId);
 
   }
 

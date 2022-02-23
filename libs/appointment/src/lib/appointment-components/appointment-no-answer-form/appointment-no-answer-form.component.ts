@@ -4,6 +4,7 @@ import {AppointmentNoAnswer} from "@homecare/shared";
 import {AppointmentNoAnswerFormService} from "../../services/form/appointment-no-answer-form/appointment-no-answer-form.service";
 import {AppointmentNoAnswersService} from "../../store/entity/services/appointment-no-answers/appointment-no-answers.service";
 import {AppointmentNoAnswerReasonsService} from "../../store/entity/services/appointment-no-answer-reasons/appointment-no-answer-reasons.service";
+import {AppointmentsService} from "../../store/entity/services/appointments/appointments.service";
 
 @Component({
   selector: 'hc-appointment-no-answer-form',
@@ -20,7 +21,8 @@ export class AppointmentNoAnswerFormComponent extends EntityFormContainer<Appoin
 
   constructor(public formService: AppointmentNoAnswerFormService,
               public appointmentNoAnswerReasonsService: AppointmentNoAnswerReasonsService,
-              public entityService: AppointmentNoAnswersService) {
+              public entityService: AppointmentNoAnswersService,
+              public appointmentsService: AppointmentsService) {
     super(formService, entityService);
   }
 
@@ -29,5 +31,14 @@ export class AppointmentNoAnswerFormComponent extends EntityFormContainer<Appoin
     super.ngOnInit();
     this.patchForm({appointmentId: this.appointmentId});
     console.log('patched form', this.formService.form);
+  }
+
+  protected async entityCreated(entity: AppointmentNoAnswer) {
+
+    await super.entityCreated(entity);
+
+    // re-fetch to update booked flag.
+    this.appointmentsService.getByKey(this.appointmentId);
+
   }
 }

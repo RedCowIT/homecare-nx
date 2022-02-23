@@ -1,5 +1,5 @@
 
-<div *ngIf="appointmentsService.entities$ | async as appointments">
+<div *ngIf="appointments$ | async as appointments">
   <div *ngIf="appointments">
 
     <div *ngIf="platform.isMobile; else tablet">

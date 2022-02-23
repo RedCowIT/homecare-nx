@@ -93,9 +93,9 @@ export class JobsLoaderService {
 
     console.log('loadAppointmentRelations', appointment);
 
-    selectOrFetchEntity(this.appointmentVisitsService, appointment.id).pipe(
-      first()
-    ).subscribe(visit => {});
+    this.appointmentVisitsService.getWithQuery({
+      appointmentId: `${appointment.id}`
+    });
 
     this.customersService.getByKey(appointment.customerId);
 

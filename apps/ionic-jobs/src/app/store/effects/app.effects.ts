@@ -16,6 +16,11 @@ import {Store} from "@ngrx/store";
 import {addJobError} from "../../job/store/actions/job.actions";
 import {Router} from "@angular/router";
 import {LoggerService} from "@homecare/core";
+import {authActions} from "../../../../../../libs/auth/src/lib/store/actions";
+import {AppointmentEntity} from "@homecare/appointment";
+import {CustomerEntity} from "@homecare/customer";
+import {EntityServices} from "@ngrx/data";
+import {BillingEntity} from "@homecare/billing";
 
 
 @Injectable()
@@ -40,17 +45,49 @@ export class AppEffects {
     );
   }, {dispatch: false});
 
+  logout$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(authActions.logout),
+      tap(async (action) => {
+        this.resetData();
+      }),
+    );
+  }, {dispatch: false});
+
   constructor(private actions$: Actions,
               private store$: Store,
               private auth0Service: Auth0Service,
               private entitySyncErrorService: EntitySyncErrorService,
               private router: Router,
               private loadingCtrl: LoadingController,
-              private logger: LoggerService) {
+              private logger: LoggerService,
+              private entityServices: EntityServices) {
 
     console.log('APP EFFECTS CTOR');
 
 
+  }
+
+  resetData() {
+    try {
+
+      const entities = [
+        AppointmentEntity.Appointment,
+        AppointmentEntity.AppointmentNoAnswer,
+        CustomerEntity.Customer,
+        CustomerEntity.CustomerAppliance,
+        BillingEntity.InvoiceItem,
+        BillingEntity.Invoice
+      ];
+
+      for (const entityName of entities) {
+        const entityService = this.entityServices.getEntityCollectionService(entityName);
+        entityService.clearCache();
+      }
+
+    } catch (e) {
+      console.error('Error clearing cache on logout')
+    }
   }
 
 }

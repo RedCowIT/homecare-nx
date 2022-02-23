@@ -1,7 +1,8 @@
 .signature-pad {
 
-  display: flex;
-  flex-direction:column;
+  display: inline-block;
+  //display: flex;
+  //flex-direction:column;
 
   canvas {
     //touch-action: none;
@@ -13,17 +14,23 @@
     margin-right: .25em;
   }
 
-  .buttons{
+  .buttons {
     margin-top: 10px;
   }
 
 }
 
 .signature-pad-wrap {
+  display: inline-block;
   border: 2px dashed var(--ion-color-primary);
   border-radius: 4px;
 }
 
+.clear-button-wrap {
+
+}
 .clear-button {
-text-align: right;
+
+  display: inline-block;
+  text-align: right;
 }

@@ -12,7 +12,8 @@ ion-item.status-disabled {
 
 ion-item.active {
   --ion-color-base: var(--active-background-color) !important;
-  --ion-color-contrast: var(--active-color) !important;
+  //--ion-color-contrast: var(--active-color) !important;
+  font-weight: bold;
 }
 
 ion-item ion-icon {

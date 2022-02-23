@@ -1,4 +1,4 @@
-<div class="signature-pad-wrap">
+<div class="signature-pad-wrap" [style]="{width: width, height: height}">
   <div class="signature-pad">
     <canvas
       [width]="width"
@@ -7,6 +7,8 @@
   </div>
 </div>
 
-<div class="clear-button ion-margin-top">
-  <ion-icon name="trash-bin-outline" size="large" (click)="clearPad()"></ion-icon>
+<div class="clear-button-wrap ion-margin-top">
+  <div class="clear-button" [style]="{width: width, height: height}">
+    <ion-icon name="trash-bin-outline" size="large" (click)="clearPad()"></ion-icon>
+  </div>
 </div>
