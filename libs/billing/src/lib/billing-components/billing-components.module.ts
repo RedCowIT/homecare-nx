@@ -27,7 +27,10 @@ import {GlobalPaymentRequestFormComponent} from './payment/global-payment-reques
 import {GlobalPaymentModalComponent} from './payment/global-payment-modal/global-payment-modal.component';
 import {InvoiceListTableComponent} from './invoice/invoice-list-table/invoice-list-table.component';
 import {NgSelectModule} from "@ng-select/ng-select";
-import { FinancePlanInvoiceItemFormComponent } from './invoice/invoice-items/finance-plan-invoice-item-form/finance-plan-invoice-item-form.component';
+import {FinancePlanInvoiceItemFormComponent} from './invoice/invoice-items/finance-plan-invoice-item-form/finance-plan-invoice-item-form.component';
+import {InvoicePaymentItemListComponent} from './invoice-payment-item-list/invoice-payment-item-list.component';
+import {InvoicePaymentModalComponent} from './invoice-payment-modal/invoice-payment-modal.component';
+import { EmailInvoiceModalComponent } from './invoice/email-invoice-modal/email-invoice-modal.component';
 
 
 @NgModule({
@@ -52,6 +55,9 @@ import { FinancePlanInvoiceItemFormComponent } from './invoice/invoice-items/fin
     GlobalPaymentModalComponent,
     InvoiceListTableComponent,
     FinancePlanInvoiceItemFormComponent,
+    InvoicePaymentItemListComponent,
+    InvoicePaymentModalComponent,
+    EmailInvoiceModalComponent
   ],
   imports: [
     CommonModule,
@@ -73,7 +79,9 @@ import { FinancePlanInvoiceItemFormComponent } from './invoice/invoice-items/fin
     InvoiceNotesFormComponent,
     InvoicePaymentFormComponent,
     InvoiceListTableComponent,
-    GlobalPaymentRequestFormComponent
+    InvoicePaymentItemListComponent,
+    GlobalPaymentRequestFormComponent,
+    EmailInvoiceModalComponent
   ]
 })
 export class BillingComponentsModule {

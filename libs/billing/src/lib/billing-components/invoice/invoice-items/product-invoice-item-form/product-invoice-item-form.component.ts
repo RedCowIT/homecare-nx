@@ -9,7 +9,7 @@ import {
   SubscribedContainer
 } from "@homecare/shared";
 import {EMPTY, Observable} from "rxjs";
-import {first, mergeMap, takeUntil} from "rxjs/operators";
+import {finalize, first, mergeMap, takeUntil} from "rxjs/operators";
 import {InvoiceItemsService} from '../../../../store/entity/services/invoice/invoice-items/invoice-items.service';
 import {ProductInvoiceItemFormService} from "../../../../services/form/invoice/product-invoice-item-form/product-invoice-item-form.service";
 import {ProductCategoriesService, ProductsService} from "@homecare/product";
@@ -47,6 +47,8 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
   invoiceItem: InvoiceItem;
 
   editMode = false;
+
+  deleting = false;
 
   errors = [];
 
@@ -102,6 +104,18 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
     } else {
       this.createInvoiceItem();
     }
+  }
+
+  delete(){
+    if (this.deleting){
+      return;
+    }
+    this.deleting = true;
+    this.invoiceItemsService.delete(this.invoiceItemId).pipe(first(), finalize(() => {
+      this.deleting = true;
+    })).subscribe(() => {
+      this.done.emit();
+    });
   }
 
   createInvoiceItem() {

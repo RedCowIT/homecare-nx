@@ -2,10 +2,62 @@
 
   <div [formGroupName]="formGroupNameKey">
 
+    <div *ngIf="products$ | async as products">
+
+      <div *ngIf="products" class="ng-select-wrap">
+        <ion-label>Product</ion-label>
+        <ng-select [items]="products"
+                   bindLabel="description"
+                   bindValue="id"
+                   formControlName="productId"
+                   [clearable]="false">
+        </ng-select>
+      </div>
+
+    </div>
+
+    <ion-item>
+      <ion-label position="stacked">Price</ion-label>
+      <ion-input formControlName="price"></ion-input>
+    </ion-item>
+
     <ion-item>
       <ion-label position="stacked">Deposit</ion-label>
       <ion-input formControlName="deposit" type="number"></ion-input>
     </ion-item>
+
+    <dd-entity-select
+      [formGroup]="formGroup"
+      [formGroupNameKey]="formGroupNameKey"
+      entityName="FinancePlanPeriod"
+      fieldName="monthPeriodId"
+      labelKey="months"
+    ></dd-entity-select>
+
+    <hr>
+
+    <div *ngIf="formGroup.get(formGroupNameKey).get('loan').value">
+      <ion-item>
+        <ion-label>Amount of Credit</ion-label>
+        <ion-input readonly formControlName="loan" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Charge for Credit</ion-label>
+        <ion-input readonly formControlName="interest" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Total Payable</ion-label>
+        <ion-input readonly formControlName="totalPayable" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Monthly Payment</ion-label>
+        <ion-input readonly formControlName="monthlyPayment" type="number"></ion-input>
+      </ion-item>
+    </div>
+
 
   </div>
 

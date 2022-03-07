@@ -3,7 +3,7 @@ import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {tap} from 'rxjs/operators';
 import {dataServiceError, httpError} from '../actions/data-error.actions';
 import {DataErrorService} from '../../services/data-error/data-error.service';
-import {LoggerService} from "@homecare/core";
+import {LoggerService} from "../../services/logger/logger.service";
 
 
 

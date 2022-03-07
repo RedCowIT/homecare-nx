@@ -1,19 +1,27 @@
-<div [formGroup]="formService.form" class="d-flex">
-  <div *ngIf="invoicePaymentType">
-    <div class="label">{{invoicePaymentType.description}}</div>
-    <ion-input formControlName="amount" type="number" (dblclick)="addFullAmount()"></ion-input>
+<div *ngIf="showForm;else noOptions">
+  <div [formGroup]="formService.form" class="d-flex">
+    <div *ngIf="invoicePaymentType">
+      <div class="label">{{getDescription(invoicePaymentType)}}</div>
+      <ion-input formControlName="amount" type="number" (dblclick)="addFullAmount()"></ion-input>
+    </div>
+    <div *ngIf="!hideSubmit" class="ion-margin-top ion-margin-start">
+      <dd-entity-form-submit
+        [loading]="isLoading"
+        [disabled]="!formService.form.valid || isLoading"
+        [label]="saveLabel"
+        color="dark"
+        (submitted)="submit()"
+      ></dd-entity-form-submit>
+    </div>
   </div>
-  <div class="ion-margin-top ion-margin-start">
-    <dd-entity-form-submit
-      [loading]="isLoading"
-      [disabled]="!formService.form.valid || isLoading"
-      label="Add Payment"
-      color="dark"
-      (submitted)="submit()"
-    ></dd-entity-form-submit>
+  <div *ngIf="!id" class="ion-margin-top">
+    <a (click)="changePaymentType($event)">Change Method</a>
   </div>
 </div>
 
-<div class="ion-margin-top">
-  <a (click)="changePaymentType($event)">Change Method</a>
-</div>
+
+<ng-template #noOptions>
+  <ion-note color="danger">All payment methods in use, please amend an existing payment.</ion-note>
+</ng-template>
+
+

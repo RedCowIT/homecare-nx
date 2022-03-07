@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {AppointmentBaseComponent} from "../../appointment-base/appointment-base.component";
 
 @Component({
@@ -7,6 +7,8 @@ import {AppointmentBaseComponent} from "../../appointment-base/appointment-base.
   styleUrls: ['./job-details.component.scss']
 })
 export class JobDetailsComponent extends AppointmentBaseComponent {
+
+
 
 
 }

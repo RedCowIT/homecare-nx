@@ -32,7 +32,9 @@ export class InvoiceTableService extends TableSourceService {
     ]).pipe(map(([
                    invoiceItems]) => {
 
-        return invoiceItems.map(invoiceItem => {
+        return invoiceItems
+          .filter(invoiceItem => invoiceItem.invoiceId === this.invoiceId)
+          .map(invoiceItem => {
 
           return {
             id: invoiceItem.id,

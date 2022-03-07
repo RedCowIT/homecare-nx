@@ -11,7 +11,7 @@ import {combineLatest, Observable} from "rxjs";
 import {PlansService} from "@homecare/plan";
 import {CustomerPlansService} from "@homecare/customer";
 import {InvoiceItemsService} from "../../../../store/entity/services/invoice/invoice-items/invoice-items.service";
-import {first, map, mergeMap, takeUntil, tap} from "rxjs/operators";
+import {finalize, first, map, mergeMap, takeUntil, tap} from "rxjs/operators";
 import {EntityFormService} from "@homecare/entity";
 import {FormGroup} from "@angular/forms";
 import {InvoicesService} from "../../../../store/entity/services/invoice/invoices/invoices.service";
@@ -45,6 +45,8 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
   isLoading$: Observable<boolean> | null;
 
   errors: string[];
+
+  deleting = false;
 
   constructor(public plansService: PlansService,
               public customerPlansService: CustomerPlansService,
@@ -230,5 +232,17 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
       this.done.emit();
     });
 
+  }
+
+  delete(){
+    if (this.deleting){
+      return;
+    }
+    this.deleting = true;
+    this.invoiceItemsService.delete(this.invoiceItemId).pipe(first(), finalize(() => {
+      this.deleting = true;
+    })).subscribe(() => {
+      this.done.emit();
+    });
   }
 }

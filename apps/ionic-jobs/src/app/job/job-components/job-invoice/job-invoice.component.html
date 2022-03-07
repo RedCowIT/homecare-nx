@@ -47,9 +47,26 @@
           </ion-card>
 
           <ion-card>
-
+            <ion-card-header>
+              <ion-card-title>Payment</ion-card-title>
+            </ion-card-header>
             <ion-card-content>
-              <hc-invoice-payment-form [invoiceId]="invoice.id"></hc-invoice-payment-form>
+              <div class="payment-list">
+                <hc-invoice-payment-item-list [invoiceId]="invoice.id"></hc-invoice-payment-item-list>
+              </div>
+
+              <div *ngIf="showPaymentForm$ | async as showPaymentForm">
+
+                <div *ngIf="showPaymentForm?.value || addMultiplePayment">
+                  <hc-invoice-payment-form [invoiceId]="invoice.id" (create)="invoicePaymentCreated($event)"></hc-invoice-payment-form>
+                </div>
+
+                <div *ngIf="!showPaymentForm?.value && !addMultiplePayment">
+                  <ion-button fill="outline" color="medium" (click)="addMultiplePayment = true">Add another payment</ion-button>
+                </div>
+
+              </div>
+
             </ion-card-content>
           </ion-card>
 

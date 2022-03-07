@@ -29,6 +29,7 @@
     </div>
   </div>
   <div class="action-footer">
+    <ion-button *ngIf="formService.editMode" color="danger" (click)="delete()" class="mr-auto" [disabled]="deleting">Remove</ion-button>
     <ion-button color="primary" size="default" (click)="save()" [disabled]="!formService.form.valid">
       Save
     </ion-button>

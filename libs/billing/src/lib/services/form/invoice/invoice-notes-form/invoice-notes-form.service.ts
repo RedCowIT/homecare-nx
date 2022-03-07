@@ -12,7 +12,6 @@ export class InvoiceNotesFormService extends EntityFormService {
   protected init(): void {
     this.form = this.fb.group({
       id: undefined,
-      appointmentId: [null, Validators.required],
       notes: [null, Validators.required],
       serviceNotes: [null, Validators.required]
     });

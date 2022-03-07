@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {InvoicePaymentFormService} from "../../../services/form/invoice/invoice-payment-form/invoice-payment-form.service";
 import {InvoicePaymentTypesService} from "../../../store/entity/services/invoice/invoice-payment-types/invoice-payment-types.service";
 import {EntityFormContainer} from "@homecare/entity";
 import {
+  firstByKey,
   InvoiceItemTypes,
   InvoicePayment,
   InvoicePaymentType,
@@ -11,8 +12,8 @@ import {
   selectFirstEntityByKey
 } from "@homecare/shared";
 import {InvoicePaymentsService} from "../../../store/entity/services/invoice/invoice-payments/invoice-payments.service";
-import {first, mergeMap, takeUntil} from "rxjs/operators";
-import {Observable} from "rxjs";
+import {distinctUntilChanged, first, map, mergeMap, takeUntil} from "rxjs/operators";
+import {combineLatest, Observable} from "rxjs";
 import {PopoverSelectComponent} from "../../../../../../ionic-common/src/lib/components/popover-select/popover-select.component";
 import {PopoverController} from "@ionic/angular";
 import {SelectOption} from "@homecare/common";
@@ -27,7 +28,20 @@ import {InvoicesService} from "../../../store/entity/services/invoice/invoices/i
 export class InvoicePaymentFormComponent extends EntityFormContainer<InvoicePayment> implements OnInit {
 
   @Input()
+  id: number;
+
+  @Input()
   invoiceId: number;
+
+  @Input()
+  hideSubmit = false;
+
+  @Output()
+  create = new EventEmitter<InvoicePayment>();
+
+  saveLabel: string;
+
+  showForm = true;
 
   readonly defaultPaymentType = InvoicePaymentTypes.Card;
 
@@ -35,20 +49,23 @@ export class InvoicePaymentFormComponent extends EntityFormContainer<InvoicePaym
 
   paymentTypeOptions: SelectOption[] = [
     {
-      label: InvoicePaymentTypes.Card, value: InvoicePaymentTypes.Card
+      label: InvoicePaymentTypes.Card, value: InvoicePaymentTypes.PendingCard
     },
     {
-      label: InvoicePaymentTypes.Cash, value: InvoicePaymentTypes.Cash
+      label: InvoicePaymentTypes.Cash, value: InvoicePaymentTypes.PendingCash
     },
     {
-      label: InvoicePaymentTypes.Cheque, value: InvoicePaymentTypes.Cheque
+      label: InvoicePaymentTypes.Cheque, value: InvoicePaymentTypes.PendingCheque
     }
   ];
+
+  paymentTypeOptions$: Observable<SelectOption[]>;
 
   constructor(public formService: InvoicePaymentFormService,
               public entityService: InvoicePaymentsService,
               public invoicePaymentTypesService: InvoicePaymentTypesService,
               public invoicesService: InvoicesService,
+              public invoicePaymentsService: InvoicePaymentsService,
               public popoverCtrl: PopoverController) {
     super(formService, entityService);
   }
@@ -56,6 +73,12 @@ export class InvoicePaymentFormComponent extends EntityFormContainer<InvoicePaym
   ngOnInit(): void {
 
     super.ngOnInit();
+
+    if (this.id) {
+      this.saveLabel = 'Save';
+    } else {
+      this.saveLabel = 'Add Payment';
+    }
 
     this.formService.form.get('paymentTypeId').valueChanges.pipe(
       mergeMap(paymentTypeId =>
@@ -76,48 +99,144 @@ export class InvoicePaymentFormComponent extends EntityFormContainer<InvoicePaym
         paymentTypeId: paymentType.id
       });
 
-    })
+    });
+
+    // Only allow one payment per payment type
+    this.paymentTypeOptions$ = combineLatest([
+      this.invoicePaymentTypesService.entities$,
+      this.invoicePaymentsService.entities$
+    ]).pipe(
+      map(([paymentTypes, invoicePayments]) => {
+
+        invoicePayments = invoicePayments.filter(invoicePayment => invoicePayment.invoiceId);
+
+        return this.paymentTypeOptions.filter(paymentTypeOption => {
+
+          const paymentType = firstByKey(paymentTypes, 'description', paymentTypeOption.value);
+
+          console.log('payment', paymentTypeOption.value, paymentType);
+
+          return firstByKey(invoicePayments, 'paymentTypeId', paymentType.id) === null;
+
+        });
+      })
+    );
+
+    if (this.model$) {
+      this.showForm = true;
+      this.model$.pipe(first()).subscribe(invoicePayment => {
+        this.patchForm({
+          paymentTypeId: invoicePayment.paymentTypeId
+        });
+      });
+    } else {
+      this.paymentTypeOptions$.pipe(
+        distinctUntilChanged(),
+        takeUntil(this.destroyed$)
+      ).subscribe(
+        paymentTypeOptions => {
+          console.log('PAYMENT TYPE OPTIONS', paymentTypeOptions);
+          if (paymentTypeOptions.length) {
+            this.showForm = true;
+            this.setPaymentType(paymentTypeOptions[0].value);
+          } else {
+            this.showForm = false;
+          }
+        }
+      );
+    }
+
 
   }
 
   async changePaymentType($event) {
-    const popover = await this.popoverCtrl.create({
-      component: PopoverSelectComponent,
-      componentProps: {
-        options: this.paymentTypeOptions
-      },
-      event: $event
-    });
 
-    popover.onWillDismiss().then(
-      (data: any) => {
-        console.log('onWillDismiss', data.data);
-        // this.openModal(data.data.option);
+    this.paymentTypeOptions$.pipe(first()).subscribe(
+      async paymentTypeOptions => {
 
-        this.invoicePaymentTypesService.selectByDescription(data.data.option.value).pipe(
-          first()
-        ).subscribe((paymentType) => {
-          this.patchForm({
-            paymentTypeId: paymentType.id
-          });
+        const popover = await this.popoverCtrl.create({
+          component: PopoverSelectComponent,
+          componentProps: {
+            options: paymentTypeOptions
+          },
+          event: $event
         });
+
+        popover.onWillDismiss().then(
+          (data: any) => {
+            if (!data.data) {
+              return;
+            }
+            this.setPaymentType(data.data.option.value);
+          }
+        );
+
+        await popover.present();
+
       }
     );
 
-    await popover.present();
+  }
+
+  setPaymentType(description: string) {
+    this.invoicePaymentTypesService.selectByDescription(description).pipe(
+      first()
+    ).subscribe((paymentType) => {
+      this.patchForm({
+        paymentTypeId: paymentType.id
+      });
+    });
   }
 
   addFullAmount() {
+
+    console.log('addFullAmount');
+
     selectEntity(this.invoicesService, this.invoiceId).pipe(
       first()
     ).subscribe(invoice => {
 
-      if (invoice.grossAmount){
+      if (invoice.grossAmount) {
         this.patchForm({
           amount: invoice.grossAmount
         });
       }
 
     });
+  }
+
+  getDescription(invoicePaymentType: InvoicePaymentType): string {
+
+    switch (invoicePaymentType.description) {
+      case InvoicePaymentTypes.PendingCard:
+        return InvoicePaymentTypes.Card;
+      case InvoicePaymentTypes.PendingCash:
+        return InvoicePaymentTypes.Cash;
+      case InvoicePaymentTypes.PendingCheque:
+        return InvoicePaymentTypes.Cheque;
+    }
+
+    return invoicePaymentType.description;
+  }
+
+  protected async entityCreated(entity: InvoicePayment) {
+    await super.entityCreated(entity);
+    this.formService.reset();
+    this.id = null;
+
+  }
+
+  protected async entityUpdated(entity: InvoicePayment) {
+    await super.entityUpdated(entity);
+    this.formService.reset();
+    this.id = null;
+
+  }
+
+  protected async entityDeleted(entity: InvoicePayment) {
+    await super.entityDeleted(entity);
+    this.formService.reset();
+    this.id = null;
+
   }
 }

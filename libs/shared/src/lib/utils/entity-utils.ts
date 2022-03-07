@@ -52,7 +52,7 @@ export function selectOrFetchFirstEntityByKey<T>(entityService: EntityCollection
       }
       const query: any = {};
       query[`${key}`] = `${value}`;
-      console.log('fetch with query', entityService, query);
+      // console.log('fetch with query', entityService, query);
       return entityService.getWithQuery(query).pipe(map(entities => firstItem(entities)),
         tap(result => console.log(result)));
     })

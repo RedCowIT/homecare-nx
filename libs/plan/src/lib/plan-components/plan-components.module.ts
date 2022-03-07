@@ -7,6 +7,7 @@ import { AppliancePriceRangeSelectComponent } from './appliance/appliance-price-
 import {IonicCommonComponentsModule} from "@homecare/ionic-common";
 import { AppliancePlanFormComponent } from './appliance/appliance-plan-form/appliance-plan-form.component';
 import { FinancePlanFormComponent } from './finance/finance-plan-form/finance-plan-form.component';
+import {NgSelectModule} from "@ng-select/ng-select";
 
 
 
@@ -17,12 +18,13 @@ import { FinancePlanFormComponent } from './finance/finance-plan-form/finance-pl
     AppliancePlanFormComponent,
     FinancePlanFormComponent
   ],
-  imports: [
-    CommonModule,
-    IonicModule,
-    ReactiveFormsModule,
-    IonicCommonComponentsModule
-  ],
+    imports: [
+        CommonModule,
+        IonicModule,
+        ReactiveFormsModule,
+        IonicCommonComponentsModule,
+        NgSelectModule
+    ],
   exports: [
     PlanPaymentPeriodSelectComponent,
     AppliancePlanFormComponent,

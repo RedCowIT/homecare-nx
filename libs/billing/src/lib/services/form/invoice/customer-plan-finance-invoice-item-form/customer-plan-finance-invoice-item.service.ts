@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {EntityFormService} from "@homecare/entity";
 import {FormBuilder, Validators} from "@angular/forms";
-import {nowAsDateString} from "../../../../../../../shared/src/lib/utils/date-utils";
+import {nowAsDateString} from "@homecare/shared";
 
 @Injectable()
 export class CustomerPlanFinanceInvoiceItemFormService extends EntityFormService {

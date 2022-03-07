@@ -10,11 +10,12 @@ import {combineLatest, Observable} from "rxjs";
 import {ApplianceRepairPlanService, PlanPaymentPeriodsService, PlansService, PlanTypesService} from "@homecare/plan";
 import {CustomerPlanAppliancesService, CustomerPlansService} from "@homecare/customer";
 import {InvoiceItemsService} from "../../../../store/entity/services/invoice/invoice-items/invoice-items.service";
-import {first, map, mergeAll, mergeMap, tap} from "rxjs/operators";
+import {catchError, first, map, mergeAll, mergeMap, tap} from "rxjs/operators";
 import {CustomerPlanApplianceInvoiceItemService} from "../../../../services/form/invoice/customer-plan-appliance-invoice-item-form/customer-plan-appliance-invoice-item.service";
 import {CustomerPlanInvoiceItemBaseComponent} from "../customer-plan-invoice-item-base/customer-plan-invoice-item-base.component";
 import {EntityFormService} from "@homecare/entity";
 import {InvoicesService} from "../../../../store/entity/services/invoice/invoices/invoices.service";
+import {LoggerService} from "@homecare/core";
 
 @Component({
   selector: 'hc-appliance-plan-invoice-item-form',
@@ -34,7 +35,8 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
               public invoicesService: InvoicesService,
               public invoiceItemsService: InvoiceItemsService,
               public planPaymentPeriodsService: PlanPaymentPeriodsService,
-              public applianceRepairPlanService: ApplianceRepairPlanService) {
+              public applianceRepairPlanService: ApplianceRepairPlanService,
+              public logger: LoggerService) {
 
     super(plansService, customerPlansService, invoicesService, invoiceItemsService);
 
@@ -111,7 +113,7 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
           }
         });
       }
-    )
+    );
 
   }
 

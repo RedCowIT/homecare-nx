@@ -33,7 +33,6 @@
     "billing": { "tags": [] },
     "plan": { "tags": [] },
     "customer": { "tags": [] },
-    "ionic-shared": { "tags": [] },
     "common": { "tags": [] },
     "ionic-common": { "tags": [] },
     "document": { "tags": [] },

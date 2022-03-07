@@ -31,6 +31,7 @@ export class AppointmentCallTypeListComponent extends AppointmentBaseComponent i
       this.callTypesService.entityMap$
     ]).pipe(
       map(([appointmentCallTypes, callTypeMap]) => {
+
         return appointmentCallTypes.map(appointmentCallType => {
           return {
             label: callTypeMap[appointmentCallType.callTypeId].description,

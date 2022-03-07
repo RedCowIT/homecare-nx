@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ModalController} from "@ionic/angular";
 import {QuoteTableService} from "../../../services/quote/quote-table/quote-table.service";
 import {QuoteItemsService} from "../../../store/entity/services/quote/quote-items/quote-items.service";
@@ -35,7 +35,8 @@ export class QuoteTableComponent implements OnInit, AfterViewInit {
               private quoteItemsService: QuoteItemsService,
               private quoteItemTypesService: QuoteItemTypesService,
               private quoteApplianceDetailsService: QuoteApplianceDetailsService,
-              public quoteSummaryService: QuoteSummaryService) {
+              public quoteSummaryService: QuoteSummaryService,
+              public cdRef: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -46,6 +47,7 @@ export class QuoteTableComponent implements OnInit, AfterViewInit {
     this.quoteTableService.init(this.quoteId, {value:this.valueTmpl});
     this.quoteTableService.load();
     this.quoteSummaryService.init(this.quoteId);
+    this.cdRef.detectChanges();
   }
 
   async select(row) {

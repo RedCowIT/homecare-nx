@@ -16,6 +16,8 @@ export class ShampooReportFormComponent extends EntityFormContainer<AppointmentV
 
   // @Input()
   // appointmentId: number;
+  @Input()
+  id: number;
 
   constructor(public formService: ShampooReportFormService,
               public entityService: AppointmentVisitsService) {

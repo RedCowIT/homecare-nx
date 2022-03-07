@@ -45,6 +45,7 @@ export class EntityInitService implements AppInitHandler {
     BillingEntity.InvoicePaymentType,
     BillingEntity.InvoiceStatus,
     CustomerEntity.CustomerApplianceType,
+    PlanEntity.FinancePlanPeriod,
     PlanEntity.PlanPaymentPeriod,
     PlanEntity.PlanType,
     PlanEntity.Plan,

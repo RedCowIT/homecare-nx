@@ -1,0 +1,27 @@
+
+<div *ngIf="invoicePaymentTypesService.entityMap$ | async as paymentTypeMap">
+
+  <div *ngIf="paymentTypeMap">
+
+    <div *ngIf="invoicePayments$ | async as invoicePayments">
+      <ion-list *ngIf="invoicePayments" lines="none">
+        <ion-item *ngFor="let invoicePayment of invoicePayments" (click)="openModal(invoicePayment)">
+          <div slot="start">
+            <ion-icon *ngIf="paymentTypeMap[invoicePayment.paymentTypeId].description == 'Pending Card'" name="card-outline" size="large"></ion-icon>
+            <ion-icon *ngIf="paymentTypeMap[invoicePayment.paymentTypeId].description == 'Pending Cash'" name="cash-outline" size="large"></ion-icon>
+            <ion-icon *ngIf="paymentTypeMap[invoicePayment.paymentTypeId].description == 'Pending Cheque'" name="wallet-outline" size="large"></ion-icon>
+          </div>
+          <div slot="start">
+            {{paymentTypeMap[invoicePayment.paymentTypeId].description}} Payment
+          </div>
+          <div slot="end">
+            {{invoicePayment.amount | currency: 'GBP' }}
+          </div>
+        </ion-item>
+      </ion-list>
+    </div>
+
+  </div>
+
+
+</div>

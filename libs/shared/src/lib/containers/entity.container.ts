@@ -27,4 +27,9 @@ export abstract class EntityContainer<T> extends SubscribedContainer implements 
 
     this.model$ = selectEntity(this.entityService, this.id);
   }
+
+  clearEntity() {
+    this.id = null;
+    this.model$ = null;
+  }
 }

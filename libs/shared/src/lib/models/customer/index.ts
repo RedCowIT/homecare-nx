@@ -5,3 +5,6 @@ export * from './customer-appliance';
 export * from './customer-appliance-type';
 export * from './customer-plan-appliance';
 export * from './customer-plan-finance';
+export * from './employment-status';
+export * from './employment-status-time';
+export * from './residential-status';

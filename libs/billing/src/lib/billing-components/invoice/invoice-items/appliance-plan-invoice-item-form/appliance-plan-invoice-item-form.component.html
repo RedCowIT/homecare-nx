@@ -23,6 +23,7 @@
   </div>
 
   <div class="action-footer">
+    <ion-button *ngIf="invoiceItemId" color="danger" (click)="delete()" class="mr-auto" [disabled]="deleting">Remove</ion-button>
     <ion-button (click)="calculate()" [fill]="formService.form.valid ? 'outline' : 'solid'">Calculate</ion-button>
     <ion-button *ngIf="formService.form.valid" (click)="save()">Save</ion-button>
   </div>

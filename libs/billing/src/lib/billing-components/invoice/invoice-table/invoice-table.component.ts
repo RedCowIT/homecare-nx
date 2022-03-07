@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {InvoiceTableService} from "../../../services/invoice/invoice-table/invoice-table.service";
 import {InvoiceItemModalComponent} from "../invoice-item-modal/invoice-item-modal.component";
 import {ModalController} from "@ionic/angular";
@@ -19,7 +19,8 @@ export class InvoiceTableComponent implements OnInit, AfterViewInit {
 
   constructor(public invoiceTableService: InvoiceTableService,
               public invoiceSummaryService: InvoiceSummaryService,
-              public modalCtrl: ModalController) {
+              public modalCtrl: ModalController,
+              public cdRef: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -30,6 +31,7 @@ export class InvoiceTableComponent implements OnInit, AfterViewInit {
     this.invoiceTableService.init(this.invoiceId, {value: this.valueTmpl});
     this.invoiceSummaryService.init(this.invoiceId);
     this.load();
+    this.cdRef.detectChanges();
   }
 
 
