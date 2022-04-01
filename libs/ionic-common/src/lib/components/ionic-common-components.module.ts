@@ -30,10 +30,10 @@ import { AccordionItemComponent } from './accordion/accordion-item/accordion-ite
     AccordionItemComponent,
   ],
   imports: [
-    CommonModule,
     IonicModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule
   ],
   exports: [
     ModalHeaderComponent,

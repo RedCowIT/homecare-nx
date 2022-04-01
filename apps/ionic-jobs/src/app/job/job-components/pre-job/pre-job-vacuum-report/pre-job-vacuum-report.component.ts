@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {createFooterBackButton, createFooterNextButton} from "../../../support/footer-button-factory";
 import {PreJobSection} from "@homecare/shared";
 import {VacuumReportFormComponent} from "../../../../../../../../libs/appointment/src/lib/appointment-components/pre-job/vacuum-report-form/vacuum-report-form.component";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'hc-pre-job-vacuum-report',
@@ -35,7 +36,14 @@ export class PreJobVacuumReportComponent implements OnInit {
       createFooterNextButton(async () => {
 
         if (this.vacuumReportForm.validate()){
-          this.currentJobService.completePreJobSection(PreJobSection.VacuumReport);
+
+          this.vacuumReportForm.save().pipe(first()).subscribe(
+            () => {
+              this.currentJobService.completePreJobSection(PreJobSection.VacuumReport);
+            }
+          );
+
+
         }
 
       })

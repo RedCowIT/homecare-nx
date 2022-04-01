@@ -1,0 +1,9 @@
+<div *ngIf="docs$ | async as docs">
+
+  <ion-list *ngIf="docs?.length">
+
+    <hc-customer-plan-finance-document-list-item *ngFor="let doc of docs" [id]="doc.id"></hc-customer-plan-finance-document-list-item>
+
+  </ion-list>
+
+</div>

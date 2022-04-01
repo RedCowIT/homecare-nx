@@ -22,8 +22,10 @@ import {Store} from "@ngrx/store";
 import {JobModule} from "./job/job.module";
 import {ApiUrlService} from "@homecare/common";
 import {environment} from "../environments/environment";
-import {EntitySyncErrorModalComponent} from './components/entity-sync-error-modal/entity-sync-error-modal.component';
 import {AppComponentsModule} from "./components/app-components.module";
+import * as Sentry from "@sentry/angular";
+
+Sentry.init(environment.sentry);
 
 function storageFactory(storage: ClientStorage): StorageService {
   return new StorageService(storage);
@@ -47,7 +49,7 @@ function cacheStoreServiceFactory(store: Store, storage: StorageService): CacheS
     CoreModule,
     StorageModule,
     AuthModule,
-    EntityModule,
+    EntityModule.forRoot(environment.entity.useCache),
     MainModule,
     JobModule
   ],

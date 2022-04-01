@@ -20,26 +20,26 @@ export class AppDataErrorService extends DataErrorService {
     super();
   }
 
-  public handleHttpError(error: HttpErrorResponse): void {
+  public handleHttpError(response: any): void {
 
-    super.handleHttpError(error);
+    super.handleHttpError(response);
 
-    this.logger.error('DataHttpError', error);
+    this.logger.error('DataHttpError', response);
 
-    switch (error.status) {
+    switch (response.status) {
       case 401:
         this.unauthorized();
         break;
       case 422:
-        this.validationError(error);
+        this.validationError(response);
         break;
       case 403:
       case 404:
       case 500:
-        this.serverError(error);
+        this.serverError(response);
         break;
       default:
-        this.unhandledHttpError(error);
+        this.unhandledHttpError(response);
     }
   }
 
@@ -96,3 +96,4 @@ export class AppDataErrorService extends DataErrorService {
 
   }
 }
+

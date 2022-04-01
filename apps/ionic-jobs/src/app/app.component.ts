@@ -1,7 +1,7 @@
 import {Component, NgZone} from '@angular/core';
 import {LoadingController, Platform} from '@ionic/angular';
 import {EntitySyncService} from "@homecare/entity";
-import {CoreEntity, PlatformService} from "@homecare/core";
+import {CoreEntity, NetworkConnectivityService, PlatformService} from "@homecare/core";
 import {distinct, distinctUntilChanged, filter} from "rxjs/operators";
 
 import {App} from '@capacitor/app';
@@ -17,6 +17,7 @@ export class AppComponent {
 
   isLoading = false;
   loadingEl: HTMLIonLoadingElement;
+  networkOnline = true;
 
   constructor(
     public platformService: PlatformService,
@@ -24,6 +25,7 @@ export class AppComponent {
     private zone: NgZone,
     private authService: TokenAuthService,
     private entitySyncService: EntitySyncService,
+    private networkConnectivityService: NetworkConnectivityService,
     private loadingCtrl: LoadingController,
     private router: Router) {
     this.initializeApp().then(() => {
@@ -39,6 +41,7 @@ export class AppComponent {
       });
     });
 
+
     this.platform.ready().then(async () => {
       if (this.platform.is('capacitor')) {
         await this.initCapacitor();
@@ -49,6 +52,12 @@ export class AppComponent {
       filter(isAuthenticated => isAuthenticated)
     ).subscribe((isAuthenticated) => {
       this.entitySyncService.init(CoreEntity.AppDataId);
+    });
+
+    this.networkConnectivityService.isOnline$.pipe(
+      distinctUntilChanged()
+    ).subscribe(isOnline => {
+      this.networkOnline = isOnline;
     });
 
     this.entitySyncService.isLoading$.subscribe(async isLoading => {

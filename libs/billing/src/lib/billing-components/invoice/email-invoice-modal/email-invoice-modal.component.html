@@ -1,1 +1,6 @@
-<p>email-invoice-modal works!</p>
+<div class="ion-page">
+  <dd-modal-header [title]="'Email Invoice'"></dd-modal-header>
+  <ion-content>
+    <hc-email-invoice-form [id]="id" (done)="done()"></hc-email-invoice-form>
+  </ion-content>
+</div>

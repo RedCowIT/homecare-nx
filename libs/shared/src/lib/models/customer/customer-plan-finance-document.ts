@@ -7,7 +7,7 @@ export interface CustomerPlanFinanceDocument {
   phone1: string;
   phone2: string;
   email1: string;
-  email2: number;
+  email2: string;
   residentialStatus: number;
   currentAddressLessThanThree: boolean;
   currentAddress1: string;
@@ -37,4 +37,16 @@ export interface CustomerPlanFinanceDocument {
   signatureDate: string;
   signatureJSON: string;
   signatureBase64: string;
+}
+
+export function isValidCustomerPlanFinanceDocument(doc: CustomerPlanFinanceDocument): boolean {
+  return doc.customerPlanId &&
+  doc.title &&
+  doc.customerName && doc.customerName !== '',
+  doc.dob && doc.dob !== '' &&
+  doc.employmentStatusId &&
+  doc.employmentStatusTimeId &&
+  doc.residentialStatus &&
+  doc.occupation && doc.occupation !== '' &&
+  doc.signatureName && doc.signatureName !== '';
 }

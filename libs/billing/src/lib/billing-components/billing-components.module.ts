@@ -31,6 +31,9 @@ import {FinancePlanInvoiceItemFormComponent} from './invoice/invoice-items/finan
 import {InvoicePaymentItemListComponent} from './invoice-payment-item-list/invoice-payment-item-list.component';
 import {InvoicePaymentModalComponent} from './invoice-payment-modal/invoice-payment-modal.component';
 import { EmailInvoiceModalComponent } from './invoice/email-invoice-modal/email-invoice-modal.component';
+import { EmailInvoiceFormComponent } from './invoice/email-invoice-form/email-invoice-form.component';
+import { GlobalPaymentEmbedComponent } from './payment/global-payment-embed/global-payment-embed.component';
+import { CardPaymentListComponent } from './card-payment/card-payment-list/card-payment-list.component';
 
 
 @NgModule({
@@ -57,7 +60,10 @@ import { EmailInvoiceModalComponent } from './invoice/email-invoice-modal/email-
     FinancePlanInvoiceItemFormComponent,
     InvoicePaymentItemListComponent,
     InvoicePaymentModalComponent,
-    EmailInvoiceModalComponent
+    EmailInvoiceModalComponent,
+    EmailInvoiceFormComponent,
+    GlobalPaymentEmbedComponent,
+    CardPaymentListComponent
   ],
   imports: [
     CommonModule,
@@ -81,7 +87,8 @@ import { EmailInvoiceModalComponent } from './invoice/email-invoice-modal/email-
     InvoiceListTableComponent,
     InvoicePaymentItemListComponent,
     GlobalPaymentRequestFormComponent,
-    EmailInvoiceModalComponent
+    EmailInvoiceModalComponent,
+    CardPaymentListComponent
   ]
 })
 export class BillingComponentsModule {

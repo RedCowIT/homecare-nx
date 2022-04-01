@@ -1,4 +1,5 @@
 export enum BillingEntity {
+  CardPayment = 'CardPayment',
   Quote = 'Quote',
   QuoteItem = 'QuoteItem',
   QuoteItemType = 'QuoteItemType',
@@ -14,6 +15,7 @@ export enum BillingEntity {
 }
 
 export const billingEntityMetadata = {
+  [BillingEntity.CardPayment]: {},
   [BillingEntity.Quote]: {},
   [BillingEntity.QuoteItem]: {},
   [BillingEntity.QuoteItemType]: {},

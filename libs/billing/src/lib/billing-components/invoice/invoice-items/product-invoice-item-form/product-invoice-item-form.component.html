@@ -17,7 +17,9 @@
       </div>
 
       <ion-item>
-        <ion-label position="stacked">Quantity</ion-label>
+        <ion-label position="stacked">Quantity
+          <ng-container *ngIf="productStock">({{productStock.qty}} on van)</ng-container>
+        </ion-label>
         <ion-input formControlName="qty" type="number"></ion-input>
       </ion-item>
 

@@ -94,7 +94,8 @@ export class CurrentJobService {
   }
 
   completeJobSection(sectionId: JobSection) {
-
+    this.jobsService.completeJobSection(this.appointmentId, sectionId);
+    this.navToNextJobSection(sectionId);
   }
 
   completePreJobSection(sectionId: PreJobSection) {
@@ -131,6 +132,25 @@ export class CurrentJobService {
         const prevPreJobSection = job.preJobSections[index - 1];
 
         await this.router.navigateByUrl(`/job/${job.appointmentId}/pre-job/${prevPreJobSection.id}`);
+
+      }
+    });
+  }
+
+  navToNextJobSection(fromSectionId: JobSection) {
+    this.job$.pipe(
+      first()
+    ).subscribe(async job => {
+      const index = findIndexWithId(job.jobSections, fromSectionId);
+      if (index < job.jobSections.length - 1) {
+
+        const nextJobSection = job.jobSections[index + 1];
+
+        await this.router.navigateByUrl(`/job/${job.appointmentId}/${nextJobSection.id}`);
+
+      } else {
+
+        await this.router.navigateByUrl(`/job/${job.appointmentId}/`);
 
       }
     });

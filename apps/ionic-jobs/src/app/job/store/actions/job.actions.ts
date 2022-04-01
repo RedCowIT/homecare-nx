@@ -26,6 +26,11 @@ export const setJobSections = createAction(
   props<{ appointmentId: number, jobSections: JobSectionStatus[] }>()
 );
 
+export const reloadJobSections = createAction(
+  '[Job] Reload Sections',
+  props<{ appointmentId: number }>()
+);
+
 export const updateJob = createAction(
   '[Job] Update Job',
   props<{ job: Job }>()

@@ -21,6 +21,7 @@ import {AppointmentBaseComponent} from "./appointment-base/appointment-base.comp
 import {AppointmentCallTypeListComponent} from './appointment-call-type-list/appointment-call-type-list.component';
 import { ShampooReportFormComponent } from './pre-job/shampoo-report-form/shampoo-report-form.component';
 import { VacuumReportFormComponent } from './pre-job/vacuum-report-form/vacuum-report-form.component';
+import { OvenReportFormComponent } from './pre-job/oven-report-form/oven-report-form.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { VacuumReportFormComponent } from './pre-job/vacuum-report-form/vacuum-r
     AppointmentBaseComponent,
     AppointmentCallTypeListComponent,
     ShampooReportFormComponent,
-    VacuumReportFormComponent
+    VacuumReportFormComponent,
+    OvenReportFormComponent
   ],
   imports: [
     CommonModule,
@@ -61,7 +63,8 @@ import { VacuumReportFormComponent } from './pre-job/vacuum-report-form/vacuum-r
     AppointmentBaseComponent,
     AppointmentCallTypeListComponent,
     VacuumReportFormComponent,
-    ShampooReportFormComponent
+    ShampooReportFormComponent,
+    OvenReportFormComponent
   ]
 })
 export class AppointmentComponentsModule { }

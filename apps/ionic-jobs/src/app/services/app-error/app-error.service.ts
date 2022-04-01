@@ -1,6 +1,6 @@
 import {ErrorHandler, Injectable} from '@angular/core';
 import {LoggerService} from "@homecare/core";
-
+import * as Sentry from "@sentry/angular";
 /**
  * Handle client errors
  *
@@ -31,9 +31,20 @@ export class AppErrorService extends ErrorHandler {
     }
   }
 
-  private reportError(message: string, data: any) {
+  private reportError(message: string, error: any) {
 
-    this.logger.error(message, data);
+    try {
+      this.logger.error(message, error);
+    }
+    catch (e){
+      console.error(e);
+    }
+
+    try {
+      Sentry.captureException(error.originalError || error);
+    } catch (e) {
+      console.error(e);
+    }
 
     //
     // this.firebase.trackEvent({

@@ -1,0 +1,21 @@
+<div class="detail-with-footer">
+  <div class="detail-content">
+    <div *ngIf="currentJobService.appointmentVisit$ | async as appointmentVisit">
+      <div *ngIf="appointmentVisit">
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Oven clean pre-inspection (complete with customer)</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <hc-oven-report-form [id]="appointmentVisit.id"></hc-oven-report-form>
+          </ion-card-content>
+        </ion-card>
+
+      </div>
+    </div>
+  </div>
+  <div class="detail-footer">
+    <hc-job-footer [buttonConfigs$]="footerButtons$"></hc-job-footer>
+  </div>
+</div>

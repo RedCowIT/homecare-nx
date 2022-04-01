@@ -1,0 +1,189 @@
+
+<div class="content-with-action-footer">
+  <div class="content">
+    <div [formGroup]="formService.form">
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Customer</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Customer Name</ion-label>
+            <ion-input formControlName="customerName"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Date of Birth</ion-label>
+            <ion-datetime formControlName="dob" [max]="maxDate" pickerFormat="DD-MM-YYYY"></ion-datetime>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Phone 1</ion-label>
+            <ion-input formControlName="phone1" type="tel"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Phone 2</ion-label>
+            <ion-input formControlName="phone2" type="tel"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Email 1</ion-label>
+            <ion-input formControlName="email1" type="email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Email 2</ion-label>
+            <ion-input formControlName="email2" type="email"></ion-input>
+          </ion-item>
+
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Current Address</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+
+          <ion-item>
+            <ion-label position="stacked">Address</ion-label>
+            <ion-input formControlName="currentAddress1"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Address 2</ion-label>
+            <ion-input formControlName="currentAddress2"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Address 3</ion-label>
+            <ion-input formControlName="currentAddress3"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Address 4</ion-label>
+            <ion-input formControlName="currentAddress4"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Postcode</ion-label>
+            <ion-input formControlName="currentPostcode"></ion-input>
+          </ion-item>
+
+          <dd-entity-select
+            [formGroup]="formService.form"
+            entityName="ResidentialStatus"
+            fieldName="residentialStatus"
+          ></dd-entity-select>
+
+          <ion-item>
+            <ion-label>Have you lived at this address for less than 3 years?</ion-label>
+            <ion-toggle formControlName="currentAddressLessThanThree"></ion-toggle>
+          </ion-item>
+
+        </ion-card-content>
+
+      </ion-card>
+
+      <ion-card *ngIf="formService.form.value['currentAddressLessThanThree']">
+        <ion-card-header>
+          <ion-card-title>Previous Address</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Address</ion-label>
+            <ion-input formControlName="previousAddress1"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Address 2</ion-label>
+            <ion-input formControlName="previousAddress2"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Address 3</ion-label>
+            <ion-input formControlName="previousAddress3"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Address 4</ion-label>
+            <ion-input formControlName="previousAddress4"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Postcode</ion-label>
+            <ion-input formControlName="previousPostcode"></ion-input>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Employment</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <dd-entity-select
+            [formGroup]="formService.form"
+            entityName="EmploymentStatus"
+            fieldName="employmentStatusId"
+          ></dd-entity-select>
+          <dd-entity-select
+            [formGroup]="formService.form"
+            entityName="EmploymentStatusTime"
+            fieldName="employmentStatusTimeId"
+          ></dd-entity-select>
+          <ion-item>
+            <ion-label position="stacked">Occupation</ion-label>
+            <ion-input formControlName="occupation"></ion-input>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Customer Signature</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+
+          <ion-item>
+            <ion-label position="stacked">Signature Name</ion-label>
+            <ion-input formControlName="signatureName"></ion-input>
+          </ion-item>
+
+          <div class="ion-margin-top">
+
+            <dd-signature-pad
+              (done)="updateSignature($event)"
+              [format]="'base64'"
+            ></dd-signature-pad>
+
+          </div>
+
+          <div *ngIf="showError" class="ion-margin-top">
+            <ion-item color="danger">
+              Signature required
+            </ion-item>
+          </div>
+
+          <ion-item>
+            <ion-label>Signature Date</ion-label>
+            <ion-input readonly formControlName="signatureDate"></ion-input>
+          </ion-item>
+
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+  </div>
+  <div class="action-footer">
+    <ion-button color="primary" size="default" (click)="submit()" [disabled]="!formService.form.valid">
+      Save
+    </ion-button>
+  </div>
+</div>
+
+
+

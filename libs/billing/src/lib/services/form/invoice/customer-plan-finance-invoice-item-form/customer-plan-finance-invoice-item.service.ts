@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {EntityFormService} from "@homecare/entity";
-import {FormBuilder, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {nowAsDateString} from "@homecare/shared";
 
 @Injectable()
@@ -15,6 +15,7 @@ export class CustomerPlanFinanceInvoiceItemFormService extends EntityFormService
       invoiceItem: this.fb.group({
         id: undefined,
         invoiceId: [null, Validators.required],
+        invoiceItemTypeId: [null, Validators.required],
         productId: [null, Validators.required],
         qty: [1, Validators.required],
         unitPrice: [null]
@@ -23,6 +24,7 @@ export class CustomerPlanFinanceInvoiceItemFormService extends EntityFormService
         id: undefined,
         planId: [null, Validators.required],
         invoiceId: [null, Validators.required],
+        appointmentId: [null, Validators.required],
         invoiceItemId: [null],
         startDate: [nowAsDateString(), Validators.required],
         periodPrice: [null, Validators.required],
@@ -31,18 +33,33 @@ export class CustomerPlanFinanceInvoiceItemFormService extends EntityFormService
         notes: [null]
       }),
       financePlan: this.fb.group({
-        id: undefined,
-        customerPlanId: [null],
-        productId: [null, Validators.required],
-        price: [null, Validators.required],
-        deposit: [null, Validators.required],
-        monthPeriodId: [null, Validators.required],
-        loan: [null],
-        interest: [null],
-        totalPayable: [null],
-        monthlyPayment: [null]
-      })
+          id: undefined,
+          customerPlanId: [null],
+          productId: [null, Validators.required],
+          price: [null, Validators.required],
+          deposit: [null, Validators.required],
+          monthPeriodId: [null, Validators.required],
+          loan: [null],
+          interest: [null],
+          totalPayable: [null],
+          monthlyPayment: [null]
+        },
+        {
+          validators: [this.depositLessThanPriceValidator]
+        })
     });
   }
 
+  depositLessThanPriceValidator(formGroup: FormGroup) {
+    console.log('depositLessThanPriceValidator');
+
+    if (formGroup.value.price) {
+      if (!formGroup.value.deposit || formGroup.value.deposit > formGroup.value.price) {
+        return {
+          depositGreaterThanPrice: true,
+        };
+      }
+    }
+    return null;
+  }
 }

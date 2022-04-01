@@ -3,3 +3,7 @@
   <ion-router-outlet></ion-router-outlet>
 
 </ion-app>
+
+<div id="network-alert" [ngClass]="{'d-none': networkOnline}">
+  <div class="alert-inner">No internet connectivity.</div>
+</div>

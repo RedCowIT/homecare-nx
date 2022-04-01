@@ -15,10 +15,14 @@ import {catchError, first, mergeMap} from "rxjs/operators";
 export class VacuumReportFormComponent extends EntityFormContainer<AppointmentVisit> implements OnInit {
 
   @Input()
-  appointmentId: number;
+  id: number;
 
   washFilterOptions = [
-    { id: 'never', description: 'Never' }
+    { id: '0', description: 'Never' },
+    { id: 'Every Month', description: 'Every Month' },
+    { id: 'Every 3 Months', description: 'Every 3 Months' },
+    { id: 'Every 6 Months', description: 'Every 6 Months' },
+    { id: 'Every 12 Months', description: 'Every 12 Months' }
   ];
 
   constructor(public formService: VacuumReportFormService,
@@ -32,4 +36,28 @@ export class VacuumReportFormComponent extends EntityFormContainer<AppointmentVi
     // console.log('patched form', this.formService.form);
   }
 
+  save(): Observable<AppointmentVisit> {
+
+    return this.model$.pipe(
+      first(),
+      mergeMap(appointmentVisit => {
+
+        const dto = this.createDTO();
+
+        console.log('Update appointmentVisit', appointmentVisit);
+
+        return this.entityService.update({
+          ...appointmentVisit,
+          qIndependentCompany: dto.qIndependentCompany,
+          qServiceCost: dto.qServiceCost,
+          qWashFilters: dto.qWashFilters,
+          qEfficiency: dto.qEfficiency,
+          qParts: dto.qParts
+        });
+
+      }),
+      catchError(error => throwError(error))
+    );
+
+  }
 }

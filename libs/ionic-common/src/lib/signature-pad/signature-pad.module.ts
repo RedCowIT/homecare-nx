@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import {IonicModule} from "@ionic/angular";
 
 @NgModule({
-  imports: [CommonModule, IonicModule],
+  imports: [IonicModule],
   declarations: [SignaturePadComponent],
   exports: [SignaturePadComponent]
 })

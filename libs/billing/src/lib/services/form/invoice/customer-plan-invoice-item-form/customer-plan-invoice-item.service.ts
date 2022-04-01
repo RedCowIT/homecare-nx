@@ -24,6 +24,7 @@ export class CustomerPlanInvoiceItemService extends EntityFormService {
         customerId: [null],
         planId: [null, Validators.required],
         invoiceId: [null, Validators.required],
+        appointmentId: [null, Validators.required],
         invoiceItemId: [null],
         startDate: [nowAsDateString(), Validators.required],
         periodPrice: [null, Validators.required],

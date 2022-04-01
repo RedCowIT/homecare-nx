@@ -24,6 +24,19 @@ export function arrayGroupBy<T>(items: T[], by: any) {
   }, {});
 }
 
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
+
+export function arrayUnique(items: any[]) {
+  if (!items) {
+    return null;
+  }
+  return items.filter((value, index, self) => {
+    return self.indexOf(value) === index;
+  });
+}
+
 export function groupById<T>(items: T[]): any {
   return arrayGroupBy(items, (item) => {
     return [item.id];
@@ -124,6 +137,13 @@ export function containsString(array: string[], str: string) {
     return false;
   }
   return array.find(arrayStr => arrayStr === str) != null;
+}
+
+export function containsNumber(array: number[], num: number): boolean {
+  if (!array) {
+    return false;
+  }
+  return array.find(arrayNum => arrayNum === num) != null;
 }
 
 export function distinctArray(array: any[]) {

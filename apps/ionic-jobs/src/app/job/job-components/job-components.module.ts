@@ -33,6 +33,10 @@ import { PostJobAfterPhotosComponent } from './sign-off/post-job-after-photos/po
 import {BarRatingModule} from "ngx-bar-rating";
 import { PreJobPoliciesComponent } from './pre-job/pre-job-policies/pre-job-policies.component';
 import { JobPaymentComponent } from './job-payment/job-payment.component';
+import { JobFinanceComponent } from './job-finance/job-finance.component';
+import { JobDirectDebitComponent } from './job-direct-debit/job-direct-debit.component';
+import { QuoteLockedComponent } from './quote/quote-locked/quote-locked.component';
+import { PreJobOvenReportComponent } from './pre-job/pre-job-oven-report/pre-job-oven-report.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +63,11 @@ import { JobPaymentComponent } from './job-payment/job-payment.component';
     SignOffComponent,
     PostJobAfterPhotosComponent,
     PreJobPoliciesComponent,
-    JobPaymentComponent
+    JobPaymentComponent,
+    JobFinanceComponent,
+    JobDirectDebitComponent,
+    QuoteLockedComponent,
+    PreJobOvenReportComponent
   ],
     imports: [
         CommonModule,

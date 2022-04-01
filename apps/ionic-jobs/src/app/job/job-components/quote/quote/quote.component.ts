@@ -40,11 +40,14 @@ export class QuoteComponent implements OnInit {
               customerId: appointment.customerId
             } as Quote);
           }
-        )
-
+        );
+      } else {
 
       }
     })
   }
 
+  redirectOnAccepted() {
+    console.log('redirectOnAccepted');
+  }
 }

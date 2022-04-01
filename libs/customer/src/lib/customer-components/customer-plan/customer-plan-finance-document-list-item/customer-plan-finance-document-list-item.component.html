@@ -1,0 +1,4 @@
+<ion-item *ngIf="model$ | async as doc" [ngClass]="{valid: isValid(doc)}" lines="none" (click)="openModal()">
+  <ion-icon slot="start" name="reader-outline"></ion-icon>
+  {{doc.productDescription}}
+</ion-item>

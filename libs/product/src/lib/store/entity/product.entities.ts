@@ -1,6 +1,5 @@
-import {Policy} from "@homecare/shared";
+import {Policy, ProductStock} from "@homecare/shared";
 import {createStringKeyComparer} from "@homecare/common";
-import {CustomerEntity} from "@homecare/customer";
 
 export enum ProductEntity {
   ApplianceModel = 'ApplianceModel',
@@ -10,7 +9,8 @@ export enum ProductEntity {
   CommercialProduct = 'CommercialProduct',
   Manufacturer = 'Manufacturer',
   Product = 'Product',
-  ProductCategory = 'ProductCategory'
+  ProductCategory = 'ProductCategory',
+  ProductStock = 'ProductStock'
 }
 
 export function sortPolicy(a: Policy, b: Policy): number {
@@ -38,4 +38,7 @@ export const productEntityMetadata = {
   [ProductEntity.ProductCategory]: {
     sortComparer: createStringKeyComparer('description')
   },
+  [ProductEntity.ProductStock]: {
+    selectId: (productStock: ProductStock) => productStock.productId
+  }
 }

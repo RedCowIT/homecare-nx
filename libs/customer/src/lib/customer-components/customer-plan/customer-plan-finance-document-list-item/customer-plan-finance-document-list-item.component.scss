@@ -1,0 +1,19 @@
+ion-item {
+  border: 1px solid var(--ion-color-danger);
+  border-radius: 8px;
+  color: var(--ion-color-danger);
+  margin-bottom: 20px;
+
+  ion-icon {
+    color: var(--ion-color-danger);
+  }
+}
+
+ion-item.valid {
+  border: 1px solid var(--ion-color-primary);
+  color: var(--ion-color-primary);
+
+  ion-icon {
+    color: var(--ion-color-primary);
+  }
+}

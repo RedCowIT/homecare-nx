@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CustomerPlanInvoiceItemBaseComponent} from "../customer-plan-invoice-item-base/customer-plan-invoice-item-base.component";
 import {ApplianceRepairPlanService, PlanPaymentPeriodsService, PlansService, PlanTypesService} from "@homecare/plan";
 import {CustomerPlanAppliancesService, CustomerPlansService} from "@homecare/customer";
 import {CustomerPlanApplianceInvoiceItemService} from "../../../../services/form/invoice/customer-plan-appliance-invoice-item-form/customer-plan-appliance-invoice-item.service";
 import {InvoiceItemsService} from "../../../../store/entity/services/invoice/invoice-items/invoice-items.service";
-import {CustomerPlanFinanceService} from "../../../../../../../customer/src/lib/store/entity/services/customer-plan-finance/customer-plan-appliances.service";
 import {CustomerPlanFinanceInvoiceItemFormService} from "../../../../services/form/invoice/customer-plan-finance-invoice-item-form/customer-plan-finance-invoice-item.service";
 import {InvoicesService} from "../../../../store/entity/services/invoice/invoices/invoices.service";
 import {EntityFormService} from "@homecare/entity";
-import {first, mergeMap} from "rxjs/operators";
+import {first, mergeMap, tap} from "rxjs/operators";
 import {FinancePlanService} from "../../../../../../../plan/src/lib/services/finance/finance-plan/finance-plan.service";
 import {Observable} from "rxjs";
 import {
@@ -19,6 +18,8 @@ import {
   selectFirstEntityByKey,
   selectOrFetchFirstEntityByKey
 } from "@homecare/shared";
+import {CustomerPlanFinanceService} from "../../../../../../../customer/src/lib/store/entity/services/customer-plan-finance/customer-plan-finance.service";
+import {CustomerPlanFinanceDocumentsService} from "../../../../../../../customer/src/lib/store/entity/services/customer-plan-finance-documents/customer-plan-finance-documents.service";
 
 @Component({
   selector: 'hc-finance-plan-invoice-item-form',
@@ -27,6 +28,21 @@ import {
   providers: [CustomerPlanFinanceInvoiceItemFormService]
 })
 export class FinancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItemBaseComponent implements OnInit {
+
+  @Input()
+  invoiceId: number;
+
+  @Input()
+  invoiceItemId: number;
+
+  @Input()
+  invoiceItemTypeId: number;
+
+  @Input()
+  planTypes: number[];
+
+  @Output()
+  done = new EventEmitter<void>();
 
   calculateFill = 'solid';
 
@@ -39,6 +55,7 @@ export class FinancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItem
               public planPaymentPeriodsService: PlanPaymentPeriodsService,
               public invoicesService: InvoicesService,
               public customerPlanFinanceService: CustomerPlanFinanceService,
+              public customerPlanFinanceDocumentsService: CustomerPlanFinanceDocumentsService,
               public financePlanService: FinancePlanService) {
 
     super(plansService, customerPlansService, invoicesService, invoiceItemsService);
@@ -159,17 +176,25 @@ export class FinancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItem
         return this.customerPlanFinanceService.add(dto as CustomerPlanFinance);
 
       }),
+      mergeMap(customerPlanFinance => {
+        return this.customerPlanFinanceDocumentsService.getWithQuery({
+          customerPlanId: `${customerPlanFinance.customerPlanId}`
+        });
+      }),
       catchHttpValidationErrors(errors => {
         console.log('errors', errors);
         this.errors = errors;
       }),
       first()
     ).subscribe((c) => {
+
+      // TODO: load finance docs
+
       this.done.emit();
     });
   }
 
-  protected doUpdate() {
+  doUpdate() {
 
     const dto = this.getFormService().createDTO() as any;
     this.invoiceItemsService.update(dto.invoiceItem as InvoiceItem).pipe(

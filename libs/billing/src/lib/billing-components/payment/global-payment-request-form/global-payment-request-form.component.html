@@ -1,7 +1,15 @@
 <div class="content-with-action-footer">
   <div class="content">
 
-    <div [formGroup]="formService.form">
+    <div *ngIf="globalPaymentRequest" class="embed-wrap">
+      <hc-global-payment-embed [globalPaymentRequest]="globalPaymentRequest" (done)="processPaymentResult($event)"></hc-global-payment-embed>
+    </div>
+
+    <div *ngIf="!globalPaymentRequest" [formGroup]="formService.form">
+
+      <div *ngIf="errors" class="ion-margin">
+        <ion-item color="danger">{{errors}}</ion-item>
+      </div>
 
       <ion-item>
         <ion-label position="stacked">Invoice No. (amend if invoice has multiple payments)</ion-label>
@@ -12,6 +20,7 @@
         <ion-label position="stacked">Description</ion-label>
         <ion-input formControlName="description"></ion-input>
       </ion-item>
+
 
       <ion-row>
         <ion-col size="6">
@@ -33,10 +42,15 @@
       <ion-row>
         <ion-col size="6">
 
-          <ion-item>
-            <ion-label position="stacked">Phone</ion-label>
-            <ion-input formControlName="phone" type="tel"></ion-input>
-          </ion-item>
+          <div *ngIf="phones$ | async as phones">
+            <ion-item *ngIf="phones">
+              <ion-label position="stacked">Phone</ion-label>
+              <ion-select formControlName="phone" placeholder="Select one" interface="action-sheet">
+                <ion-select-option *ngFor="let phone of phones"
+                                   [value]="phone">{{phone}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
 
         </ion-col>
       </ion-row>
@@ -133,7 +147,7 @@
 
   </div>
   <div class="action-footer">
-    <ion-button [disabled]="!formService.form.valid">
+    <ion-button *ngIf="!globalPaymentRequest" [disabled]="!formService.form.valid" (click)="checkout()">
       Checkout {{formService.form.value.amount | currency:'GBP'}}</ion-button>
   </div>
 </div>

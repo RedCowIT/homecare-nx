@@ -8,7 +8,6 @@ import {storageEffects} from './store/effects/storage.effects';
 
 @NgModule({
   imports: [
-    CommonModule,
     StorageComponentsModule,
     StoreModule.forFeature(fromStore.storeFeatureKey,
       fromStore.reducers,

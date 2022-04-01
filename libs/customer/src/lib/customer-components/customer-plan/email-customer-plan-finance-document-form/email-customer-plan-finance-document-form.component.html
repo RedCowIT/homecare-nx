@@ -1,0 +1,31 @@
+<div class="content-with-action-footer">
+
+  <div class="content">
+    <div [formGroup]="formService.form">
+
+      <div *ngIf="emails$ | async as emails">
+        <ion-item *ngIf="emails?.length">
+          <ion-label position="stacked">Email</ion-label>
+          <ion-select formControlName="toAddress" placeholder="Select one" interface="action-sheet">
+            <ion-select-option *ngFor="let email of emails"
+                               [value]="email">{{email}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div *ngIf="!emails?.length">
+          <ion-item color="danger" lines="none">
+            Customer has no emails
+          </ion-item>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="action-footer">
+    <ion-button color="dark" class="mr-auto" (click)="skip()">Skip</ion-button>
+    <ion-button size="default" (click)="sendEmail()" [disabled]="disabled">
+      Email Document
+    </ion-button>
+  </div>
+
+</div>

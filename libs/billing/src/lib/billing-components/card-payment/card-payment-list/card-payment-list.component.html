@@ -1,0 +1,8 @@
+<div *ngIf="cardPayments$ | async as cardPayments">
+  <ion-list>
+    <ion-item *ngFor="let cardPayment of cardPayments">
+      <ion-text>{{cardPayment.created | date}} - Invoice no. {{cardPayment.invoiceNo}}</ion-text>
+      <ion-text slot="end">{{cardPayment.amount | currency: 'GBP'}}</ion-text>
+    </ion-item>
+  </ion-list>
+</div>

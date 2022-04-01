@@ -76,16 +76,22 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
   protected patchForm() {
 
     this.getFormService().form.patchValue({
-      'invoiceItem': {id: this.invoiceItemId, invoiceId: this.invoiceId},
+      'invoiceItem': {id: this.invoiceItemId, invoiceId: this.invoiceId, invoiceItemTypeId: this.invoiceItemTypeId},
       'customerPlan': {invoiceId: this.invoiceId, invoiceItemId: this.invoiceItemId},
     });
 
+    selectEntity(this.invoicesService, this.invoiceId).pipe(first()).subscribe((invoice) => {
+      this.getFormService().form.patchValue({
+        'customerPlan': {appointmentId: invoice.appointmentId},
+      });
+    });
 
     if (this.invoiceItemId) {
       selectEntity(this.invoiceItemsService, this.invoiceItemId).pipe(first()).subscribe(
         invoiceItem => {
           this.getFormService().form.patchValue({
             'invoiceItem': {
+              invoiceItemTypeId: invoiceItem.invoiceItemTypeId,
               productId: invoiceItem.productId,
               productCode: invoiceItem.productCode,
               qty: invoiceItem.qty,
@@ -234,8 +240,8 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
 
   }
 
-  delete(){
-    if (this.deleting){
+  delete() {
+    if (this.deleting) {
       return;
     }
     this.deleting = true;

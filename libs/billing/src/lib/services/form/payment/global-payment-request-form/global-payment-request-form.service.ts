@@ -12,6 +12,7 @@ export class GlobalPaymentRequestFormService extends EntityFormService {
   protected init(): void {
     this.form = this.fb.group({
       invoiceId: [null, Validators.required],
+      appointmentId: [null, Validators.required],
       invoiceNumber: [null, Validators.required],
       description: [null, Validators.required],
       amount: [null, [Validators.min(0.01)]],

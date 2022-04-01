@@ -7,7 +7,6 @@ import {SharedEffects} from './store/effects/shared.effects';
 
 @NgModule({
   imports: [
-    CommonModule,
     StoreModule.forFeature(fromStore.storeFeatureKey, fromStore.reducers, {metaReducers: fromStore.metaReducers}), EffectsModule.forFeature([SharedEffects])
   ],
 })

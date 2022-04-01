@@ -7,8 +7,6 @@ export const environment = {
   api: {
     domain: 'homecare-job-api.test',
     baseUrl: 'https://homecare-job-api.test',
-    // domain: 'staging-laravel.homecareservicecentre.co.uk:8443',
-    // baseUrl: 'https://staging-laravel.homecareservicecentre.co.uk:8443',
     timeout: 10000
   },
   auth: {
@@ -18,6 +16,9 @@ export const environment = {
     redirectUri: 'https://homecare.digi-dom.co.uk:8100/main',
     logoutUri: 'https://homecare.digi-dom.co.uk:8100/logout-success',
     audience: 'http://homecare-job-api.test',
+  },
+  entity: {
+    useCache: true
   },
   debug: {
     forceDevice: false
@@ -41,6 +42,10 @@ export const environment = {
       }
     }
   ],
+  sentry: {
+    dsn: 'https://7d6b1fedfda549b4b64a094875ad50c3@o1181554.ingest.sentry.io/6295140',
+    environment: 'dev'
+  }
 };
 
 /*

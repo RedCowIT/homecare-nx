@@ -26,6 +26,11 @@
       <ion-input formControlName="deposit" type="number"></ion-input>
     </ion-item>
 
+    <ion-item *ngIf="formGroup.get('financePlan').dirty && formGroup.get('financePlan').errors?.depositGreaterThanPrice"
+    color="danger" lines="none">
+      Deposit must be less than total price.
+    </ion-item>
+
     <dd-entity-select
       [formGroup]="formGroup"
       [formGroupNameKey]="formGroupNameKey"
@@ -57,7 +62,6 @@
         <ion-input readonly formControlName="monthlyPayment" type="number"></ion-input>
       </ion-item>
     </div>
-
 
   </div>
 

@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
+  production: true,
   api: {
     domain: 'staging-laravel.homecareservicecentre.co.uk:8443',
     baseUrl: 'https://staging-laravel.homecareservicecentre.co.uk:8443',
@@ -16,6 +16,9 @@ export const environment = {
     redirectUri: 'https://homecareservicecentre.com/main',
     logoutUri: 'https://homecareservicecentre.com/logout-success',
     audience: 'http://homecare-job-api.test',
+  },
+  entity: {
+    useCache: false
   },
   debug: {
     forceDevice: false

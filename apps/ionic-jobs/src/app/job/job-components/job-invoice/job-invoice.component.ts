@@ -1,12 +1,12 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {CurrentJobService} from "../../services/current-job/current-job.service";
-import {filter, first, map, mergeMap, takeUntil} from "rxjs/operators";
+import {filter, first, map, mergeMap} from "rxjs/operators";
 import {
   Invoice,
-  Quote,
+  JobSection,
   selectEntityByKey,
-  selectFirstEntityByKey,
-  selectOrFetchFirstEntityByKey, SubscribedContainer
+  selectOrFetchFirstEntityByKey,
+  SubscribedContainer
 } from "@homecare/shared";
 import {InvoicePaymentsService, InvoicesService} from "@homecare/billing";
 import {BehaviorSubject, combineLatest, Observable} from "rxjs";
@@ -65,6 +65,8 @@ export class JobInvoiceComponent extends SubscribedContainer implements OnInit {
           this.invoicesService.add({
             appointmentId: this.currentJobService.appointmentId
           } as Invoice);
+        } else {
+
         }
       });
 
@@ -134,8 +136,11 @@ export class JobInvoiceComponent extends SubscribedContainer implements OnInit {
       ).subscribe(async result => {
 
         if (result.invoice.grossAmount > 0 && !result.invoicePayments?.length) {
-          await this.alertService.error('Invoice requires a payment');
+          console.log('INVOICE REQUIRES PAYMENT');
+          const alert = await this.alertService.error('Invoice requires a payment');
+          await alert.present();
         } else {
+          console.log('PUBLISH INVOICE');
           this.publishInvoice();
         }
 
@@ -154,7 +159,14 @@ export class JobInvoiceComponent extends SubscribedContainer implements OnInit {
     const modal = await this.modalCtrl.create({
       component: EmailInvoiceModalComponent,
       componentProps: {
-        invoice
+        id: invoice.id
+      }
+    });
+
+    modal.onDidDismiss().then(result => {
+      console.log('Dismiss', result);
+      if (result?.role === 'success'){
+        this.currentJobService.completeJobSection(JobSection.Invoice);
       }
     });
 

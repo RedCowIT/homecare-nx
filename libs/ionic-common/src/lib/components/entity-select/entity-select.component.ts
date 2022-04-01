@@ -43,7 +43,6 @@ export class EntitySelectComponent implements OnInit {
   ngOnInit(): void {
     assertTrue(!!this.formGroup, 'missing form');
     assertTrue(!!this.fieldName, 'missing fieldName');
-    assertTrue(!!this.formGroupNameKey, 'missing formGroupNameKey');
     assertTrue(!!this.entityName, 'missing entity name');
 
     this.entities$ = this.entityServices.getEntityCollectionService(this.entityName).entities$;

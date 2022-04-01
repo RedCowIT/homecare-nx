@@ -1,5 +1,6 @@
 export interface GlobalPaymentRequest {
   invoiceId: number;
+  appointmentId: number;
   invoiceNumber: string;
   description: string;
   amount: number;

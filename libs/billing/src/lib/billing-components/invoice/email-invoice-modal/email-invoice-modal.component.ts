@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {ModalController} from "@ionic/angular";
 
 @Component({
   selector: 'hc-email-invoice-modal',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmailInvoiceModalComponent implements OnInit {
 
-  constructor() { }
+  @Input()
+  id: number;
+
+  constructor(private modalCtrl: ModalController) {
+  }
 
   ngOnInit(): void {
+  }
+
+  async done() {
+    await this.modalCtrl.dismiss(null, 'success');
   }
 
 }

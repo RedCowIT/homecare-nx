@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
   catchHttpValidationErrors, CustomerPlan,
   CustomerPlanAppliance, InvoiceItem,
@@ -10,7 +10,7 @@ import {combineLatest, Observable} from "rxjs";
 import {ApplianceRepairPlanService, PlanPaymentPeriodsService, PlansService, PlanTypesService} from "@homecare/plan";
 import {CustomerPlanAppliancesService, CustomerPlansService} from "@homecare/customer";
 import {InvoiceItemsService} from "../../../../store/entity/services/invoice/invoice-items/invoice-items.service";
-import {catchError, first, map, mergeAll, mergeMap, tap} from "rxjs/operators";
+import {catchError, first, map, mergeAll, mergeMap, takeUntil, tap} from "rxjs/operators";
 import {CustomerPlanApplianceInvoiceItemService} from "../../../../services/form/invoice/customer-plan-appliance-invoice-item-form/customer-plan-appliance-invoice-item.service";
 import {CustomerPlanInvoiceItemBaseComponent} from "../customer-plan-invoice-item-base/customer-plan-invoice-item-base.component";
 import {EntityFormService} from "@homecare/entity";
@@ -26,6 +26,21 @@ import {LoggerService} from "@homecare/core";
 export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItemBaseComponent implements OnInit {
 
   calculateFill = 'solid';
+
+  @Input()
+  invoiceId: number;
+
+  @Input()
+  invoiceItemId: number;
+
+  @Input()
+  invoiceItemTypeId: number;
+
+  @Input()
+  planTypes: number[];
+
+  @Output()
+  done = new EventEmitter<void>();
 
   constructor(public plansService: PlansService,
               public customerPlansService: CustomerPlansService,
@@ -45,6 +60,22 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
   ngOnInit(): void {
 
     super.ngOnInit();
+
+    // TODO: add listener for recalc.
+    combineLatest([
+      this.formService.form.get('appliancePlan.datePurchased').valueChanges,
+      this.formService.form.get('appliancePlan.priceRangeId').valueChanges
+    ]).pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe(([dateChange, priceChange]) => {
+      console.log('Clearing period price');
+      this.formService.form.patchValue({
+        'customerPlan': {
+          periodPrice: null
+        }
+      });
+    });
+
 
   }
 
@@ -111,7 +142,7 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
           'customerPlan': {
             periodPrice: result?.periodPrice
           }
-        });
+        }, {emitEvent: false});
       }
     );
 

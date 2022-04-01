@@ -22,6 +22,11 @@ import {SignOffComponent} from "../../job-components/sign-off/sign-off/sign-off.
 import {PreJobShampooReportComponent} from "../../job-components/pre-job/pre-job-shampoo-report/pre-job-shampoo-report.component";
 import {PreJobPoliciesComponent} from "../../job-components/pre-job/pre-job-policies/pre-job-policies.component";
 import {JobPaymentComponent} from "../../job-components/job-payment/job-payment.component";
+import {JobFinanceComponent} from "../../job-components/job-finance/job-finance.component";
+import {JobDirectDebitComponent} from "../../job-components/job-direct-debit/job-direct-debit.component";
+import {QuoteUnacceptedResolver} from "../../resolvers/quote-unaccepted.resolver";
+import {QuoteLockedComponent} from "../../job-components/quote/quote-locked/quote-locked.component";
+import {PreJobOvenReportComponent} from "../../job-components/pre-job/pre-job-oven-report/pre-job-oven-report.component";
 
 const routes: Routes = [
   {
@@ -63,6 +68,10 @@ const routes: Routes = [
             component: PreJobBeforePhotosComponent
           },
           {
+            path: 'clean',
+            component: PreJobOvenReportComponent
+          },
+          {
             path: 'shampoo',
             component: PreJobShampooReportComponent
           },
@@ -91,7 +100,8 @@ const routes: Routes = [
           },
           {
             path: 'appliance-cover',
-            component: QuoteApplianceCoverComponent
+            component: QuoteApplianceCoverComponent,
+            resolve: [QuoteUnacceptedResolver]
           },
           {
             path: 'products',
@@ -109,6 +119,10 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'quote-complete',
+        component: QuoteLockedComponent
+      },
+      {
         path: 'contact',
         component: JobCustomerContactComponent,
       },
@@ -117,8 +131,16 @@ const routes: Routes = [
         component: JobInvoiceComponent,
       },
       {
+        path: 'finance',
+        component: JobFinanceComponent
+      },
+      {
         path: 'payment',
         component: JobPaymentComponent,
+      },
+      {
+        path: 'dd',
+        component: JobDirectDebitComponent,
       },
       {
         path: 'sign-off',

@@ -2,8 +2,9 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {ApiUrlService} from "@homecare/common";
 import {Observable} from "rxjs";
-import {Document, GlobalPaymentRequest, GlobalPaymentResponse} from "@homecare/shared";
+import {GlobalPaymentRequest, GlobalPaymentResponse, GlobalPaymentResult} from "@homecare/shared";
 import {map} from "rxjs/operators";
+import {GlobalPaymentCharge} from "../../../../../../shared/src/lib/models/payment/global-payment/global-payment-charge";
 
 @Injectable({
   providedIn: 'root'
@@ -14,19 +15,34 @@ export class GlobalPaymentsService {
               protected apiUrlService: ApiUrlService) {
   }
 
-  initPayment(globalPaymentRequest: GlobalPaymentRequest): Observable<GlobalPaymentResponse> {
+  createPaymentCharge(globalPaymentRequest: GlobalPaymentRequest): Observable<GlobalPaymentCharge> {
 
-    return this.httpClient.post(this.url(), globalPaymentRequest).pipe(
+    const url = this.apiUrlService.url('createGlobalPaymentCharge');
+
+    return this.httpClient.post(url, globalPaymentRequest).pipe(
       map((response: any) => {
-        console.log('global payments', response);
-        return response?.data as GlobalPaymentResponse;
+
+        const result = response?.data as GlobalPaymentCharge;
+
+        result.chargeResponse = JSON.parse(result.chargeResponse);
+
+        return result;
       })
     );
 
   }
 
-  url(): string {
-    return this.apiUrlService.url('globalPayments');
+  processPaymentResponse(globalPaymentResponse: GlobalPaymentResponse): Observable<GlobalPaymentResult> {
+
+    const url = this.apiUrlService.url('processGlobalPaymentResponse');
+
+    return this.httpClient.post(url, globalPaymentResponse).pipe(
+      map((response: any) => {
+        console.log('globalPaymentResult', response);
+        return response?.data as GlobalPaymentResult;
+      })
+    );
+
   }
 
 }

@@ -10,12 +10,19 @@ import {SharedComponentsModule} from "@homecare/shared";
 import {CustomerApplianceModalComponent} from './appliance/customer-appliance-modal/customer-appliance-modal.component';
 import {CustomerApplianceFormComponent} from './appliance/customer-appliance-form/customer-appliance-form.component';
 import {CustomerApplianceTableComponent} from "./appliance/customer-appliance-table/customer-appliance-table.component";
-import {IonicCommonComponentsModule} from "@homecare/ionic-common";
+import {IonicCommonComponentsModule, SignaturePadModule} from "@homecare/ionic-common";
 import {ReactiveFormsModule} from "@angular/forms";
 import {CustomerContactFormComponent} from './customer-contact-form/customer-contact-form.component';
 import {PlanComponentsModule} from "../../../../plan/src/lib/plan-components/plan-components.module";
 import {ProductComponentsModule} from "../../../../product/src/lib/product-components/product-components.module";
 import {ApplianceFormComponent} from "./appliance/appliance-form/appliance-form.component";
+import { CustomerPlanFinanceDocumentListComponent } from './customer-plan/customer-plan-finance-document-list/customer-plan-finance-document-list.component';
+import { CustomerPlanFinanceDocumentFormComponent } from './customer-plan/customer-plan-finance-document-form/customer-plan-finance-document-form.component';
+import { CustomerPlanFinanceDocumentModalComponent } from './customer-plan/customer-plan-finance-document-modal/customer-plan-finance-document-modal.component';
+import { CustomerPlanFinanceDocumentListItemComponent } from './customer-plan/customer-plan-finance-document-list-item/customer-plan-finance-document-list-item.component';
+import { EmailCustomerPlanFinanceDocumentFormComponent } from './customer-plan/email-customer-plan-finance-document-form/email-customer-plan-finance-document-form.component';
+import { EmailCustomerPlanFinanceDocumentModalComponent } from './customer-plan/email-customer-plan-finance-document-modal/email-customer-plan-finance-document-modal.component';
+import { DirectDebitDetailsFormComponent } from './direct-debit-details-form/direct-debit-details-form.component';
 
 
 @NgModule({
@@ -28,7 +35,14 @@ import {ApplianceFormComponent} from "./appliance/appliance-form/appliance-form.
     AddCustomerApplianceComponent,
     CustomerApplianceModalComponent,
     CustomerApplianceFormComponent,
-    CustomerContactFormComponent
+    CustomerContactFormComponent,
+    CustomerPlanFinanceDocumentListComponent,
+    CustomerPlanFinanceDocumentFormComponent,
+    CustomerPlanFinanceDocumentModalComponent,
+    CustomerPlanFinanceDocumentListItemComponent,
+    EmailCustomerPlanFinanceDocumentFormComponent,
+    EmailCustomerPlanFinanceDocumentModalComponent,
+    DirectDebitDetailsFormComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +52,8 @@ import {ApplianceFormComponent} from "./appliance/appliance-form/appliance-form.
     SharedComponentsModule,
     ReactiveFormsModule,
     PlanComponentsModule,
-    ProductComponentsModule
+    ProductComponentsModule,
+    SignaturePadModule
   ],
   exports: [
     ApplianceFormComponent,
@@ -47,7 +62,10 @@ import {ApplianceFormComponent} from "./appliance/appliance-form/appliance-form.
     CustomerPlanListComponent,
     CustomerApplianceTableComponent,
     AddCustomerApplianceComponent,
-    CustomerContactFormComponent
+    CustomerContactFormComponent,
+    CustomerPlanFinanceDocumentListComponent,
+    CustomerPlanFinanceDocumentModalComponent,
+    CustomerPlanFinanceDocumentFormComponent
   ]
 })
 export class CustomerComponentsModule {

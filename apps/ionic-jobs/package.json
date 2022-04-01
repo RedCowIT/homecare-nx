@@ -11,6 +11,9 @@
     "cap.update": "npx ionic capacitor update",
     "build.device": "ng build --configuration=device;npx cap copy;"
   },
+  "config": {
+    "ionic_generate_source_map": "true"
+  },
   "dependencies": {
     "@capacitor/android": "^3.4.1",
     "@capacitor/app": "^1.1.0",
@@ -18,7 +21,8 @@
     "@capacitor/cli": "^3.4.1",
     "@capacitor/core": "^3.4.1",
     "@capacitor/ios": "^3.4.1",
-    "@ionic-native/deeplinks": "^5.36.0"
-  },
-  "devDependencies": {}
+    "@ionic-native/deeplinks": "^5.36.0",
+    "@sentry/angular": "^6.19.2",
+    "@sentry/tracing": "^6.19.2"
+  }
 }

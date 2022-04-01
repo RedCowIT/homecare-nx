@@ -230,6 +230,7 @@
             "main": "apps/ionic-jobs/src/main.ts",
             "polyfills": "apps/ionic-jobs/src/polyfills.ts",
             "tsConfig": "apps/ionic-jobs/tsconfig.app.json",
+            "preserveSymlinks": true,
             "assets": [
               {
                 "glob": "**/*",

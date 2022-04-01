@@ -1,16 +1,25 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {addJob, addJobError, addJobSuccess, completeJobSection, setJobSections} from "../actions/job.actions";
-import {catchError, filter, first, map, mergeMap, withLatestFrom} from "rxjs/operators";
+import {
+  addJob,
+  addJobError,
+  addJobSuccess,
+  completeJobSection,
+  reloadJobSections,
+  setJobSections
+} from "../actions/job.actions";
+import {catchError, distinctUntilChanged, filter, first, map, mergeMap, tap, withLatestFrom} from "rxjs/operators";
 import {
   Appointment,
   AppointmentVisit,
+  containsNumber,
   findById,
   findByKey,
   findIndexWithId,
   firstByKey,
-  JobSection,
-  JobSectionStatus,
+  JobSection, JobSections,
+  JobSectionStatus, jobSectionStatusComparer,
+  pluck,
   selectEntity,
   selectOrFetchEntity
 } from "@homecare/shared";
@@ -23,6 +32,10 @@ import {AppointmentCallTypesService, AppointmentsService, AppointmentVisitsServi
 import {QuoteManagerService} from "../../../../../../../libs/billing/src/lib/services/quote-manager/quote-manager.service";
 import {CustomerPlansService, CustomersService} from "@homecare/customer";
 import {LoggerService} from "@homecare/core";
+import {CustomerPlanFinanceDocumentsService} from "../../../../../../../libs/customer/src/lib/store/entity/services/customer-plan-finance-documents/customer-plan-finance-documents.service";
+import {PlansService, PlanTypesService} from "@homecare/plan";
+import {InvoiceManagerService} from "@homecare/billing";
+import {CustomerPlanManagerService} from "../../../../../../../libs/customer/src/lib/services/customer-plan-manager/customer-plan-manager.service";
 
 
 @Injectable()
@@ -65,6 +78,12 @@ export class JobEffects {
               );
             }),
             mergeMap(appointment => {
+              return this.invoiceManagerService.loadAppointmentInvoice(appointment.id).pipe(
+                first(),
+                map(() => appointment)
+              );
+            }),
+            mergeMap(appointment => {
               return this.createJobSections(appointment.id).pipe(
                 first(),
                 map(jobSections => {
@@ -81,12 +100,32 @@ export class JobEffects {
     );
   });
 
+  reloadJobSections$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(reloadJobSections),
+      mergeMap(action => {
+
+        return this.createJobSections(action.appointmentId).pipe(
+          first(),
+          map(jobSections => {
+            return setJobSections({appointmentId: action.appointmentId, jobSections});
+          }),
+          catchError(error => {
+            console.error('Error creating job sections after customer plan finance doc update', error);
+            return of(null);
+          })
+        );
+
+      })
+    );
+  });
+
   completeJobSection$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(completeJobSection),
       withLatestFrom(this.store$.select(getJobMap)),
       filter(([action, jobMap]) => !!jobMap[action.appointmentId]),
-      map(([action, jobMap]) => {
+      mergeMap(([action, jobMap]) => {
 
         const job = {...jobMap[action.appointmentId]};
 
@@ -94,20 +133,59 @@ export class JobEffects {
           return {...jobSection};
         });
 
-        const index = findIndexWithId(sections, action.sectionId);
+        if (action.sectionId === JobSection.Invoice){
+          return this.customerPlanManagerService.appointmentHasFinanceDocs(action.appointmentId).pipe(
+            map(hasFinanceDocs => {
 
-        const section = findById(sections, action.sectionId);
-        section.status = ChecklistItemStatus.Complete;
+              // add finance section
+              if (hasFinanceDocs){
+                if (!firstByKey(sections, 'id', JobSection.Finance)){
+                  sections.push({
+                    id: JobSection.Finance,
+                    status: ChecklistItemStatus.Disabled
+                  });
+                  sections.sort(jobSectionStatusComparer);
+                }
+              }
 
-        if (index < sections.length - 1) {
-          if (sections[index + 1].status == ChecklistItemStatus.Disabled) {
-            sections[index + 1].status = ChecklistItemStatus.Enabled;
-          }
+              this.completeSection(action.sectionId, sections);
+              return setJobSections({appointmentId: action.appointmentId, jobSections: sections});
+            }),
+            first()
+          );
+        } else {
+          this.completeSection(action.sectionId, sections);
+          return of(setJobSections({appointmentId: action.appointmentId, jobSections: sections}));
         }
 
-        return setJobSections({appointmentId: action.appointmentId, jobSections: sections});
 
-      })
+
+
+
+
+      }),
+      // map(([action, jobMap]) => {
+      //
+      //   const job = {...jobMap[action.appointmentId]};
+      //
+      //   const sections = job.jobSections.map(jobSection => {
+      //     return {...jobSection};
+      //   });
+      //
+      //   const index = findIndexWithId(sections, action.sectionId);
+      //
+      //   const section = findById(sections, action.sectionId);
+      //   section.status = ChecklistItemStatus.Complete;
+      //
+      //   if (index < sections.length - 1) {
+      //     if (sections[index + 1].status == ChecklistItemStatus.Disabled) {
+      //       sections[index + 1].status = ChecklistItemStatus.Enabled;
+      //     }
+      //   }
+      //
+      //   return setJobSections({appointmentId: action.appointmentId, jobSections: sections});
+      //
+      // })
     );
   });
 
@@ -119,18 +197,39 @@ export class JobEffects {
               private appointmentVisitsService: AppointmentVisitsService,
               private appointmentCallTypesService: AppointmentCallTypesService,
               private quoteManagerService: QuoteManagerService,
+              private plansService: PlansService,
+              private planTypesService: PlanTypesService,
               private customerPlansService: CustomerPlansService,
+              private customerPlanFinanceDocumentsService: CustomerPlanFinanceDocumentsService,
               private customersService: CustomersService,
+              private invoiceManagerService: InvoiceManagerService,
+              private customerPlanManagerService: CustomerPlanManagerService,
               private loggerService: LoggerService) {
+  }
+
+  private completeSection(sectionId: string, sections: JobSectionStatus[]){
+    const index = findIndexWithId(sections, sectionId);
+
+    const section = findById(sections, sectionId);
+    section.status = ChecklistItemStatus.Complete;
+
+    if (index < sections.length - 1) {
+      if (sections[index + 1].status == ChecklistItemStatus.Disabled) {
+        sections[index + 1].status = ChecklistItemStatus.Enabled;
+      }
+    }
   }
 
   private createJobSections(appointmentId: number):
     Observable<JobSectionStatus[]> {
 
     return combineLatest([
-      this.jobsService.isNCOOnly(appointmentId)
+      this.jobsService.isNCOOnly(appointmentId),
+      this.customerPlanManagerService.appointmentHasFinanceDocs(appointmentId)
     ]).pipe(
-      map(([isNCOOnly]) => {
+      map(([isNCOOnly, hasFinanceDocs]) => {
+
+        console.log("HAS FINANCE DOCS");
 
         const sections = [
           {
@@ -158,7 +257,16 @@ export class JobEffects {
           {
             id: JobSection.Invoice,
             status: ChecklistItemStatus.Disabled
-          },
+          });
+
+        if (hasFinanceDocs) {
+          sections.push({
+            id: JobSection.Finance,
+            status: ChecklistItemStatus.Enabled
+          });
+        }
+
+        sections.push(
           {
             id: JobSection.Payment,
             status: ChecklistItemStatus.Disabled
@@ -172,6 +280,7 @@ export class JobEffects {
             status: ChecklistItemStatus.Disabled
           }
         );
+
 
         return sections;
 
@@ -248,6 +357,17 @@ export class JobEffects {
     return this.customerPlansService.getWithQuery({
       customerId: `${appointment.customerId}`
     });
+
+    // return forkJoin([
+    //   this.plansService.entityMap$,
+    //   this.planTypesService.entityMap$,
+    //
+    // ]).pipe(
+    //   mergeMap(([planMap, planTypeMap, customerPlans]) => {
+    //     foreach (const customerPlans)
+    //     return of(null);
+    //   })
+    // );
 
   }
 

@@ -12,7 +12,6 @@ import {TokenAuthService} from "./services/token-auth.service";
 
 @NgModule({
   imports: [
-    CommonModule,
     AuthComponentsModule,
     StoreModule.forFeature(fromStore.storeFeatureKey, fromStore.reducer),
     EffectsModule.forFeature([AuthEffects])],

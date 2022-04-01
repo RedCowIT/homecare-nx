@@ -9,7 +9,6 @@ import {IonicModule} from "@ionic/angular";
     AddButtonComponent
   ],
   imports: [
-    CommonModule,
     IonicModule
   ],
   exports: [

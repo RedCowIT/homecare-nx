@@ -1,20 +1,20 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GlobalPaymentRequestFormService} from "../../../services/form/payment/global-payment-request-form/global-payment-request-form.service";
 import {
   Customer,
-  CustomerAddress, findByKey,
-  firstByKey,
   getCustomerEmail,
-  getCustomerPhone,
+  GlobalPaymentRequest,
+  GlobalPaymentResult,
   Invoice,
-  selectEntity, SubscribedContainer
+  selectEntity,
+  SubscribedContainer
 } from "@homecare/shared";
-import {GlobalPaymentsService} from "../../../services/payment/global-payments/global-payments.service";
 import {InvoicesService} from "../../../store/entity/services/invoice/invoices/invoices.service";
 import {combineLatest, Observable} from "rxjs";
 import {CustomerAddressesService, CustomersService} from "@homecare/customer";
-import {first, mergeMap, takeUntil} from "rxjs/operators";
-import {Validators} from "@angular/forms";
+import {first, map, mergeMap, takeUntil} from "rxjs/operators";
+import {ModalController} from "@ionic/angular";
+import {CardPaymentsService} from "../../../store/entity/services/card-payment/card-payments.service";
 
 @Component({
   selector: 'hc-global-payment-request-form',
@@ -31,13 +31,20 @@ export class GlobalPaymentRequestFormComponent extends SubscribedContainer imple
 
   customer$: Observable<Customer>;
 
+  phones$: Observable<string[]>;
+
+  globalPaymentRequest: GlobalPaymentRequest;
+
   checkoutEnabled = false;
 
+  errors: string;
+
   constructor(public formService: GlobalPaymentRequestFormService,
-              public globalPaymentsService: GlobalPaymentsService,
               public invoicesService: InvoicesService,
               public customersService: CustomersService,
-              public customerAddressesService: CustomerAddressesService) {
+              public customerAddressesService: CustomerAddressesService,
+              public cardPaymentsService: CardPaymentsService,
+              public modalCtrl: ModalController) {
     super();
   }
 
@@ -49,15 +56,34 @@ export class GlobalPaymentRequestFormComponent extends SubscribedContainer imple
       mergeMap(invoice => selectEntity(this.customersService, invoice.customerId))
     );
 
+    this.phones$ = this.customer$.pipe(
+      map(customer => {
+        const phones = [];
+        if (customer.phone1) {
+          phones.push(this.formatPhone(customer.phone1));
+        }
+        if (customer.phone2) {
+          phones.push(this.formatPhone(customer.phone2));
+        }
+        return phones;
+      })
+    );
+
+    this.phones$.pipe(first()).subscribe(phones => {
+      this.formService.form.patchValue({
+        phone: phones[0]
+      })
+    });
+
     combineLatest([this.invoice$, this.customer$, this.customerAddressesService.entities$]).pipe(
       first()
     ).subscribe(([invoice, customer, customerAddresses]) => {
 
       const patch: any = {
         invoiceId: invoice.id,
+        appointmentId: invoice.appointmentId,
         invoiceNumber: invoice.invoiceNumber,
         email: getCustomerEmail(customer),
-        phone: getCustomerPhone(customer),
         amount: 0
       };
 
@@ -65,8 +91,8 @@ export class GlobalPaymentRequestFormComponent extends SubscribedContainer imple
 
       if (customerAddress) {
         patch['customerAddress1'] = customerAddress.address1;
-        patch['city'] = customerAddress.address2;
-        patch['postcode'] = customerAddress.postcode;
+        patch['customerCity'] = customerAddress.address2;
+        patch['customerPostcode'] = customerAddress.postcode;
       }
 
       this.formService.form.patchValue(patch);
@@ -82,6 +108,9 @@ export class GlobalPaymentRequestFormComponent extends SubscribedContainer imple
 
   }
 
+  formatPhone(phone: string): string {
+    return '44|' + phone.replace(' ', '');
+  }
 
   syncBillingAddress(formValue: any) {
 
@@ -106,5 +135,25 @@ export class GlobalPaymentRequestFormComponent extends SubscribedContainer imple
         emitEvent: false
       });
     }
+  }
+
+  checkout() {
+
+    this.errors = null;
+    this.globalPaymentRequest = this.formService.form.value;
+
+  }
+
+  async processPaymentResult(globalPaymentResult: GlobalPaymentResult) {
+    if (globalPaymentResult?.success) {
+
+      await this.modalCtrl.dismiss({}, 'success');
+
+      return;
+    }
+
+    this.globalPaymentRequest = null;
+    this.errors = globalPaymentResult?.errors;
+
   }
 }

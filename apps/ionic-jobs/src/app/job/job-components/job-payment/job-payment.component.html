@@ -24,6 +24,22 @@
         </ion-card-content>
       </ion-card>
 
+      <ng-container *ngIf="cardPayments$ | async as cardPayments">
+        <ion-card *ngIf="cardPayments?.length">
+
+          <ion-card-header>
+            Card Payments
+          </ion-card-header>
+
+          <ion-card-content>
+
+            <hc-card-payment-list [appointmentId]="invoice.appointmentId"></hc-card-payment-list>
+
+          </ion-card-content>
+
+        </ion-card>
+      </ng-container>
+
       <div class="card-payment padded-center">
         <ion-button (click)="makePayment()">
           Make Payment

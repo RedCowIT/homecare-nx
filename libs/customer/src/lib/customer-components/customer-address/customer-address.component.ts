@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CustomerAddress, EntityContainer} from "@homecare/shared";
 import {CustomerAddressesService} from "../../store/entity/services/customer-addresses/customer-addresses.service";
 
@@ -8,6 +8,9 @@ import {CustomerAddressesService} from "../../store/entity/services/customer-add
   styleUrls: ['./customer-address.component.scss']
 })
 export class CustomerAddressComponent extends EntityContainer<CustomerAddress> implements OnInit {
+
+  @Input()
+  id: number;
 
   constructor(protected customerAddressesService: CustomerAddressesService) {
     super(customerAddressesService);

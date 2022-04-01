@@ -12,7 +12,6 @@ export class VacuumReportFormService extends EntityFormService {
   protected init(): void {
     this.form = this.fb.group({
       id: undefined,
-      appointmentId: [null, Validators.required],
       qIndependentCompany: [null, Validators.requiredTrue],
       qServiceCost: [null, Validators.requiredTrue],
       qWashFilters: [null, Validators.required],

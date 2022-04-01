@@ -1,18 +1,19 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
   ApiValidationErrors,
-  catchHttpValidationErrors,
+  catchHttpValidationErrors, firstItem,
   InvoiceItem,
   Product,
-  ProductCategory,
-  selectEntity, selectEntityByKey,
+  ProductCategory, ProductStock,
+  selectEntity, selectEntityByKey, selectOrFetchFirstEntityByKey,
   SubscribedContainer
 } from "@homecare/shared";
-import {EMPTY, Observable} from "rxjs";
-import {finalize, first, mergeMap, takeUntil} from "rxjs/operators";
+import {combineLatest, EMPTY, Observable} from "rxjs";
+import {finalize, first, map, mergeMap, takeUntil} from "rxjs/operators";
 import {InvoiceItemsService} from '../../../../store/entity/services/invoice/invoice-items/invoice-items.service';
 import {ProductInvoiceItemFormService} from "../../../../services/form/invoice/product-invoice-item-form/product-invoice-item-form.service";
 import {ProductCategoriesService, ProductsService} from "@homecare/product";
+import {ProductStocksService} from "../../../../../../../product/src/lib/store/entity/services/product-stocks.service";
 
 @Component({
   selector: 'hc-product-invoice-item-form',
@@ -37,6 +38,9 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
   @Input()
   productId: number;
 
+  @Input()
+  stockOnly: boolean;
+
   @Output()
   done = new EventEmitter<void>();
 
@@ -45,6 +49,8 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
   products$: Observable<Product[]> | null;
 
   invoiceItem: InvoiceItem;
+
+  productStock: ProductStock;
 
   editMode = false;
 
@@ -55,6 +61,7 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
   constructor(public formService: ProductInvoiceItemFormService,
               public invoiceItemsService: InvoiceItemsService,
               public productCategoriesService: ProductCategoriesService,
+              public productStockService: ProductStocksService,
               public productsService: ProductsService) {
     super();
   }
@@ -63,10 +70,31 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
 
     this.productCategory$ = selectEntity(this.productCategoriesService, this.categoryId);
 
-    if (this.categoryId){
+    if (this.categoryId) {
       this.products$ = selectEntityByKey(this.productsService, 'categoryId', this.categoryId);
     } else {
-      this.products$ = this.productsService.entities$;
+
+      if (this.stockOnly) {
+        this.products$ = combineLatest([this.productStockService.entities$, this.productsService.entityMap$])
+          .pipe(
+            map(([productStocks, productMap]) => {
+              const products = [];
+              for (const productStock of productStocks) {
+                const product = productMap[productStock.productId];
+                products.push({
+                  ...product,
+                  description: product.description + ` [${productStock.qty}]`,
+                  stock: productStock.qty
+                });
+              }
+              return products;
+            })
+          );
+
+        this.productStockService.getAll();
+      } else {
+        this.products$ = this.productsService.entities$;
+      }
     }
 
     // this.products$ = this.productsService.getWithQuery({
@@ -81,6 +109,23 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
       this.formService.form.patchValue({
         unitPrice: product.defaultPrice
       });
+
+      this.productStock = null;
+      if (this.stockOnly) {
+        selectOrFetchFirstEntityByKey(this.productStockService, 'productId', product.id)
+          .pipe(first()).subscribe(
+          productStock => {
+            this.productStock = productStock;
+            this.formService.setStockQuantity(this.productStock.qty);
+          }
+        )
+      }
+
+      this.productStockService.getWithQuery({
+        productId: `${product.id}`
+      }).pipe(first()).subscribe(productStocks => {
+        this.productStock = firstItem(productStocks);
+      })
 
     });
 
@@ -106,8 +151,8 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
     }
   }
 
-  delete(){
-    if (this.deleting){
+  delete() {
+    if (this.deleting) {
       return;
     }
     this.deleting = true;
@@ -125,7 +170,9 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
         return EMPTY;
       }),
       first()
-    ).subscribe(() => {this.done.emit()});
+    ).subscribe(() => {
+      this.done.emit()
+    });
   }
 
   updateInvoiceItem() {
@@ -135,6 +182,8 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
         return EMPTY;
       }),
       first()
-    ).subscribe(() => {this.done.emit()});
+    ).subscribe(() => {
+      this.done.emit()
+    });
   }
 }

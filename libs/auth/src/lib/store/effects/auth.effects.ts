@@ -30,7 +30,10 @@ export class AuthEffects {
         }),
         catchError(error => {
           this.logger.error('Failed to initAuth', error);
-          return of(initAuthError({error}));
+          return of(
+            initAuthError({error}),
+            authActions.logout({targetPath: '/'})
+          );
         })
       );
 

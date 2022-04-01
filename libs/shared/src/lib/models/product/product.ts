@@ -7,4 +7,5 @@ export interface Product {
   vatStatusId: number;
   defaultPrice: number;
   link: number;
+  stock: number;
 }

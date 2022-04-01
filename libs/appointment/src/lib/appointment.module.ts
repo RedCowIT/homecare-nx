@@ -7,7 +7,6 @@ import {AppointmentEffects} from './store/effects/appointment.effects';
 
 @NgModule({
   imports: [
-    CommonModule,
     StoreModule.forFeature(
       fromStore.storeFeatureKey,
       fromStore.reducers,

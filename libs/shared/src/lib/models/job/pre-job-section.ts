@@ -4,6 +4,7 @@ export enum PreJobSection {
   WorkSummary = 'work-summary',
   Appliances = 'appliances',
   BeforePhotos = 'before-photos',
+  OvenReport = 'clean',
   ShampooReport = 'shampoo',
   VacuumReport = 'vacuum',
   Policies = 'policies',
@@ -19,6 +20,9 @@ export const PreJobSectionMeta = {
   },
   [PreJobSection.BeforePhotos]: {
     label: 'Before Photos',
+  },
+  [PreJobSection.OvenReport]: {
+    label: 'Oven Report',
   },
   [PreJobSection.VacuumReport]: {
     label: 'Vacuum Report',

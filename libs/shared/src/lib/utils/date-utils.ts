@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import {Moment} from "moment";
 
 export function millisFromNow(date: string | moment.Moment): number {
 
@@ -33,5 +34,9 @@ export function displayTime(millisec: number): string {
 }
 
 export function nowAsDateString(): string {
-  return moment().format('YYYY-MM-D');
+  return moment().format('YYYY-MM-DD');
+}
+
+export function asDateString(moment: Moment): string {
+  return moment.format('YYYY-MM-DD');
 }

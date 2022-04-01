@@ -1,3 +1,5 @@
+import {CustomerPlanFinanceDocument} from "../../../../../shared/src/lib/models/customer/customer-plan-finance-document";
+
 export enum CustomerEntity {
   Customer = 'Customer',
   CustomerAddress = 'CustomerAddress',
@@ -6,9 +8,12 @@ export enum CustomerEntity {
   CustomerPlan = 'CustomerPlan',
   CustomerPlanAppliance = 'CustomerPlanAppliance',
   CustomerPlanFinance = 'CustomerPlanFinance',
+  CustomerPlanFinanceDocument = 'CustomerPlanFinanceDocument',
+  DirectDebitDetails = 'DirectDebitDetails',
   EmploymentStatus = 'EmploymentStatus',
   EmploymentStatusTime = 'EmploymentStatusTime',
-  ResidentialStatus = 'ResidentialStatus'
+  ResidentialStatus = 'ResidentialStatus',
+  Title = 'Title'
 }
 
 export const customerEntityMetadata = {
@@ -19,7 +24,10 @@ export const customerEntityMetadata = {
   [CustomerEntity.CustomerPlan]: {},
   [CustomerEntity.CustomerPlanAppliance]: {},
   [CustomerEntity.CustomerPlanFinance]: {},
+  [CustomerEntity.CustomerPlanFinanceDocument]: {},
+  [CustomerEntity.DirectDebitDetails]: {},
   [CustomerEntity.EmploymentStatus]: {},
   [CustomerEntity.EmploymentStatusTime]: {},
-  [CustomerEntity.ResidentialStatus]: {}
+  [CustomerEntity.ResidentialStatus]: {},
+  [CustomerEntity.Title]: {}
 }

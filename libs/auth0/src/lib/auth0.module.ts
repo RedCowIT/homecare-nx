@@ -14,7 +14,6 @@ import {Auth0Interceptor} from './interceptors/auth0.interceptor';
 
 @NgModule({
   imports: [
-    CommonModule,
     StoreModule.forFeature(fromStore.storeFeatureKey, fromStore.reducer),
     EffectsModule.forFeature([Auth0Effects]),
   ],

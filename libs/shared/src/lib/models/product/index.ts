@@ -5,5 +5,6 @@ export * from './appliance-brand';
 export * from './manufacturer';
 export * from './product';
 export * from './product-category';
+export * from './product-stock';
 export * from './commercial-product';
 export * from './product-categories';

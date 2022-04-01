@@ -126,6 +126,14 @@ export class PreJobEffects {
         console.log('creating pre job sections', callTypes);
 
         if (callTypes){
+
+          if (containsItemWithKey(callTypes, 'clean', true)) {
+            sections.push({
+              id: PreJobSection.OvenReport,
+              status: ChecklistItemStatus.Disabled
+            });
+          }
+
           if (containsItemWithKey(callTypes, 'carpet', true)) {
             sections.push({
               id: PreJobSection.ShampooReport,
