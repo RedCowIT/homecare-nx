@@ -23,6 +23,8 @@ import { CustomerPlanFinanceDocumentListItemComponent } from './customer-plan/cu
 import { EmailCustomerPlanFinanceDocumentFormComponent } from './customer-plan/email-customer-plan-finance-document-form/email-customer-plan-finance-document-form.component';
 import { EmailCustomerPlanFinanceDocumentModalComponent } from './customer-plan/email-customer-plan-finance-document-modal/email-customer-plan-finance-document-modal.component';
 import { DirectDebitDetailsFormComponent } from './direct-debit-details-form/direct-debit-details-form.component';
+import { CustomerPlanChangesComponent } from './customer-plan-change/customer-plan-changes/customer-plan-changes.component';
+import { CustomerPlanChangeFormComponent } from './customer-plan-change/customer-plan-change-form/customer-plan-change-form.component';
 
 
 @NgModule({
@@ -42,7 +44,9 @@ import { DirectDebitDetailsFormComponent } from './direct-debit-details-form/dir
     CustomerPlanFinanceDocumentListItemComponent,
     EmailCustomerPlanFinanceDocumentFormComponent,
     EmailCustomerPlanFinanceDocumentModalComponent,
-    DirectDebitDetailsFormComponent
+    DirectDebitDetailsFormComponent,
+    CustomerPlanChangesComponent,
+    CustomerPlanChangeFormComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +69,9 @@ import { DirectDebitDetailsFormComponent } from './direct-debit-details-form/dir
     CustomerContactFormComponent,
     CustomerPlanFinanceDocumentListComponent,
     CustomerPlanFinanceDocumentModalComponent,
-    CustomerPlanFinanceDocumentFormComponent
+    CustomerPlanFinanceDocumentFormComponent,
+    DirectDebitDetailsFormComponent,
+    CustomerPlanChangeFormComponent
   ]
 })
 export class CustomerComponentsModule {

@@ -1,1 +1,18 @@
-<p>direct-debit-details-form works!</p>
+<div [formGroup]="formService.form">
+
+  <ion-item>
+    <ion-label position="stacked">Name of account holder(s)</ion-label>
+    <ion-input formControlName="accountHolder" type="text"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Sort code</ion-label>
+    <ion-input formControlName="sortCode" type="text"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Account number</ion-label>
+    <ion-input formControlName="accountNumber" type="text"></ion-input>
+  </ion-item>
+
+</div>

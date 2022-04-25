@@ -1,0 +1,60 @@
+<div [formGroup]="customerPlanChangesFormService.form">
+
+  <div class="plan-change-row plan-change-header">
+
+    <div class="col-name">
+      Plan
+    </div>
+
+    <div class="col-start-date">
+      Start
+    </div>
+
+    <div class="col-amount">
+      Amount
+    </div>
+
+    <div class="col-new-amount">
+      Increase
+    </div>
+
+  </div>
+
+  <div formArrayName="customerPlanChanges">
+
+    <div *ngFor="let customerPlanChange of customerPlanChangesFormService.customerPlanChanges.controls; let i=index">
+
+      <div [formGroupName]="i">
+
+        <div class="plan-change-row">
+
+          <div class="col-name">
+            {{customerPlanChangesFormService.customerPlanChanges.controls[i].value.description}}
+          </div>
+
+          <div class="col-start-date">
+            {{customerPlanChangesFormService.customerPlanChanges.controls[i].value.startDate | date:'dd-MM-YYYY'}}
+          </div>
+
+          <div class="col-amount">
+            {{customerPlanChangesFormService.customerPlanChanges.controls[i].value.periodPrice | currency: 'GBP'}}
+          </div>
+
+          <div class="col-new-amount">
+            <ng-container *ngIf="customerPlanChangesFormService.customerPlanChanges.controls[i].value.canIncrease; else cannotIncrease">
+              <ion-input type="number" formControlName="newPrice"></ion-input>
+            </ng-container>
+            <ng-template #cannotIncrease>
+              -
+            </ng-template>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

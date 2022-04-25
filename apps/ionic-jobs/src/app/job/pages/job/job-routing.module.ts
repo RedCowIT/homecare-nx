@@ -27,6 +27,7 @@ import {JobDirectDebitComponent} from "../../job-components/job-direct-debit/job
 import {QuoteUnacceptedResolver} from "../../resolvers/quote-unaccepted.resolver";
 import {QuoteLockedComponent} from "../../job-components/quote/quote-locked/quote-locked.component";
 import {PreJobOvenReportComponent} from "../../job-components/pre-job/pre-job-oven-report/pre-job-oven-report.component";
+import {JobPlanChangeComponent} from "../../job-components/job-plan-change/job-plan-change.component";
 
 const routes: Routes = [
   {
@@ -141,6 +142,10 @@ const routes: Routes = [
       {
         path: 'dd',
         component: JobDirectDebitComponent,
+      },
+      {
+        path: 'plan-change',
+        component: JobPlanChangeComponent
       },
       {
         path: 'sign-off',

@@ -10,6 +10,7 @@ export enum JobSection {
   Finance = 'finance',
   Payment = 'payment',
   DD = 'dd',
+  PlanChange = 'plan-change',
   SignOff = 'sign-off'
 }
 
@@ -59,10 +60,15 @@ export const JobSectionMeta = {
     icon: 'today',
     order: 7
   },
+  [JobSection.PlanChange]: {
+    label: 'Plan Update',
+    icon: 'swap-vertical-outline',
+    order: 8
+  },
   [JobSection.SignOff]: {
     label: 'Sign Off',
     icon: 'thumbs-up-sharp',
-    order: 8
+    order: 9
   }
 }
 

@@ -4,6 +4,7 @@ export * from './customer-plan';
 export * from './customer-appliance';
 export * from './customer-appliance-type';
 export * from './customer-plan-appliance';
+export * from './customer-plan-change';
 export * from './customer-plan-finance';
 export * from './customer-plan-finance-document';
 export * from './direct-debit-details';

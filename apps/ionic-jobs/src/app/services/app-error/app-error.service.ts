@@ -1,6 +1,7 @@
 import {ErrorHandler, Injectable} from '@angular/core';
 import {LoggerService} from "@homecare/core";
 import * as Sentry from "@sentry/angular";
+
 /**
  * Handle client errors
  *

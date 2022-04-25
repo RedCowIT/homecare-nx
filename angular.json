@@ -286,11 +286,11 @@
             "ci": {
               "progress": false
             },
-            "device": {
+            "staging": {
               "fileReplacements": [
                 {
                   "replace": "apps/ionic-jobs/src/environments/environment.ts",
-                  "with": "apps/ionic-jobs/src/environments/environment.device.ts"
+                  "with": "apps/ionic-jobs/src/environments/environment.staging.ts"
                 }
               ]
             }

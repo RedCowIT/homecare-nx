@@ -1,4 +1,4 @@
-import {CustomerPlanFinanceDocument} from "../../../../../shared/src/lib/models/customer/customer-plan-finance-document";
+import {CustomerPlanChange} from "@homecare/shared";
 
 export enum CustomerEntity {
   Customer = 'Customer',
@@ -7,6 +7,7 @@ export enum CustomerEntity {
   CustomerApplianceType = 'CustomerApplianceType',
   CustomerPlan = 'CustomerPlan',
   CustomerPlanAppliance = 'CustomerPlanAppliance',
+  CustomerPlanChange = 'CustomerPlanChange',
   CustomerPlanFinance = 'CustomerPlanFinance',
   CustomerPlanFinanceDocument = 'CustomerPlanFinanceDocument',
   DirectDebitDetails = 'DirectDebitDetails',
@@ -16,6 +17,10 @@ export enum CustomerEntity {
   Title = 'Title'
 }
 
+export const customerPluralNames = {
+  DirectDebitDetails : 'DirectDebitDetails'
+};
+
 export const customerEntityMetadata = {
   [CustomerEntity.Customer]: {},
   [CustomerEntity.CustomerAddress]: {},
@@ -23,6 +28,9 @@ export const customerEntityMetadata = {
   [CustomerEntity.CustomerApplianceType]: {},
   [CustomerEntity.CustomerPlan]: {},
   [CustomerEntity.CustomerPlanAppliance]: {},
+  [CustomerEntity.CustomerPlanChange]: {
+    selectId: (customerPlanChange: CustomerPlanChange) => customerPlanChange.customerPlanId
+  },
   [CustomerEntity.CustomerPlanFinance]: {},
   [CustomerEntity.CustomerPlanFinanceDocument]: {},
   [CustomerEntity.DirectDebitDetails]: {},

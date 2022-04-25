@@ -1,0 +1,36 @@
+.plan-change-header {
+  font-weight: 500;
+}
+
+.plan-change-row {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border-color);
+
+  .col-name {
+    width: 40%;
+  }
+
+  .col-start-date {
+    width: 20%;
+  }
+
+  .col-amount {
+    width: 20%;
+    text-align:right;
+    padding-right: 30px;
+  }
+
+  .col-new-amount {
+    width: 20%;
+  }
+}
+
+.col-new-amount {
+  ion-input {
+    background: white;
+    border: 1px solid gray;
+  }
+}

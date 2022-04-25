@@ -16,6 +16,11 @@ const defaultDataServiceConfig: DefaultDataServiceConfig = {
   timeout: environment.api.timeout
 };
 
+export const pluralNames = {
+  // Case matters. Match the case of the entity name.
+  DirectDebitDetails: 'DirectDebitDetails'
+};
+
 export const metaReducers: MetaReducer<any>[] = environment.production
   ? []
   : []; // [storeFreeze];
@@ -38,7 +43,9 @@ export const metaReducers: MetaReducer<any>[] = environment.production
       stateKey: 'router',
       serializer: SimpleRouterStateSerializer
     }),
-    EntityDataModule.forRoot({}),
+    EntityDataModule.forRoot({
+      pluralNames: pluralNames
+    }),
   ],
   providers: [
     {provide: DefaultDataServiceConfig, useValue: defaultDataServiceConfig},

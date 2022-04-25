@@ -31,9 +31,9 @@ import { AccordionItemComponent } from './accordion/accordion-item/accordion-ite
   ],
   imports: [
     IonicModule,
+    CommonModule,
     RouterModule,
-    ReactiveFormsModule,
-    CommonModule
+    ReactiveFormsModule
   ],
   exports: [
     ModalHeaderComponent,

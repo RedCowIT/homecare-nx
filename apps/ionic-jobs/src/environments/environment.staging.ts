@@ -42,6 +42,10 @@ export const environment = {
       }
     }
   ],
+  sentry: {
+    dsn: 'https://7d6b1fedfda549b4b64a094875ad50c3@o1181554.ingest.sentry.io/6295140',
+    environment: 'staging'
+  }
 };
 
 /*

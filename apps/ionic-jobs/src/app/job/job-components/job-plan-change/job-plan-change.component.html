@@ -1,0 +1,37 @@
+<div class="detail-with-footer">
+  <div class="detail-content">
+    <div *ngIf="currentJobService.appointmentId$ | async as appointmentId">
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Mandatory Plan Increases</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div>
+
+            <ion-item color="danger" lines="none" class="ion-margin-top">
+              <ion-label class="ion-text-wrap">
+                The customer must be aware of any increases before proceeding.
+              </ion-label>
+            </ion-item>
+
+            <ion-item color="warning-subtle" lines="none" class="ion-margin-top">
+              <ion-label class="ion-text-wrap">
+                To cover increasing costs, we are now applying a mandatory <strong>{{percentChange}}% increase</strong> across the following customer plans.
+              </ion-label>
+            </ion-item>
+
+          </div>
+
+          <hc-customer-plan-change-form [appointmentId]="appointmentId"></hc-customer-plan-change-form>
+
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+  </div>
+  <div class="detail-footer">
+    <hc-job-footer [buttonConfigs$]="footerButtons$"></hc-job-footer>
+  </div>
+</div>
+

@@ -8,18 +8,18 @@ import {
   reloadJobSections,
   setJobSections
 } from "../actions/job.actions";
-import {catchError, distinctUntilChanged, filter, first, map, mergeMap, tap, withLatestFrom} from "rxjs/operators";
+import {catchError, filter, first, map, mergeMap, withLatestFrom} from "rxjs/operators";
 import {
   Appointment,
   AppointmentVisit,
-  containsNumber,
+  CustomerPlanChange,
   findById,
   findByKey,
   findIndexWithId,
   firstByKey,
-  JobSection, JobSections,
-  JobSectionStatus, jobSectionStatusComparer,
-  pluck,
+  JobSection,
+  JobSectionStatus,
+  jobSectionStatusComparer,
   selectEntity,
   selectOrFetchEntity
 } from "@homecare/shared";
@@ -36,6 +36,8 @@ import {CustomerPlanFinanceDocumentsService} from "../../../../../../../libs/cus
 import {PlansService, PlanTypesService} from "@homecare/plan";
 import {InvoiceManagerService} from "@homecare/billing";
 import {CustomerPlanManagerService} from "../../../../../../../libs/customer/src/lib/services/customer-plan-manager/customer-plan-manager.service";
+import {DirectDebitDetailsService} from "../../../../../../../libs/customer/src/lib/store/entity/services/direct-debit-details/direct-debit-details.service";
+import {CustomerPlanChangesService} from "../../../../../../../libs/customer/src/lib/store/entity/services/customer-plan-changes/customer-plan-changes.service";
 
 
 @Injectable()
@@ -75,6 +77,20 @@ export class JobEffects {
               return this.initCustomerPlans(appointment).pipe(
                 first(),
                 map(() => appointment)
+              );
+            }),
+            mergeMap(appointment => {
+              return this.initCustomerDirectDebitDetails(appointment).pipe(
+                first(),
+                map(() => appointment),
+                mergeMap(appointment => {
+                  console.log('initCustomerPlanChanges');
+                  return this.initCustomerPlanChanges(appointment).pipe(
+                    first(),
+                    map(() => appointment),
+                    catchError(error => throwError(error))
+                  );
+                }),
               );
             }),
             mergeMap(appointment => {
@@ -133,13 +149,13 @@ export class JobEffects {
           return {...jobSection};
         });
 
-        if (action.sectionId === JobSection.Invoice){
+        if (action.sectionId === JobSection.Invoice) {
           return this.customerPlanManagerService.appointmentHasFinanceDocs(action.appointmentId).pipe(
             map(hasFinanceDocs => {
 
               // add finance section
-              if (hasFinanceDocs){
-                if (!firstByKey(sections, 'id', JobSection.Finance)){
+              if (hasFinanceDocs) {
+                if (!firstByKey(sections, 'id', JobSection.Finance)) {
                   sections.push({
                     id: JobSection.Finance,
                     status: ChecklistItemStatus.Disabled
@@ -157,10 +173,6 @@ export class JobEffects {
           this.completeSection(action.sectionId, sections);
           return of(setJobSections({appointmentId: action.appointmentId, jobSections: sections}));
         }
-
-
-
-
 
 
       }),
@@ -202,12 +214,14 @@ export class JobEffects {
               private customerPlansService: CustomerPlansService,
               private customerPlanFinanceDocumentsService: CustomerPlanFinanceDocumentsService,
               private customersService: CustomersService,
+              private directDebitDetailsService: DirectDebitDetailsService,
+              private customerPlanChangesService: CustomerPlanChangesService,
               private invoiceManagerService: InvoiceManagerService,
               private customerPlanManagerService: CustomerPlanManagerService,
               private loggerService: LoggerService) {
   }
 
-  private completeSection(sectionId: string, sections: JobSectionStatus[]){
+  private completeSection(sectionId: string, sections: JobSectionStatus[]) {
     const index = findIndexWithId(sections, sectionId);
 
     const section = findById(sections, sectionId);
@@ -225,11 +239,12 @@ export class JobEffects {
 
     return combineLatest([
       this.jobsService.isNCOOnly(appointmentId),
-      this.customerPlanManagerService.appointmentHasFinanceDocs(appointmentId)
+      this.customerPlanManagerService.appointmentHasFinanceDocs(appointmentId),
+      this.customerPlanChangesService.hasPlanChanges(appointmentId)
     ]).pipe(
-      map(([isNCOOnly, hasFinanceDocs]) => {
+      map(([isNCOOnly, hasFinanceDocs, hasPlanChanges]) => {
 
-        console.log("HAS FINANCE DOCS");
+        console.log("create sections", {hasFinanceDocs, hasPlanChanges});
 
         const sections = [
           {
@@ -274,12 +289,20 @@ export class JobEffects {
           {
             id: JobSection.DD,
             status: ChecklistItemStatus.Disabled
-          },
-          {
-            id: JobSection.SignOff,
-            status: ChecklistItemStatus.Disabled
           }
         );
+
+        if (hasPlanChanges) {
+          sections.push({
+            id: JobSection.PlanChange,
+            status: ChecklistItemStatus.Disabled
+          });
+        }
+
+        sections.push({
+          id: JobSection.SignOff,
+          status: ChecklistItemStatus.Disabled
+        });
 
 
         return sections;
@@ -358,16 +381,23 @@ export class JobEffects {
       customerId: `${appointment.customerId}`
     });
 
-    // return forkJoin([
-    //   this.plansService.entityMap$,
-    //   this.planTypesService.entityMap$,
-    //
-    // ]).pipe(
-    //   mergeMap(([planMap, planTypeMap, customerPlans]) => {
-    //     foreach (const customerPlans)
-    //     return of(null);
-    //   })
-    // );
+  }
+
+  private initCustomerDirectDebitDetails(appointment: Appointment) {
+
+    return this.directDebitDetailsService.getWithQuery({
+      appointmentId: `${appointment.id}`
+    });
+
+
+  }
+
+  private initCustomerPlanChanges(appointment: Appointment): Observable<CustomerPlanChange[]> {
+
+    return this.customerPlanChangesService.getWithQuery({
+      appointmentId: `${appointment.id}`,
+      customerId: `${appointment.customerId}`
+    });
 
   }
 
