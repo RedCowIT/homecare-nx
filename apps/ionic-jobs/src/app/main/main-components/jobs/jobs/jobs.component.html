@@ -1,4 +1,3 @@
-
 <div *ngIf="appointments$ | async as appointments">
   <div *ngIf="appointments">
 
@@ -44,4 +43,19 @@
   </div>
 </div>
 
-
+<div>
+  <div *ngIf="currentJobService.job$ | async as job">
+    <div *ngIf="job.loadState === 'LOADING'">
+      <div class="overlay loading gray-1-bg">
+        <div class="overlay-inner">
+          <ion-card>
+            <ion-card-content>
+              <div class="label">Loading job...</div>
+              <dd-spinner [show]="true"></dd-spinner>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,3 +4,4 @@ export * from './logger';
 export * from './network/network-connectivity.service';
 export * from './platform/platform.service';
 export * from './router';
+export * from './logger'

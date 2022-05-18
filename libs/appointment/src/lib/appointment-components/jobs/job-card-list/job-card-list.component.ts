@@ -11,6 +11,9 @@ export class JobCardListComponent implements OnInit {
   @Input()
   appointments: Appointment[]
 
+  @Input()
+  isLoading: boolean;
+
   constructor() {
   }
 

@@ -1,4 +1,4 @@
-<div class="detail ion-padding">
+<div class="detail-with-footer">
   <div class="detail-content">
 
     <ion-card>
@@ -42,12 +42,16 @@
 
       <div class="card-payment padded-center">
         <ion-button (click)="makePayment()">
-          Make Payment
+          Make Card Payment
           <ion-icon name="card" slot="end"></ion-icon>
         </ion-button>
       </div>
 
     </div>
 
+  </div>
+
+  <div class="detail-footer">
+    <hc-job-footer [buttonConfigs$]="footerButtons$"></hc-job-footer>
   </div>
 </div>

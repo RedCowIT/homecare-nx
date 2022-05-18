@@ -47,7 +47,7 @@ export class AuthEffects {
       return this.loginService.login(action.username, action.password).pipe(
         mergeMap(token => {
           return of(
-            authActions.setAuth({isAuthenticated: true, token}),
+            authActions.setAuth({isAuthenticated: true, username: action.username, token}),
             authActions.initAuthSuccess(),
             authActions.loginSuccess()
           );

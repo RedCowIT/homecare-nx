@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {EntityFormContainer} from "@homecare/entity";
 import {CustomerAppliance} from "@homecare/shared";
 import {CustomerAppliancesService} from "../../../store/entity/services/customer-appliances/customer-appliances.service";
@@ -18,6 +18,15 @@ export class CustomerApplianceFormComponent extends EntityFormContainer<Customer
 
   @Input()
   customerId: number;
+
+  @Output()
+  create = new EventEmitter<CustomerAppliance>();
+
+  @Output()
+  update = new EventEmitter<CustomerAppliance>();
+
+  @Output()
+  delete = new EventEmitter<CustomerAppliance>();
 
   constructor(public formService: CustomerApplianceFormService,
               public entityService: CustomerAppliancesService,

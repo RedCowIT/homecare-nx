@@ -1,3 +1,5 @@
+import {createDateKeyComparer, createStringKeyComparer} from "@homecare/common";
+
 export enum AppointmentEntity {
   Appointment = 'Appointment',
   AppointmentCallType = 'AppointmentCallType',
@@ -10,7 +12,9 @@ export enum AppointmentEntity {
 }
 
 export const appointmentEntityMetadata = {
-  [AppointmentEntity.Appointment]: {},
+  [AppointmentEntity.Appointment]: {
+    sortComparer: createDateKeyComparer('bookingDateTime')
+  },
   [AppointmentEntity.AppointmentCallType]: {},
   [AppointmentEntity.AppointmentNoAnswer]: {},
   [AppointmentEntity.AppointmentNoAnswerReason]: {},

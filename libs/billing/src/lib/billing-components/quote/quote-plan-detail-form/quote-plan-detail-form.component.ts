@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {QuotePlanDetailFormService} from "../../../services/form/quote-plan-detail-form/quote-plan-detail-form.service";
 import {EntityFormContainer} from "@homecare/entity";
 import {firstItem, Plan, QuoteItem, QuoteItemTypes, QuotePlanDetail, selectEntityByKey} from "@homecare/shared";
@@ -27,6 +27,15 @@ export class QuotePlanDetailFormComponent extends EntityFormContainer<QuotePlanD
   @Input()
   quoteId: number;
 
+  @Output()
+  create = new EventEmitter<QuotePlanDetail>();
+
+  @Output()
+  update = new EventEmitter<QuotePlanDetail>();
+
+  @Output()
+  delete = new EventEmitter<QuotePlanDetail>();
+
   plans$: Observable<Plan[]>;
 
   constructor(public formService: QuotePlanDetailFormService,
@@ -45,9 +54,6 @@ export class QuotePlanDetailFormComponent extends EntityFormContainer<QuotePlanD
     super.ngOnInit();
 
     if (!this.isEditMode()) {
-      this.patchForm({
-        planTypeId: this.planTypeId
-      });
 
       this.findApplianceQuoteItemId().pipe(
         first()
@@ -57,6 +63,10 @@ export class QuotePlanDetailFormComponent extends EntityFormContainer<QuotePlanD
         }
       });
     }
+
+    this.patchForm({
+      planTypeId: this.planTypeId
+    });
 
     console.log('planTypeId', this.planTypeId);
 
@@ -127,13 +137,8 @@ export class QuotePlanDetailFormComponent extends EntityFormContainer<QuotePlanD
 
     return this.model$.pipe(
       mergeMap(quotePlanDetail => {
-        return this.entityService.delete(quotePlanDetail.quoteItemId).pipe(
-          mergeMap(result => {
-            return this.quoteItemService.delete(quotePlanDetail.quoteItemId);
-          })
-        )
-      })
-    );
+        return this.quoteItemService.delete(quotePlanDetail.quoteItemId);
+      }));
 
   }
 

@@ -138,7 +138,18 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
   protected async doOperation(operation$, operationType: 'create' | 'update' | 'delete') {
     operation$.pipe(
       catchHttpValidationErrors((errors: ApiValidationErrors) => {
-        this.errors = errors.errors;
+        console.log('HTTP validation error', errors);
+        if (errors?.errors?.length) {
+          this.errors = errors.errors;
+        } else if (errors.message) {
+          try{
+            const jsonError = JSON.parse(errors.message);
+            this.errors = [jsonError.message];
+          } catch (e){
+            this.errors = [errors.message];
+          }
+        }
+
         return EMPTY;
       }),
       first()

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {EntityFormContainer} from "@homecare/entity";
 import {firstItem, QuoteApplianceDetail, QuoteItem, QuoteItemTypes, selectEntityByKey} from "@homecare/shared";
 import {ApplianceBrandsService, AppliancePriceRangesService, ApplianceTypesService} from "@homecare/product";
@@ -27,6 +27,15 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
 
   @Input()
   quoteId: number;
+
+  @Output()
+  create = new EventEmitter<QuoteApplianceDetail>();
+
+  @Output()
+  update = new EventEmitter<QuoteApplianceDetail>();
+
+  @Output()
+  delete = new EventEmitter<QuoteApplianceDetail>();
 
   constructor(public formService: QuoteApplianceDetailFormService,
               public entityService: QuoteApplianceDetailsService,
@@ -125,13 +134,8 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
 
     return this.model$.pipe(
       mergeMap(quoteApplianceDetail => {
-        return this.entityService.delete(quoteApplianceDetail.quoteItemId).pipe(
-          mergeMap(result => {
-            return this.quoteItemService.delete(quoteApplianceDetail.quoteItemId);
-          })
-        )
-      })
-    );
-
+          return this.quoteItemService.delete(quoteApplianceDetail.quoteItemId);
+        }
+      ));
   }
 }

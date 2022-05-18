@@ -5,6 +5,7 @@ import {JobsLoaderService} from "../../../../job/services/jobs-loader/jobs-loade
 import {first} from "rxjs/operators";
 import {Observable} from "rxjs";
 import {Appointment} from "@homecare/shared";
+import {CurrentJobService} from "../../../../job/services/current-job/current-job.service";
 
 @Component({
   selector: 'hc-jobs',
@@ -17,7 +18,8 @@ export class JobsComponent implements OnInit {
 
   constructor(public platform: PlatformService,
               public appointmentsService: AppointmentsService,
-              public jobLoaderService: JobsLoaderService) { }
+              public jobLoaderService: JobsLoaderService,
+              public currentJobService: CurrentJobService) { }
 
   ngOnInit(): void {
     this.appointments$ = this.appointmentsService.entities$;

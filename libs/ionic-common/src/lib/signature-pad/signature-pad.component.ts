@@ -83,6 +83,12 @@ export class SignaturePadComponent implements OnInit, AfterViewInit {
     }
   }
 
+  fromDataURL(data){
+    console.log('fromDataURL', data);
+    this.signaturePad.clear();
+    this.signaturePad.fromDataURL(data, {width: this.width, height: this.height});
+  }
+
   clearPad() {
     this.signaturePad.clear();
     this.cleared.emit();

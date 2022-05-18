@@ -24,8 +24,11 @@ import {ApiUrlService} from "@homecare/common";
 import {environment} from "../environments/environment";
 import {AppComponentsModule} from "./components/app-components.module";
 import * as Sentry from "@sentry/angular";
+import {ScreenOrientation} from "@awesome-cordova-plugins/screen-orientation/ngx";
 
-Sentry.init(environment.sentry);
+if (environment.sentry.enabled){
+  Sentry.init(environment.sentry);
+}
 
 function storageFactory(storage: ClientStorage): StorageService {
   return new StorageService(storage);
@@ -64,6 +67,7 @@ function cacheStoreServiceFactory(store: Store, storage: StorageService): CacheS
     {provide: APP_INITIALIZER, useFactory: AppInitServiceFactory, deps: [EntityInitService], multi: true},
     {provide: APP_INITIALIZER, useFactory: AppInitServiceFactory, deps: [AppInitService], multi: true},
     {provide: ApiUrlService, useValue: new ApiUrlService(environment.api.baseUrl)},
+    ScreenOrientation
   ]
 })
 export class AppModule {

@@ -70,19 +70,37 @@ export class QuoteProductsComponent implements OnInit {
 
   }
 
+  /**
+   * TODO:
+   * @param productId
+   */
   async openProductModal(productId: number) {
 
-    this.currentJobService.quote$.pipe(first()).subscribe(async quote => {
+    combineLatest([
+      this.currentJobService.quote$,
+      this.quoteManagerService.getQuoteProductDetails(this.currentJobService.appointmentId)
+    ]).pipe(
+      first()
+    ).subscribe(async ([quote, quoteProductDetails]) => {
+
+      let quoteProductDetailId = null;
+      if (quoteProductDetails?.length){
+        quoteProductDetailId = quoteProductDetails[0].id;
+      }
+
       const modal = await this.modalCtrl.create({
         component: QuoteProductDetailModalComponent,
         componentProps: {
           productId,
-          quoteId: quote.id
+          quoteId: quote.id,
+          quoteProductDetailId
         }
       });
 
       await modal.present();
+
     });
+
 
   }
 

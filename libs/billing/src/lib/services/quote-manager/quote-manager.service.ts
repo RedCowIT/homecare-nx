@@ -17,6 +17,7 @@ import {QuoteItemsService} from '../../store/entity/services/quote/quote-items/q
 import {catchError, filter, first, map, mergeMap} from "rxjs/operators";
 import {QuoteApplianceDetailModalComponent} from "../../billing-components/quote/quote-appliance-detail-modal/quote-appliance-detail-modal.component";
 import {QuoteItemTypesService} from "../../store/entity/services/quote/quote-item-types/quote-item-types.service";
+import {PlansService} from "@homecare/plan";
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,8 @@ export class QuoteManagerService {
               private quoteApplianceDetailsService: QuoteApplianceDetailsService,
               private quoteProductDetailsService: QuoteProductDetailsService,
               private quotePlanDetailsService: QuotePlanDetailsService,
-              private quoteItemTypesService: QuoteItemTypesService) {
+              private quoteItemTypesService: QuoteItemTypesService,
+              private plansService: PlansService) {
   }
 
   getAppointmentQuoteItems(appointmentId: number): Observable<QuoteItem[]> {
@@ -66,9 +68,15 @@ export class QuoteManagerService {
   }
 
   getQuotePlanDetailsWithType(appointmentId: number, planTypeId: number): Observable<QuotePlanDetail[]> {
-    return this.getQuotePlanDetails(appointmentId).pipe(
-      map(quotePlanDetails => {
-        return findByKey(quotePlanDetails, 'planTypeId', planTypeId);
+    return combineLatest([this.getQuotePlanDetails(appointmentId), this.plansService.entityMap$]).pipe(
+      map(([quotePlanDetails, plans]) => {
+
+        return quotePlanDetails.filter(quotePlanDetail => {
+
+          const plan = plans[quotePlanDetail.planId];
+          return plan.planTypeId === planTypeId;
+
+        });
       })
     )
   }

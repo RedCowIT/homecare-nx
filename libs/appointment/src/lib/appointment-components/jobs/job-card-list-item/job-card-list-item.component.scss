@@ -17,3 +17,12 @@ ion-card-content.rebooked {
     color: var(--ion-color-medium) !important;
   }
 }
+
+.invoiced {
+  ion-card {
+    border: 1px solid var(--ion-color-primary);
+  }
+  ion-card-content, ion-card-header {
+    color: var(--ion-color-medium) !important;
+  }
+}

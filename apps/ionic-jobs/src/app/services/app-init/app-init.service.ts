@@ -8,6 +8,7 @@ import {Platform} from "@ionic/angular";
 import {Storage} from '@ionic/storage-angular';
 import {Store} from "@ngrx/store";
 import {TokenAuthService} from "@homecare-nx/auth";
+import {SentryLogHandler} from "../sentry-log-handler/sentry-log-handler";
 
 /**
  * Bootstraps application before any component loads
@@ -36,6 +37,10 @@ export class AppInitService implements AppInitHandler {
   init(): void {
 
     LogHandlerFactory.createLogHandlers(this.store, this.logger, environment.logHandlers);
+
+    if (environment.sentry.enabled){
+      this.logger.addLogHandler('sentry', new SentryLogHandler());
+    }
 
     this.logger.debug('AppInitService.init');
 

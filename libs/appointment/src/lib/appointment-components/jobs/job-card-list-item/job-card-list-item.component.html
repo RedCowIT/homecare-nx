@@ -1,4 +1,4 @@
-<div *ngIf="appointment$ | async as appointment" [ngClass]="{rebooked: appointment.rebooked}">
+<div *ngIf="appointment$ | async as appointment" [ngClass]="{rebooked: appointment.rebooked, invoiced: appointment.invoiced}">
   <ion-card *ngIf="appointment">
     <ion-card-header>
       <hc-job-date-header [date]="appointment.bookingDateTime"></hc-job-date-header>
@@ -35,12 +35,31 @@
       </div>
 
       <ng-template #jobActions>
-        <div class="card-buttons d-flex ion-justify-content-end">
-          <hc-no-answer-button [appointmentId]="appointment.id"></hc-no-answer-button>
-          <ion-button (click)="openJob()" class="ion-margin-start">
-            Start
-          </ion-button>
+        <div *ngIf="!isLoading;else isLoadingTpl" class="card-buttons d-flex ion-justify-content-end">
+
+          <div *ngIf="appointment?.invoiced; else startJob">
+            <div class="card-buttons d-flex ion-justify-content-end ion-align-items-center">
+              <div>
+                <ion-badge class="rebooked-badge" color="light">Invoiced</ion-badge>
+              </div>
+              <ion-button (click)="openJob()" class="ion-margin-start" color="dark">
+                View
+              </ion-button>
+            </div>
+          </div>
+          <ng-template #startJob>
+            <hc-no-answer-button [appointmentId]="appointment.id"></hc-no-answer-button>
+            <ion-button (click)="openJob()" class="ion-margin-start">
+              Start
+            </ion-button>
+          </ng-template>
+
         </div>
+        <ng-template #isLoadingTpl>
+          <div class="card-buttons d-flex ion-justify-content-end">
+            <dd-spinner [show]="true"></dd-spinner>
+          </div>
+        </ng-template>
       </ng-template>
 
     </ion-card-content>

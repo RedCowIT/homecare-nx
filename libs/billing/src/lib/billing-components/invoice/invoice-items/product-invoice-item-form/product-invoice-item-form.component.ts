@@ -115,17 +115,18 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
         selectOrFetchFirstEntityByKey(this.productStockService, 'productId', product.id)
           .pipe(first()).subscribe(
           productStock => {
+            console.log('Found productStock', product, productStock);
             this.productStock = productStock;
             this.formService.setStockQuantity(this.productStock.qty);
           }
         )
       }
 
-      this.productStockService.getWithQuery({
-        productId: `${product.id}`
-      }).pipe(first()).subscribe(productStocks => {
-        this.productStock = firstItem(productStocks);
-      })
+      // this.productStockService.getWithQuery({
+      //   productId: `${product.id}`
+      // }).pipe(first()).subscribe(productStocks => {
+      //   this.productStock = firstItem(productStocks);
+      // })
 
     });
 

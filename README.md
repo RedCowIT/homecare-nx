@@ -6,15 +6,11 @@ Installing local capacitor-cli via npm for ionic-jobs causes rxjs incompatibilit
 Use global capacitor-cli
 
 ##Build
-###iOS
-To open XCode project from terminal:npm
+Update version in environment.staging and environment.production 
 <pre>
-npx cap open ios
-</pre>
-####Build Environment
-<pre>
-npm run ios:build:staging
-npm run ios:build:production
+cd apps/ionic-jobs
+ng build --configuration=staging
+npx cap sync
 </pre>
 
 ## Generate a page

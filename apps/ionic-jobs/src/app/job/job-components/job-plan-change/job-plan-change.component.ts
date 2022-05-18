@@ -1,11 +1,12 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {CurrentJobService} from "../../services/current-job/current-job.service";
-import {BehaviorSubject, combineLatest} from "rxjs";
+import {BehaviorSubject} from "rxjs";
 import {ButtonConfig} from "@homecare/common";
 import {CustomerPlanChangeFormComponent} from "../../../../../../../libs/customer/src/lib/customer-components/customer-plan-change/customer-plan-change-form/customer-plan-change-form.component";
 import {createFooterNextButton} from "../../support/footer-button-factory";
 import {CustomerPlanChangesService} from "../../../../../../../libs/customer/src/lib/store/entity/services/customer-plan-changes/customer-plan-changes.service";
 import {first, mergeMap} from "rxjs/operators";
+import {JobSection} from "@homecare/shared";
 
 @Component({
   selector: 'hc-job-plan-change',
@@ -51,4 +52,7 @@ export class JobPlanChangeComponent implements OnInit, AfterViewInit {
 
   }
 
+  done(){
+    this.currentJobService.completeJobSection(JobSection.PlanChange);
+  }
 }

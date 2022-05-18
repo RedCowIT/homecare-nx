@@ -5,7 +5,7 @@ import {CurrentJobService} from "../../../services/current-job/current-job.servi
 import {createFooterBackButton, createFooterNextButton} from "../../../support/footer-button-factory";
 import {findByKey, firstItem, PlanTypes, QuoteSection} from "@homecare/shared";
 import {first, map} from "rxjs/operators";
-import {PlanTypesService} from "@homecare/plan";
+import {PlansService, PlanTypesService} from "@homecare/plan";
 import {QuoteManagerService} from "../../../../../../../../libs/billing/src/lib/services/quote-manager/quote-manager.service";
 import {QuoteApplianceDetailModalComponent} from "../../../../../../../../libs/billing/src/lib/billing-components/quote/quote-appliance-detail-modal/quote-appliance-detail-modal.component";
 import {ModalController} from "@ionic/angular";
@@ -25,6 +25,7 @@ export class QuoteOtherPlansComponent implements OnInit {
   constructor(public currentJobService: CurrentJobService,
               public planTypesService: PlanTypesService,
               public quoteManagerService: QuoteManagerService,
+              public plansService: PlansService,
               public modalCtrl: ModalController) {
   }
 
@@ -44,23 +45,34 @@ export class QuoteOtherPlansComponent implements OnInit {
 
     this.iconTiles$ = combineLatest([
       this.planTypesService.getCommercialPlanTypes(),
+      this.plansService.entityMap$,
       this.quoteManagerService.getQuotePlanDetails(this.currentJobService.appointmentId)
     ]).pipe(
-      map(([planTypes, quotePlanDetails]) => {
+      map(([planTypes, plans, quotePlanDetails]) => {
 
         return planTypes.filter(planType => {
           return planType.description !== PlanTypes.ApplianceRepairPlan &&
             planType.description !== PlanTypes.Finance
         }).map(planType => {
 
-          const quoteDetailsMatch = findByKey(quotePlanDetails, 'planTypeId', planType.id);
+          console.log('quotePlanDetails', quotePlanDetails);
+          let match = false;
+
+          for (const quotePlanDetail of quotePlanDetails){
+            const plan = plans[quotePlanDetail.planId];
+            if (plan.planTypeId === planType.id){
+              match = true;
+            }
+          }
+
+          // const quoteDetailsMatch = findByKey(quotePlanDetails, 'planTypeId', planType.id);
 
           return {
             id: planType.id,
             label: planType.description,
             icon: planType.icon,
-            badge: quoteDetailsMatch.length > 0 ? '&check;' : '',
-            highlight: quoteDetailsMatch.length > 0 //change
+            badge: match ? '&check;' : '',
+            highlight: match
           };
 
         })

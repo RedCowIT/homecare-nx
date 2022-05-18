@@ -26,7 +26,7 @@
       <ion-input formControlName="deposit" type="number"></ion-input>
     </ion-item>
 
-    <ion-item *ngIf="formGroup.get('financePlan').dirty && formGroup.get('financePlan').errors?.depositGreaterThanPrice"
+    <ion-item *ngIf="formGroup.get('financePlan').get('deposit').dirty && formGroup.get('financePlan').errors?.depositGreaterThanPrice"
     color="danger" lines="none">
       Deposit must be less than total price.
     </ion-item>

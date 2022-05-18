@@ -21,6 +21,10 @@ import {AppointmentEntity} from "@homecare/appointment";
 import {CustomerEntity} from "@homecare/customer";
 import {EntityServices} from "@ngrx/data";
 import {BillingEntity} from "@homecare/billing";
+import {AlertService} from "../../../../../../libs/core/src/lib/services/alert/alert.service";
+import * as Sentry from "@sentry/angular";
+import {environment} from "../../../environments/environment";
+import {getUsername} from "../../../../../../libs/auth/src/lib/store/selectors/auth.selectors";
 
 
 @Injectable()
@@ -44,7 +48,33 @@ export class AppEffects {
       ofType(addJobError),
       tap(async (action) => {
         this.logger.error('AddJobError', action.error);
+
+        await this.alertService.error('Failed loading job. Please contact the office to resolve.');
+
         await this.router.navigateByUrl('/main/jobs');
+      }),
+    );
+  }, {dispatch: false});
+
+  login$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(authActions.loginSuccess),
+      tap(async (action) => {
+
+          if (environment.sentry.enabled){
+            this.store$.select(getUsername).pipe(
+              first()
+            ).subscribe(username => {
+              if (username){
+                try {
+                  Sentry.setUser({ username });
+                } catch (e){
+                  this.logger.error('Error unsetting sentry user after logout', e);
+                }
+              }
+            })
+          }
+
       }),
     );
   }, {dispatch: false});
@@ -59,6 +89,13 @@ export class AppEffects {
         catch (e){
           this.logger.error('Error handling logout', e);
         }
+        try {
+          if (environment.sentry.enabled){
+            Sentry.configureScope(scope => scope.setUser(null));
+          }
+        } catch (e){
+          this.logger.error('Error unsetting sentry user after logout', e);
+        }
       }),
     );
   }, {dispatch: false});
@@ -70,7 +107,8 @@ export class AppEffects {
               private router: Router,
               private loadingCtrl: LoadingController,
               private logger: LoggerService,
-              private entityServices: EntityServices) {
+              private entityServices: EntityServices,
+              private alertService: AlertService) {
 
     console.log('APP EFFECTS CTOR');
 

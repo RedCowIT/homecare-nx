@@ -8,6 +8,7 @@ import {App} from '@capacitor/app';
 import {SplashScreen} from "@ionic-native/splash-screen";
 import {TokenAuthService} from "@homecare-nx/auth";
 import {Router} from "@angular/router";
+import {ScreenOrientation} from "@awesome-cordova-plugins/screen-orientation/ngx";
 
 @Component({
   selector: 'homecare-nx-root',
@@ -27,6 +28,7 @@ export class AppComponent {
     private entitySyncService: EntitySyncService,
     private networkConnectivityService: NetworkConnectivityService,
     private loadingCtrl: LoadingController,
+    private screenOrientation: ScreenOrientation,
     private router: Router) {
     this.initializeApp().then(() => {
     });
@@ -110,6 +112,9 @@ export class AppComponent {
     // await StatusBar.setStyle({
     //   style: StatusBarStyle.Dark,
     // });
+
+    await this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.LANDSCAPE);
+
     await SplashScreen.hide();
   }
 

@@ -14,6 +14,9 @@ export class JobCardListItemComponent implements OnInit {
   @Input()
   appointmentId: number;
 
+  @Input()
+  isLoading: boolean;
+
   appointment$: Observable<Appointment>;
 
   showDetails = false;

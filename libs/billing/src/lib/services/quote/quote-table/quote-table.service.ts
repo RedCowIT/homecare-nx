@@ -9,10 +9,10 @@ import {QuotePlanDetailsService} from "../../../store/entity/services/quote/quot
 import {QuoteProductDetailsService} from '../../../store/entity/services/quote/quote-product-details/quote-product-details.service';
 import {
   ApplianceType,
-  firstByKey,
+  firstByKey, Plan,
   Product,
   QuoteApplianceDetail,
-  QuoteItemTypes,
+  QuoteItemTypes, QuotePlanDetail,
   QuoteProductDetail
 } from "@homecare/shared";
 import {Dictionary} from "@ngrx/entity";
@@ -54,17 +54,20 @@ export class QuoteTableService extends TableSourceService {
     const maps$ = combineLatest([
       this.quoteItemTypesService.entityMap$,
       this.applianceTypesService.entityMap$,
-      this.productsService.entityMap$
+      this.productsService.entityMap$,
+      this.plansService.entityMap$
     ]).pipe(map(([
                    quoteItemTypes,
                    applianceTypes,
-                   products
+                   products,
+                   plans
                  ]) => {
 
       return {
         quoteItemTypes,
         applianceTypes,
-        products
+        products,
+        plans
       };
 
     }));
@@ -96,6 +99,9 @@ export class QuoteTableService extends TableSourceService {
               break;
             case QuoteItemTypes.Product:
               description = this.getProductDescription(quoteItem.id, quoteProductDetails, maps.products)
+              break;
+            case QuoteItemTypes.Plan:
+              description = this.getPlanDescription(quoteItem.id, quotePlanDetails, maps.plans)
               break;
           }
 
@@ -142,6 +148,17 @@ export class QuoteTableService extends TableSourceService {
     }
 
     return `${productMap[details.productId].description}`;
+  }
+
+  getPlanDescription(quoteItemId: number,
+                     quotePlanDetails: QuotePlanDetail[],
+                     planMap: Dictionary<Plan>): string {
+    const details = firstByKey<QuotePlanDetail>(quotePlanDetails, 'quoteItemId', quoteItemId);
+    if (!details) {
+      return null;
+    }
+
+    return `${planMap[details.planId].description}`;
   }
 }
 

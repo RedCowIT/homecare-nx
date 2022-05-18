@@ -24,6 +24,8 @@ export class CustomerContactFormComponent extends EntityFormContainer<Customer> 
   @Output()
   delete = new EventEmitter<Customer>();
 
+  public errors: string[];
+
   constructor(public formService: CustomerContactFormService,
               public entityService: CustomersService) {
     super(formService, entityService);

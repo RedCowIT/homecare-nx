@@ -26,7 +26,7 @@ export class CurrentJobResolver implements Resolve<number> {
 
     return this.currentJobService.job$.pipe(
       filter(job => {
-        console.log('CurrentJobResolver', job);
+        console.log('CurrentJobResolver', job, job.loadState);
         return job.loadState === LoadingState.LOADED
       }),
       map(job => {
@@ -34,9 +34,9 @@ export class CurrentJobResolver implements Resolve<number> {
         return job.appointmentId;
       }),
       first(),
-      timeout(10000),
+      timeout(15000),
       catchError(error => {
-        this.loggerService.error('Timed out waiting for job to load');
+        this.loggerService.error('Failed to resolve job', error);
         this.router.navigateByUrl('/main/jobs');
         return of(null);
       })

@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {CurrentJobService} from "../../services/current-job/current-job.service";
-import {Observable} from "rxjs";
-import {CardPayment, Customer, firstItem, selectEntity} from "@homecare/shared";
+import {BehaviorSubject, Observable} from "rxjs";
+import {CardPayment, Customer, JobSection, selectEntity} from "@homecare/shared";
 import {CustomersService} from "@homecare/customer";
 import {first, mergeMap} from "rxjs/operators";
-import {QuotePlanDetailModalComponent} from "../../../../../../../libs/billing/src/lib/billing-components/quote/quote-plan-detail-modal/quote-plan-detail-modal.component";
 import {ModalController} from "@ionic/angular";
 import {GlobalPaymentModalComponent} from "../../../../../../../libs/billing/src/lib/billing-components/payment/global-payment-modal/global-payment-modal.component";
 import {CardPaymentsService} from "@homecare/billing";
+import {createFooterNextButton} from "../../support/footer-button-factory";
+import {ButtonConfig} from "@homecare/common";
 
 @Component({
   selector: 'hc-job-payment',
@@ -15,6 +16,8 @@ import {CardPaymentsService} from "@homecare/billing";
   styleUrls: ['./job-payment.component.scss']
 })
 export class JobPaymentComponent implements OnInit {
+
+  footerButtons$ = new BehaviorSubject<ButtonConfig[]>([]);
 
   customer$: Observable<Customer>;
 
@@ -42,7 +45,15 @@ export class JobPaymentComponent implements OnInit {
     this.currentJobService.invoice$.pipe(first())
       .subscribe(invoice => {
         this.loadCardPayments(invoice.appointmentId);
+      });
+
+    this.footerButtons$.next([
+      createFooterNextButton(async () => {
+
+        this.next();
+
       })
+    ])
   }
 
   makePayment() {
@@ -77,4 +88,7 @@ export class JobPaymentComponent implements OnInit {
     });
   }
 
+  next(){
+    this.currentJobService.completeJobSection(JobSection.Payment);
+  }
 }

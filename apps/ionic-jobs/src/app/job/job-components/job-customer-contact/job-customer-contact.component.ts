@@ -7,6 +7,7 @@ import {CurrentJobService} from "../../services/current-job/current-job.service"
 import {createFooterBackButton, createFooterNextButton} from "../../support/footer-button-factory";
 import {JobSection, PreJobSection} from "@homecare/shared";
 import {CustomerContactFormComponent} from "../../../../../../../libs/customer/src/lib/customer-components/customer-contact-form/customer-contact-form.component";
+import {CustomersService} from "@homecare/customer";
 
 @Component({
   selector: 'hc-job-customer-contact',
@@ -22,7 +23,8 @@ export class JobCustomerContactComponent implements OnInit {
 
   constructor(public route: ActivatedRoute,
               public router: Router,
-              public currentJobService: CurrentJobService) {
+              public currentJobService: CurrentJobService,
+              public customersService: CustomersService) {
 
   }
 

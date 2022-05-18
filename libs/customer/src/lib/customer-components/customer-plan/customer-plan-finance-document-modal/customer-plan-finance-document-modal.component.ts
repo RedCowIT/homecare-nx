@@ -29,7 +29,9 @@ export class CustomerPlanFinanceDocumentModalComponent implements OnInit {
     });
 
     modal.onDidDismiss().then(async () => {
-      await this.close();
+      setTimeout(async () => {
+        await this.close();
+      }, 250);
     });
 
     await modal.present();

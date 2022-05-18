@@ -38,6 +38,7 @@ import {InvoiceManagerService} from "@homecare/billing";
 import {CustomerPlanManagerService} from "../../../../../../../libs/customer/src/lib/services/customer-plan-manager/customer-plan-manager.service";
 import {DirectDebitDetailsService} from "../../../../../../../libs/customer/src/lib/store/entity/services/direct-debit-details/direct-debit-details.service";
 import {CustomerPlanChangesService} from "../../../../../../../libs/customer/src/lib/store/entity/services/customer-plan-changes/customer-plan-changes.service";
+import {CurrentJobService} from "../../services/current-job/current-job.service";
 
 
 @Injectable()
@@ -109,7 +110,8 @@ export class JobEffects {
             }),
             catchError(error => {
               this.loggerService.error("Add job error", error);
-              return of(addJobError({error}));
+              this.currentJobService.addJobError(action.appointmentId);
+              return of(addJobError({appointmentId: action.appointmentId, error}));
             })
           )
       })
@@ -218,6 +220,7 @@ export class JobEffects {
               private customerPlanChangesService: CustomerPlanChangesService,
               private invoiceManagerService: InvoiceManagerService,
               private customerPlanManagerService: CustomerPlanManagerService,
+              private currentJobService: CurrentJobService,
               private loggerService: LoggerService) {
   }
 

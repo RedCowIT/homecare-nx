@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CustomerPlanChangesFormService} from "../../../services/form/customer-plan-changes-form/customer-plan-changes-form.service";
 import {CustomerPlanChangesService} from "../../../store/entity/services/customer-plan-changes/customer-plan-changes.service";
 import {first} from "rxjs/operators";
 import {CustomerPlansService} from "../../../store/entity/services/customer-plans/customer-plans.service";
 import {PlansService} from "@homecare/plan";
 import {combineLatest} from "rxjs";
+import {ToastController} from "@ionic/angular";
 
 @Component({
   selector: 'hc-customer-plan-change-form',
@@ -17,9 +18,13 @@ export class CustomerPlanChangeFormComponent implements OnInit {
   @Input()
   appointmentId: number;
 
+  @Output()
+  done = new EventEmitter<void>();
+
   constructor(public customerPlanChangesFormService: CustomerPlanChangesFormService,
               public customerPlanChangesService: CustomerPlanChangesService,
               public customerPlansService: CustomerPlansService,
+              public toastCtrl: ToastController,
               public plansService: PlansService) {
   }
 
@@ -56,8 +61,20 @@ export class CustomerPlanChangeFormComponent implements OnInit {
     console.log('submit', dto);
     this.customerPlanChangesService.addAll(dto).pipe(
       first()
-    ).subscribe(response => {
-      console.log('add all complete');
+    ).subscribe(async response => {
+      const toast = await this.toastCtrl.create({
+        color: 'success',
+        message: 'Customer plans updated',
+        duration: 5000,
+        buttons: [
+          {
+            icon: 'close',
+            role: 'cancel'
+          }
+        ]
+      });
+      await toast.present();
+      this.done.emit();
     });
   }
 

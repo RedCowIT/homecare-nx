@@ -1,16 +1,9 @@
 import {Injectable} from "@angular/core";
-import {catchError, filter, first, map, mergeMap, tap} from "rxjs/operators";
-import {
-  Appointment,
-  AppointmentVisit,
-  firstByKey,
-  firstItem, joinEntityLoading,
-  QuoteItemTypes, selectOrFetchEntity,
-  selectOrFetchFirstEntityByKey
-} from "@homecare/shared";
+import {first, tap} from "rxjs/operators";
+import {Appointment, findById, joinEntityLoading} from "@homecare/shared";
 import {CustomerAddressesService, CustomerPlansService, CustomersService} from "@homecare/customer";
 import {AppointmentCallTypesService, AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
-import {combineLatest, forkJoin, Observable, of, throwError} from "rxjs";
+import {combineLatest, Observable} from "rxjs";
 import {DocumentsService} from "@homecare-nx/document";
 import {
   InvoiceItemsService,
@@ -24,6 +17,7 @@ import {
 } from "@homecare/billing";
 import {PolicyService} from "@homecare/core";
 import {QuoteManagerService} from "../../../../../../../libs/billing/src/lib/services/quote-manager/quote-manager.service";
+import {MergeStrategy} from "@ngrx/data";
 
 
 /**
@@ -76,10 +70,28 @@ export class JobsLoaderService {
 
   loadAll() {
 
-    this.appointmentsService.getAll().pipe(
-      tap(appointments => {
+    console.log('Load all');
 
-        for (const appointment of appointments) {
+    this.appointmentsService.getAll().subscribe(appointments => {
+      console.log('APPOINTMENTS', appointments);
+    });
+
+    combineLatest([this.appointmentsService.entities$, this.appointmentsService.getAll()]).pipe(
+      first(),
+      tap(([currentAppointments, newAppointments]) => {
+
+        console.log('Load all result', newAppointments);
+
+        // Remove any not present in current payload
+        for (const currentAppointment of currentAppointments) {
+          if (!findById(newAppointments, currentAppointment.id)) {
+            this.appointmentsService.removeOneFromCache(currentAppointment.id, {
+              mergeStrategy: MergeStrategy.IgnoreChanges
+            });
+          }
+        }
+
+        for (const appointment of newAppointments) {
           this.loadAppointmentRelations(appointment);
         }
 
@@ -125,7 +137,6 @@ export class JobsLoaderService {
     });
 
     this.quoteManagerService.loadAppointmentQuote(appointment.id).pipe(first()).subscribe();
-
 
 
   }

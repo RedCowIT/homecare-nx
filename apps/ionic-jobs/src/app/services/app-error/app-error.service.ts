@@ -1,6 +1,7 @@
 import {ErrorHandler, Injectable} from '@angular/core';
 import {LoggerService} from "@homecare/core";
 import * as Sentry from "@sentry/angular";
+import {environment} from "../../../environments/environment";
 
 /**
  * Handle client errors
@@ -42,7 +43,9 @@ export class AppErrorService extends ErrorHandler {
     }
 
     try {
-      Sentry.captureException(error.originalError || error);
+      if (environment.sentry.enabled){
+        Sentry.captureException(error.originalError || error);
+      }
     } catch (e) {
       console.error(e);
     }

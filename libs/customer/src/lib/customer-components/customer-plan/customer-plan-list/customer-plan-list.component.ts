@@ -36,7 +36,7 @@ export class CustomerPlanListComponent implements OnInit {
     ]).pipe(
       map(([customerPlans, plans]) => {
 
-          return customerPlans.map(customerPlan => {
+          return customerPlans.filter(customerPlan => customerPlan.published).map(customerPlan => {
 
             const plan = plans[customerPlan.planId];
 

@@ -15,7 +15,7 @@ export const initAuthError = createAction(
 
 export const setAuth = createAction(
   '[Auth] Set Auth',
-  props<{ isAuthenticated: boolean, token?: string }>()
+  props<{ isAuthenticated: boolean, username?: string, token?: string }>()
 );
 
 export const login = createAction(

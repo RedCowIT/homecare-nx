@@ -57,8 +57,8 @@ export class DatatableComponent extends SubscribedContainer implements OnInit, A
    */
   ngAfterViewInit() {
     this.dispatchResize$.next();
-    // setTimeout(() => {
-    //   window.dispatchEvent(new Event('resize'));
-    // }, 100);
+    setTimeout(() => {
+      this.dispatchResize$.next();
+    }, 1500);
   }
 }

@@ -9,4 +9,5 @@ export interface CustomerPlan {
   periodPrice: number;
   planPaymentPeriodId: number;
   notes: string;
+  published: boolean;
 }

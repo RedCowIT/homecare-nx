@@ -1,3 +1,8 @@
 <div class="gp-embed">
-  <iframe id="{{iframeId}}" name="{{iframeId}}" style="display:none; width: 600px; height: 100%;"></iframe>
+  <div class="embed-loader">
+    <dd-spinner [show]="true"></dd-spinner>
+  </div>
+  <div class="embed-inner">
+    <iframe id="{{iframeId}}" name="{{iframeId}}" style="display:none; width: 600px; height: 100%;"></iframe>
+  </div>
 </div>

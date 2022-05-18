@@ -3,6 +3,8 @@ import {Document, formDataFromFileList} from "@homecare/shared";
 import {finalize, first} from "rxjs/operators";
 import {DocumentUploadService} from "../../services/document-upload/document-upload.service";
 
+import { Camera, CameraResultType } from '@capacitor/camera';
+
 @Component({
   selector: 'hc-document-upload',
   templateUrl: './document-upload.component.html',
@@ -65,4 +67,21 @@ export class DocumentUploadComponent implements OnInit {
     this.fileInput.nativeElement.click();
   }
 
+  async takePicture(){
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Uri
+    });
+
+    console.log('Photo result', image);
+    // image.webPath will contain a path that can be set as an image src.
+    // You can access the original file using image.path, which can be
+    // passed to the Filesystem API to read the raw data of the image,
+    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+    // var imageUrl = image.webPath;
+    //
+    // // Can be set to the src of an image now
+    // imageElement.src = imageUrl;
+  };
 }

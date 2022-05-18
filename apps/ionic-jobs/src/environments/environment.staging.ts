@@ -43,8 +43,10 @@ export const environment = {
     }
   ],
   sentry: {
+    enabled: true,
     dsn: 'https://7d6b1fedfda549b4b64a094875ad50c3@o1181554.ingest.sentry.io/6295140',
-    environment: 'staging'
+    environment: 'staging',
+    release: 'hc-ionic@0.2.0'
   }
 };
 

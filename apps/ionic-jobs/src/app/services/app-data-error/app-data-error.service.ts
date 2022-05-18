@@ -4,6 +4,8 @@ import {Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
 import {DataErrorService, LoggerService} from "@homecare/core";
 import {TokenAuthService} from "@homecare-nx/auth";
+import {environment} from "../../../environments/environment";
+import * as Sentry from "@sentry/angular";
 
 /**
  * App Data Error Service for handling server side errors
@@ -48,6 +50,16 @@ export class AppDataErrorService extends DataErrorService {
 
     this.logger.error('DataServiceError', error);
 
+    if (error?.status === 500){
+      try {
+        if (environment.sentry.enabled){
+          Sentry.captureException(error?.error);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     this.serverError(error);
   }
 
@@ -74,6 +86,7 @@ export class AppDataErrorService extends DataErrorService {
     const toast = await this.toastCtrl.create({
       color: 'danger',
       message: 'There was an issue talking to our servers, please try again. (' + error.status + ')',
+      duration: 5000,
       buttons: [
         {
           icon: 'close',

@@ -22,6 +22,11 @@ export const getToken = createSelector(
   s1 => s1.token
 );
 
+export const getUsername = createSelector(
+  selectAuthState,
+  s1 => s1.username
+);
+
 export const isLoggingIn = createSelector(
   selectAuthState,
   s1 => s1.loginCallState === LoadingState.LOADING

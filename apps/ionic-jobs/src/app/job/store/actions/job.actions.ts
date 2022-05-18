@@ -18,7 +18,7 @@ export const removeJob = createAction(
 
 export const addJobError = createAction(
   '[Job] Add Job Error',
-  props<{ error: any }>()
+  props<{ appointmentId: number, error: any }>()
 );
 
 export const setJobSections = createAction(

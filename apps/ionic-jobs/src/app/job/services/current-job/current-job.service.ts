@@ -51,8 +51,10 @@ export class CurrentJobService {
               private router: Router) {
 
     this.job$ = combineLatest([this.appointmentId$, this.jobsService.entityMap$]).pipe(
-      filter(([appointmentId, appointmentMap]) => !!appointmentId),
       map(([appointmentId, jobMap]) => {
+        if (!appointmentId){
+          return null;
+        }
         // console.log('job$', appointmentId, jobMap);
         return jobMap[appointmentId];
       })
@@ -80,6 +82,15 @@ export class CurrentJobService {
       filter(appointmentId => !!appointmentId),
       mergeMap(appointmentId => selectOrFetchFirstEntityByKey(this.invoicesService, 'appointmentId', appointmentId))
     );
+
+
+  }
+
+  addJobError(appointmentId: number){
+    if (this.appointmentId === appointmentId){
+      this.appointmentId = null;
+      this.appointmentId$.next(null);
+    }
   }
 
   setAppointmentId(appointmentId: number) {
@@ -150,7 +161,7 @@ export class CurrentJobService {
 
       } else {
 
-        await this.router.navigateByUrl(`/job/${job.appointmentId}/`);
+        await this.router.navigateByUrl(`/main/jobs`);
 
       }
     });

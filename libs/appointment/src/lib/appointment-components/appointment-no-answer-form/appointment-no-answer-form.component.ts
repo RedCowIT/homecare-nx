@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {EntityFormContainer} from "@homecare/entity";
 import {AppointmentNoAnswer} from "@homecare/shared";
 import {AppointmentNoAnswerFormService} from "../../services/form/appointment-no-answer-form/appointment-no-answer-form.service";
@@ -18,6 +18,15 @@ export class AppointmentNoAnswerFormComponent extends EntityFormContainer<Appoin
 
   @Input()
   appointmentId: number;
+
+  @Output()
+  create = new EventEmitter<AppointmentNoAnswer>();
+
+  @Output()
+  update = new EventEmitter<AppointmentNoAnswer>();
+
+  @Output()
+  delete = new EventEmitter<AppointmentNoAnswer>();
 
   constructor(public formService: AppointmentNoAnswerFormService,
               public appointmentNoAnswerReasonsService: AppointmentNoAnswerReasonsService,

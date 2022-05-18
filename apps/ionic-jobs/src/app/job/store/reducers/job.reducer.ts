@@ -1,7 +1,7 @@
 import {Action, createFeatureSelector, createReducer, on} from '@ngrx/store';
 import {createEntityAdapter, EntityState, Update} from '@ngrx/entity';
 import {Job, LoadingState} from "@homecare/shared";
-import {addJob, addJobSuccess, setJobSections} from "../actions/job.actions";
+import {addJob, addJobError, addJobSuccess, setJobSections} from "../actions/job.actions";
 import {setPreJobSections} from "../actions/pre-job.actions";
 import {setQuoteSections} from "../actions/quote.actions";
 
@@ -43,6 +43,15 @@ const jobReducer = createReducer(
     };
 
     return adapter.updateOne(job, {
+      ...state
+    });
+
+  }),
+
+  on(addJobError, (state, action) => {
+
+    console.log('Job reducer add one error');
+    return adapter.removeOne(action.appointmentId, {
       ...state
     });
 

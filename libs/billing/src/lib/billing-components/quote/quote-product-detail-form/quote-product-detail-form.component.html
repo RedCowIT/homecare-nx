@@ -1,1 +1,41 @@
-<p>quote-product-detail-form works!</p>
+    <div class="content-with-action-footer">
+
+      <div class="content">
+
+        <div *ngIf="productInfo$ | async as productInfo" [formGroup]="formService.form">
+          <div *ngIf="productInfo" class="ion-padding">
+            <div class="product-image">
+              <img alt="{{productInfo.title}}" src="{{productInfo.image_1}}">
+<!--              <img alt="{{productInfo.title}}" src="https://m.media-amazon.com/images/I/61pW7JXlMML._AC_SL1500_.jpg">-->
+            </div>
+            <div class="product-title bold">
+              {{productInfo.title}}
+            </div>
+            <div class="product-description ion-margin-top">
+              {{productInfo.description}}
+            </div>
+            <div class="product-cost ion-margin-top">
+              <ion-item>
+                <ion-label position="stacked">Price</ion-label>
+                <ion-input formControlName="quote" type="number"></ion-input>
+              </ion-item>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="action-footer">
+
+        <ion-button *ngIf="formService.editMode" color="danger" (click)="deleteEntity()" class="mr-auto">Remove</ion-button>
+
+        <dd-entity-form-submit
+          [loading]="isLoading"
+          [disabled]="!formService.form.valid || isLoading"
+          label="Save"
+          (submitted)="submit()"
+        ></dd-entity-form-submit>
+
+      </div>
+
+    </div>

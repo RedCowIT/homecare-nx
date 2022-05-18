@@ -4,8 +4,10 @@ import {asDateString, CustomerPlanFinanceDocument, nowAsDateString, selectEntity
 import {CustomerPlanFinanceDocumentFormService} from "../../../services/form/customer-plan-finance-document-form/customer-plan-finance-document-form.service";
 import {CustomerPlanFinanceDocumentsService} from "../../../store/entity/services/customer-plan-finance-documents/customer-plan-finance-documents.service";
 import * as moment from 'moment';
-import {Observable} from "rxjs";
-import {first, mergeMap} from "rxjs/operators";
+import {combineLatest, Observable} from "rxjs";
+import {filter, first, mergeMap, takeUntil} from "rxjs/operators";
+import {CustomerPlansService} from "../../../store/entity/services/customer-plans/customer-plans.service";
+import {CustomersService} from "../../../store/entity/services/customers/customers.service";
 
 @Component({
   selector: 'hc-customer-plan-finance-document-form',
@@ -35,6 +37,8 @@ export class CustomerPlanFinanceDocumentFormComponent extends EntityFormContaine
 
   constructor(public formService: CustomerPlanFinanceDocumentFormService,
               public entityService: CustomerPlanFinanceDocumentsService,
+              public customerPlansService: CustomerPlansService,
+              public customersService: CustomersService,
               public cdRef: ChangeDetectorRef) {
 
     super(formService, entityService);
@@ -45,6 +49,30 @@ export class CustomerPlanFinanceDocumentFormComponent extends EntityFormContaine
 
   ngOnInit(): void {
     super.ngOnInit();
+
+    console.log('customer-plan-finance-document-form init', this.isEditMode());
+
+    if (this.isEditMode()){
+      combineLatest([this.model$, this.customerPlansService.entityMap$, this.customersService.entityMap$]).pipe(
+        filter(([model, customerPlanMap, customerMap]) => !!model && !!customerPlanMap[model.customerPlanId]),
+        first(),
+        takeUntil(this.destroyed$)
+      ).subscribe(([model, customerPlanMap, customerMap]) => {
+
+
+        const customerPlan = customerPlanMap[model.customerPlanId];
+        const customer = customerMap[customerPlan.customerId];
+
+        console.log('customer-plan-finance-document-form subscribe', customerPlan, customer);
+
+        this.patchForm({
+          email1: customer.email1,
+          email2: customer.email2,
+          phone1: customer.phone1,
+          phone2: customer.phone2,
+        });
+      });
+    }
   }
 
   updateSignature(data) {

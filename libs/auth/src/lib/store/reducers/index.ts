@@ -8,6 +8,7 @@ export interface State {
   isInitialized: boolean,
   loginCallState: CallState,
   isAuthenticated: boolean,
+  username: string,
   token: string,
   callState: CallState
 }
@@ -16,6 +17,7 @@ export const initialAuth0State: State = {
   isInitialized: false,
   loginCallState: LoadingState.INIT,
   isAuthenticated: false,
+  username: undefined,
   token: undefined,
   callState: LoadingState.INIT
 };
@@ -48,6 +50,7 @@ const auth0Reducer = createReducer(
       return {
         ...state,
         isAuthenticated: action.isAuthenticated,
+        username: action.username,
         token: action.token
       }
     }

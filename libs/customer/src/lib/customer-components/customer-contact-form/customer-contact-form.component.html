@@ -32,3 +32,9 @@
   </ion-grid>
 
 </form>
+
+<div *ngIf="errors?.length">
+  <ion-item *ngFor="let error of errors" color="danger">
+    {{error}}
+  </ion-item>
+</div>

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {addJob, addJobSuccess, completeJobSection} from "../actions/job.actions";
-import {catchError, filter, map, mergeMap, withLatestFrom} from "rxjs/operators";
+import {catchError, filter, map, mergeMap, switchMap, withLatestFrom} from "rxjs/operators";
 import {
   CallType,
   containsItemWithKey,
@@ -29,7 +29,7 @@ export class PreJobEffects {
   addJob$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(addJobSuccess),
-      mergeMap(action => {
+      switchMap(action => {
         return this.createPreJobSections(action.appointmentId).pipe(
           map(preJobSections => {
             return setPreJobSections({appointmentId: action.appointmentId, preJobSections});

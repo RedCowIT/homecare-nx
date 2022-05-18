@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {ButtonConfig} from "@homecare/common";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -7,17 +7,21 @@ import {createFooterBackButton} from "../../../support/footer-button-factory";
 import {PreJobSection, selectEntity} from "@homecare/shared";
 import {AppointmentVisitsService} from "@homecare/appointment";
 import {first, mergeMap} from "rxjs/operators";
+import {SignaturePadComponent} from "../../../../../../../../libs/ionic-common/src/lib/signature-pad/signature-pad.component";
 
 @Component({
   selector: 'hc-pre-job-signature',
   templateUrl: './pre-job-signature.component.html',
   styleUrls: ['./pre-job-signature.component.scss']
 })
-export class PreJobSignatureComponent implements OnInit {
+export class PreJobSignatureComponent implements OnInit, AfterViewInit {
 
   footerButtons$ = new BehaviorSubject<ButtonConfig[]>([]);
 
   showError = false;
+
+  @ViewChild(SignaturePadComponent)
+  signaturePadComponent: SignaturePadComponent;
 
   constructor(public route: ActivatedRoute,
               public router: Router,
@@ -61,6 +65,16 @@ export class PreJobSignatureComponent implements OnInit {
 
       }
     ])
+  }
+
+  ngAfterViewInit(){
+    this.currentJobService.appointmentVisit$.pipe(first()).subscribe(
+      appointmentVisit => {
+        if (appointmentVisit.preInspectionSignatureJSON){
+          this.signaturePadComponent.fromDataURL(appointmentVisit.preInspectionSignatureJSON);
+        }
+      }
+    )
   }
 
   updateSignature(data) {
