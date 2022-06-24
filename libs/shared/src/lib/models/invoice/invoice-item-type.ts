@@ -16,6 +16,7 @@ export enum InvoiceItemTypes {
   ServicePlan = 'ServicePlan',
   RepairPlan = 'RepairPlan',
   FinancePlan = 'HirePurchasePlan',
+  Other = 'Other',
   Misc = 'Misc'
 };
 
@@ -33,6 +34,9 @@ export const invoiceItemMeta = {
     description: 'Engineer Plan'
   },
   [InvoiceItemTypes.Misc]: {
+    description: 'Engineer Misc'
+  },
+  [InvoiceItemTypes.Other]: {
     description: 'Engineer Misc'
   }
 };

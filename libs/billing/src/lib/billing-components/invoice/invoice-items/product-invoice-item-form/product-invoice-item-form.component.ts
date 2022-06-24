@@ -8,7 +8,7 @@ import {
   selectEntity, selectEntityByKey, selectOrFetchFirstEntityByKey,
   SubscribedContainer
 } from "@homecare/shared";
-import {combineLatest, EMPTY, Observable} from "rxjs";
+import {combineLatest, EMPTY, merge, Observable} from "rxjs";
 import {finalize, first, map, mergeMap, takeUntil} from "rxjs/operators";
 import {InvoiceItemsService} from '../../../../store/entity/services/invoice/invoice-items/invoice-items.service';
 import {ProductInvoiceItemFormService} from "../../../../services/form/invoice/product-invoice-item-form/product-invoice-item-form.service";
@@ -40,6 +40,9 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
 
   @Input()
   stockOnly: boolean;
+
+  @Input()
+  deleteOnly: boolean;
 
   @Output()
   done = new EventEmitter<void>();
@@ -93,7 +96,29 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
 
         this.productStockService.getAll();
       } else {
-        this.products$ = this.productsService.entities$;
+
+        if (this.deleteOnly) {
+
+          if (this.invoiceItemId) {
+
+            this.products$ =
+              combineLatest([
+                selectEntity(this.invoiceItemsService, this.invoiceItemId),
+                this.productsService.entityMap$]).pipe(
+                map(([invoiceItem, productMap]) => {
+                  if (invoiceItem){
+                    return [productMap[invoiceItem.productId]];
+                  }
+                  return [];
+                })
+              );
+
+          }
+
+        } else {
+          this.products$ = this.productsService.entities$;
+        }
+
       }
     }
 
@@ -115,7 +140,6 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
         selectOrFetchFirstEntityByKey(this.productStockService, 'productId', product.id)
           .pipe(first()).subscribe(
           productStock => {
-            console.log('Found productStock', product, productStock);
             this.productStock = productStock;
             this.formService.setStockQuantity(this.productStock.qty);
           }
@@ -186,5 +210,13 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
     ).subscribe(() => {
       this.done.emit()
     });
+  }
+
+  productSearch(term: string, item: any): boolean {
+    if (!term){
+      return false;
+    }
+    const termLower = term.toLowerCase();
+    return item.description.toLowerCase().includes(termLower) || item.productCode?.toLowerCase().includes(termLower);
   }
 }

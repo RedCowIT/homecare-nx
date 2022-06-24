@@ -66,12 +66,12 @@ export class EmailCustomerPlanFinanceDocumentFormComponent extends EntityContain
   }
 
   sendEmail() {
-    console.log('sendEmail');
+
     const email = this.formService.form.value.toAddress;
     this.emailCustomerPlanFinanceDocumentService.send(this.id, email).pipe(
       first()
     ).subscribe(result => {
-      console.log('customer plan finance doc email sent');
+
       this.done.emit();
     });
   }

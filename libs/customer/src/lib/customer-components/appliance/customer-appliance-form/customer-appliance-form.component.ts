@@ -42,14 +42,6 @@ export class CustomerApplianceFormComponent extends EntityFormContainer<Customer
 
     super.ngOnInit();
 
-    console.log('CustomerApplianceFormComponent.patch', {
-      appliance: {
-        id: this.id,
-        customerId: this.customerId,
-        form: {...this.formService.form.value}
-      }
-    });
-
     this.patchForm({id: this.id, customerId: this.customerId});
 
   }

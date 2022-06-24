@@ -85,7 +85,7 @@ export class JobEffects {
                 first(),
                 map(() => appointment),
                 mergeMap(appointment => {
-                  console.log('initCustomerPlanChanges');
+
                   return this.initCustomerPlanChanges(appointment).pipe(
                     first(),
                     map(() => appointment),
@@ -247,8 +247,6 @@ export class JobEffects {
     ]).pipe(
       map(([isNCOOnly, hasFinanceDocs, hasPlanChanges]) => {
 
-        console.log("create sections", {hasFinanceDocs, hasPlanChanges});
-
         const sections = [
           {
             id: JobSection.Info,
@@ -316,8 +314,6 @@ export class JobEffects {
 
   private initAppointmentVisit(appointment: Appointment): Observable<AppointmentVisit> {
 
-    console.log('initApppintmentVisit', appointment);
-
     return selectEntity(this.appointmentVisitsService, appointment.id).pipe(
       mergeMap(appointmentVisit => {
         if (appointmentVisit) {
@@ -334,12 +330,10 @@ export class JobEffects {
       }),
       mergeMap(appointmentVisit => {
         if (!appointmentVisit) {
-          console.log('Adding appointment visit');
           return this.appointmentVisitsService.add({
             id: appointment.id,
           } as AppointmentVisit);
         }
-        console.log('Returning appointmentVisit');
         return of(appointmentVisit);
       }),
       first()
@@ -348,12 +342,12 @@ export class JobEffects {
     // return selectOrFetchEntity(this.appointmentVisitsService, appointment.id).pipe(
     //   mergeMap(appointmentVisit => {
     //     if (!appointmentVisit) {
-    //       console.log('Adding appointment visit');
+
     //       return this.appointmentVisitsService.add({
     //         id: appointment.id,
     //       } as AppointmentVisit);
     //     }
-    //     console.log('Returning appointmentVisit');
+
     //     return of(appointmentVisit);
     //   }),
     //   first()

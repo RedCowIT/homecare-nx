@@ -22,7 +22,7 @@ export class InvoicePaymentModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('MODAL ID', this.id);
+
   }
 
   async delete() {

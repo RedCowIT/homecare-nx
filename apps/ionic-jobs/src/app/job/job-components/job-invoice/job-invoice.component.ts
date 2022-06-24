@@ -8,7 +8,7 @@ import {
   selectOrFetchFirstEntityByKey,
   SubscribedContainer
 } from "@homecare/shared";
-import {InvoicePaymentsService, InvoicesService} from "@homecare/billing";
+import {InvoiceItemsService, InvoicePaymentsService, InvoicesService} from "@homecare/billing";
 import {BehaviorSubject, combineLatest, Observable} from "rxjs";
 import {BooleanValue, ButtonConfig} from "@homecare/common";
 import {createFooterNextButton} from "../../support/footer-button-factory";
@@ -38,6 +38,7 @@ export class JobInvoiceComponent extends SubscribedContainer implements OnInit {
   constructor(public currentJobService: CurrentJobService,
               public invoicesService: InvoicesService,
               public invoicePaymentsService: InvoicePaymentsService,
+              public invoiceItemsService: InvoiceItemsService,
               public modalCtrl: ModalController,
               private alertService: AlertService,
               private logger: LoggerService) {
@@ -51,8 +52,8 @@ export class JobInvoiceComponent extends SubscribedContainer implements OnInit {
 
         this.complete();
 
-      })
-    ])
+      }, 'SAVE AND NEXT')
+    ]);
 
     // check cache, then query, then create.
     const invoice$ = selectOrFetchFirstEntityByKey(this.invoicesService, 'appointmentId', this.currentJobService.appointmentId);
@@ -85,17 +86,12 @@ export class JobInvoiceComponent extends SubscribedContainer implements OnInit {
   }
 
   invoicePaymentCreated(payment) {
-    console.log('invoicePaymentCreated', payment);
     this.addMultiplePayment = false;
   }
 
   publishInvoice() {
 
-    console.log('publishInvoice');
-
     this.currentJobService.invoice$.pipe(first()).subscribe(invoice => {
-
-      console.log('updating...', invoice);
 
       const notes = this.invoiceNotesForm.getValue();
 
@@ -117,17 +113,18 @@ export class JobInvoiceComponent extends SubscribedContainer implements OnInit {
 
   complete() {
 
-    console.log('Complete invoice!');
-
     if (this.invoiceNotesForm.validate()) {
 
-      console.log('Validated');
       this.currentJobService.invoice$.pipe(
         mergeMap(invoice => {
-          return selectEntityByKey(this.invoicePaymentsService, 'invoiceId', invoice.id).pipe(
-            map(invoicePayments => {
+          return combineLatest(
+            [
+              selectEntityByKey(this.invoicePaymentsService, 'invoiceId', invoice.id),
+              selectEntityByKey(this.invoiceItemsService, 'invoiceId', invoice.id)
+            ]).pipe(
+            map(([invoicePayments, invoiceItems]) => {
               return {
-                invoice, invoicePayments
+                invoice, invoicePayments, invoiceItems
               }
             })
           )
@@ -136,19 +133,27 @@ export class JobInvoiceComponent extends SubscribedContainer implements OnInit {
       ).subscribe(async result => {
 
         if (result.invoice.grossAmount > 0 && !result.invoicePayments?.length) {
-          console.log('INVOICE REQUIRES PAYMENT');
+
           const alert = await this.alertService.error('Invoice requires a payment');
           await alert.present();
         } else {
-          console.log('PUBLISH INVOICE');
-          this.publishInvoice();
+
+          if (result.invoiceItems?.length === 0){
+            const alert = await this.alertService.error('Invoice requires at least one item.');
+            await alert.present();
+
+          } else {
+
+            this.publishInvoice();
+          }
+
         }
 
       });
 
     } else {
 
-      console.log('Invalid');
+
 
     }
 
@@ -164,7 +169,7 @@ export class JobInvoiceComponent extends SubscribedContainer implements OnInit {
     });
 
     modal.onDidDismiss().then(result => {
-      console.log('Dismiss', result);
+
       if (result?.role === 'success'){
         this.currentJobService.completeJobSection(JobSection.Invoice);
       }

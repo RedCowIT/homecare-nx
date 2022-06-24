@@ -64,8 +64,6 @@ export class JobService {
 
   isNCOOnly(appointmentId: number): Observable<boolean> {
 
-    console.log('isNCOOnly', appointmentId);
-
     return combineLatest([
       selectEntityByKey(this.appointmentCallTypesService, 'appointmentId', appointmentId),
       this.callTypesService.entityMap$,
@@ -75,7 +73,7 @@ export class JobService {
 
         for (const appointmentCallType of appointmentCallTypes) {
           const callType = callTypeMap[appointmentCallType.callTypeId];
-console.log('appointmentCallType', {appointmentCallType, callType});
+
           if (!callType) {
             return false;
           }
@@ -98,7 +96,7 @@ console.log('appointmentCallType', {appointmentCallType, callType});
   }
 
   selectAppointmentCallTypes(appointmentId: number): Observable<CallType[]> {
-    console.log('selectAppointmentCallTypes', appointmentId);
+
     return combineLatest([
       selectEntityByKey(this.appointmentCallTypesService, 'appointmentId', appointmentId),
       this.callTypesService.entityMap$

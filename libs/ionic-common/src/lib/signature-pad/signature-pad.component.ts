@@ -60,8 +60,6 @@ export class SignaturePadComponent implements OnInit, AfterViewInit {
       backgroundColor: this.backgroundColor
     });
 
-    console.log('Signature Pad:', this.signaturePad);
-
     this.signaturePad.penColor = this.penColor;
 
     if (this.editable) {
@@ -78,13 +76,12 @@ export class SignaturePadComponent implements OnInit, AfterViewInit {
     };
 
     this.applyPoints();
-    if (this.emitOnDragEnd) {
-      this.emitBlob();
-    }
+    // if (this.emitOnDragEnd) {
+    //   this.emitBlob();
+    // }
   }
 
   fromDataURL(data){
-    console.log('fromDataURL', data);
     this.signaturePad.clear();
     this.signaturePad.fromDataURL(data, {width: this.width, height: this.height});
   }
@@ -138,17 +135,14 @@ export class SignaturePadComponent implements OnInit, AfterViewInit {
     switch (this.format) {
 
       case 'base64':
-        console.log('toBase64');
         this.done.emit(this.signaturePad.toDataURL());
         break;
 
       case 'json':
-        console.log('toJson');
         this.done.emit(this.signaturePad.toData());
         break;
 
       default:
-        console.log('toBlob');
         this.canvasRef.nativeElement.toBlob((blob) => {
           this.done.emit(blob);
         });

@@ -43,8 +43,6 @@ export class SignOffComponent extends EntityFormContainer<AppointmentVisit> impl
 
   updateSignature(data) {
 
-    // console.log('updateSignature', data);
-
     this.entityService.updateOneInCache({
       id: this.currentJobService.appointmentId,
       signatureJSON: data
@@ -63,14 +61,18 @@ export class SignOffComponent extends EntityFormContainer<AppointmentVisit> impl
       .pipe(first())
       .subscribe(appointmentVisit => {
 
-        console.log('Signature', appointmentVisit.signatureJSON);
-
         if (!appointmentVisit.signatureJSON) {
           this.showError = true;
           return;
         }
 
-        this.entityService.update(appointmentVisit).pipe(first()).subscribe(async () => {
+        const form = this.formService.createDTO() as AppointmentVisit;
+        const visit = {...appointmentVisit};
+        visit.signatureName = form.signatureName;
+        visit.engineerRating = form.engineerRating;
+        visit.customerComments = form.customerComments;
+
+        this.entityService.update(visit).pipe(first()).subscribe(async () => {
           await this.currentJobService.completeJobSection(JobSection.SignOff);
         });
 

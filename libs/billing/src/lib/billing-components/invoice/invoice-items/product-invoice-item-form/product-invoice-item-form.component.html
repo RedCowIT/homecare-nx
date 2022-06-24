@@ -10,6 +10,7 @@
                      bindLabel="description"
                      bindValue="id"
                      formControlName="productId"
+                     [searchFn]="productSearch"
                       [clearable]="false">
           </ng-select>
         </div>
@@ -20,19 +21,19 @@
         <ion-label position="stacked">Quantity
           <ng-container *ngIf="productStock">({{productStock.qty}} on van)</ng-container>
         </ion-label>
-        <ion-input formControlName="qty" type="number"></ion-input>
+        <ion-input formControlName="qty" type="number" [disabled]="deleteOnly"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Unit Price</ion-label>
-        <ion-input formControlName="unitPrice" type="number"></ion-input>
+        <ion-input formControlName="unitPrice" type="number" [disabled]="deleteOnly"></ion-input>
       </ion-item>
 
     </div>
   </div>
   <div class="action-footer">
     <ion-button *ngIf="formService.editMode" color="danger" (click)="delete()" class="mr-auto" [disabled]="deleting">Remove</ion-button>
-    <ion-button color="primary" size="default" (click)="save()" [disabled]="!formService.form.valid">
+    <ion-button color="primary" size="default" (click)="save()" [disabled]="!formService.form.valid" *ngIf="!deleteOnly">
       Save
     </ion-button>
   </div>

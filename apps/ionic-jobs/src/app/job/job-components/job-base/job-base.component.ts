@@ -25,7 +25,7 @@ export class JobBaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('JobBaseComponeent', this.route.snapshot);
+
 
   }
 

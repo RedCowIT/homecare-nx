@@ -55,11 +55,20 @@
           (done)="close()"></hc-finance-plan-invoice-item-form>
       </div>
 
-      <div *ngSwitchCase="'Misc'" class="h-100">
+      <div *ngSwitchCase="'Other'" class="h-100">
         <hc-product-invoice-item-form [invoiceId]="invoiceId"
                                       [invoiceItemTypeId]="invoiceItemType.id"
                                       [invoiceItemId]="invoiceItemId"
                                       [stockOnly]="true"
+                                      (done)="close()">
+        </hc-product-invoice-item-form>
+      </div>
+
+      <div *ngSwitchCase="'Misc'" class="h-100">
+        <hc-product-invoice-item-form [invoiceId]="invoiceId"
+                                      [invoiceItemTypeId]="invoiceItemType.id"
+                                      [invoiceItemId]="invoiceItemId"
+                                      [deleteOnly]="true"
                                       (done)="close()">
         </hc-product-invoice-item-form>
       </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TokenAuthService} from "@homecare-nx/auth";
 import {SubscribedContainer} from "@homecare/shared";
@@ -34,23 +34,30 @@ export class LoginFormComponent extends SubscribedContainer implements OnInit {
       takeUntil(this.destroyed$)
     ).subscribe(error => {
 
-      console.log('ERROR CAPTURED', error);
-
-      if (error){
-
-        this.error = error;
-      }
-      else {
+      if (error) {
+        this.error = this.parseError(error);
+      } else {
         this.error = null;
       }
     });
 
   }
 
+  parseError(error): string {
+    try {
+      const errorObj = JSON.parse(error);
+      if (errorObj?.message) {
+        return errorObj.message;
+      }
+    } catch (ex) {
+    }
+    return 'Login failed, please check credentials and your internet connection and try again.'
+  }
+
   ngOnInit(): void {
   }
 
-  submit(){
+  submit() {
     const dto = this.form.value;
     this.authService.login(dto.username, dto.password);
   }

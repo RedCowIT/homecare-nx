@@ -33,7 +33,7 @@ export class AddInvoiceItemButtonComponent implements OnInit {
       label: 'Hire Purchase Plan', value: InvoiceItemTypes.FinancePlan
     },
     {
-      label: 'All Products', value: InvoiceItemTypes.Misc
+      label: 'All Products', value: InvoiceItemTypes.Other
     }
   ];
 
@@ -76,7 +76,6 @@ export class AddInvoiceItemButtonComponent implements OnInit {
   }
 
   async openModal(option: SelectOption) {
-    console.log('Selected', option);
     const modal = await this.modalCtrl.create({
       component: InvoiceItemModalComponent,
       componentProps: {

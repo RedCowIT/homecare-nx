@@ -40,7 +40,6 @@ export class CustomerPlanChangesService
 
     return this.httpClient.post(this.addAllUrl(), customerPlanChanges).pipe(
       map((response: any) => {
-        console.log('customerPlanChanges addAll response', response);
         return true;
       })
     );

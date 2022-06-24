@@ -39,7 +39,7 @@ export class AppointmentNoAnswerFormComponent extends EntityFormContainer<Appoin
   ngOnInit() {
     super.ngOnInit();
     this.patchForm({appointmentId: this.appointmentId});
-    console.log('patched form', this.formService.form);
+
   }
 
   protected async entityCreated(entity: AppointmentNoAnswer) {

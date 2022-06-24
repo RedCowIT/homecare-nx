@@ -68,8 +68,6 @@ export class QuotePlanDetailFormComponent extends EntityFormContainer<QuotePlanD
       planTypeId: this.planTypeId
     });
 
-    console.log('planTypeId', this.planTypeId);
-
     this.plans$ = selectEntityByKey(this.plansService, 'planTypeId', this.planTypeId);
   }
 

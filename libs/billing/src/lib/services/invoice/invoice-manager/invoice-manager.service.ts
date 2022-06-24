@@ -41,8 +41,6 @@ export class InvoiceManagerService {
         first(),
         mergeMap(invoice => {
 
-            console.log('InvoiceManagerService invoice', invoice);
-
             if (!invoice) {
               return of(false);
             }
@@ -70,13 +68,9 @@ export class InvoiceManagerService {
                           planTypeMap
                         ]) => {
 
-                console.log('InvoiceManager.checking invoice items...');
-
                 const planLoads = [];
 
                 for (const invoiceItem of invoiceItems) {
-
-                  console.log('InvoiceManager Checking invoice item', invoiceItem, invoiceItemTypeMap[invoiceItem.invoiceItemTypeId].description);
 
                   const customerPlan = firstByKey(customerPlans, 'invoiceItemId', invoiceItem.id);
 
@@ -84,10 +78,9 @@ export class InvoiceManagerService {
 
                     const plan = planMap[customerPlan.planId];
                     const planType = planTypeMap[plan.planTypeId];
-                    console.log('found customer plan', customerPlan, planType);
 
                     if (planType.description === PlanTypes.Finance) {
-                      console.log('FINANCE!');
+
                       planLoads.push(this.customerPlanFinanceDocumentsService.getWithQuery({
                         customerPlanId: `${customerPlan.id}`
                       }));

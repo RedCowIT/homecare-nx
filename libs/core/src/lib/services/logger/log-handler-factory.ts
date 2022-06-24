@@ -57,7 +57,6 @@ export class LogHandlerFactory {
     handler.setVerbosity(LogVerbosity[config.level]);
     handler.enable(config.enabled);
 
-    console.log('create serialized console', config);
     if (config.prefix){
       handler.setPrefix(config.prefix);
     }
@@ -66,8 +65,6 @@ export class LogHandlerFactory {
   }
 
   public static createStoreLogger(store: Store, config: LogHandlerConfig): LogHandler {
-
-    console.log('Create store logger', config);
 
     const handler = new StoreLogHandler(store);
     handler.setVerbosity(LogVerbosity[config.level]);

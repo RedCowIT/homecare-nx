@@ -12,6 +12,9 @@
         color="dark"
         (submitted)="submit()"
       ></dd-entity-form-submit>
+      <div *ngIf="errors && errors?.length">
+        <ion-item color="danger" class="ion-margin-top">{{errors}}</ion-item>
+      </div>
     </div>
   </div>
   <div *ngIf="!id" class="ion-margin-top">

@@ -6,7 +6,7 @@ Installing local capacitor-cli via npm for ionic-jobs causes rxjs incompatibilit
 Use global capacitor-cli
 
 ##Build
-Update version in environment.staging and environment.production 
+Update Sentry release in environment.staging and environment.production 
 <pre>
 cd apps/ionic-jobs
 ng build --configuration=staging

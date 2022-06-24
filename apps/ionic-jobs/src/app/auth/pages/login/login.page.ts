@@ -31,7 +31,7 @@ export class LoginPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    console.log('LoginPage.ionViewWillEnter');
+
     // this.authService.login();
   }
 

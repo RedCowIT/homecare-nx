@@ -51,7 +51,7 @@ export class CustomerPlanFinanceInvoiceItemFormService extends EntityFormService
   }
 
   depositLessThanPriceValidator(formGroup: FormGroup) {
-    console.log('depositLessThanPriceValidator');
+
 
     if (formGroup.value.price) {
       if (!formGroup.value.deposit || formGroup.value.deposit > formGroup.value.price) {

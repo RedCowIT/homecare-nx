@@ -38,7 +38,6 @@ export class PostJobAfterPhotosComponent implements OnInit {
     this.footerButtons$.next([
       createFooterNextButton(async () => {
 
-        console.log('Complete Appointment');
       })
     ])
   }

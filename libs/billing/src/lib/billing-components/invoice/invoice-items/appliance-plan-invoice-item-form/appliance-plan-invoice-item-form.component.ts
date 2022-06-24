@@ -68,7 +68,7 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
     ]).pipe(
       takeUntil(this.destroyed$)
     ).subscribe(([dateChange, priceChange]) => {
-      console.log('Clearing period price');
+
       this.formService.form.patchValue({
         'customerPlan': {
           periodPrice: null
@@ -132,7 +132,7 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
 
   calculate() {
 
-    console.log(this.getFormService().createDTO(), {valid: this.formService.form.valid});
+
 
     const dto = this.formService.createDTO({groupName: 'appliancePlan'});
 
@@ -199,7 +199,7 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
 
       }),
       catchHttpValidationErrors(errors => {
-        console.log('errors', errors);
+
         this.errors = errors;
       }),
       first()
@@ -219,7 +219,7 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
         return this.customerPlanAppliancesService.update(dto.appliancePlan as CustomerPlanAppliance);
       }),
       catchHttpValidationErrors(errors => {
-        console.log('errors', errors);
+
         this.errors = errors;
       })
     ).subscribe(() => {

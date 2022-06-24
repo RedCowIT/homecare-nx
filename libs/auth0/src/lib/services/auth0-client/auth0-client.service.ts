@@ -59,7 +59,7 @@ export class Auth0ClientService {
       })
     ) as Observable<Auth0Client>).pipe(
       tap(client => {
-        // console.log('created auth0client', client);
+
       }),
       shareReplay(1), // Every subscription receives the same shared value
       catchError(err => throwError(err))
@@ -88,8 +88,6 @@ export class Auth0ClientService {
 
   handleCallback(url?: string): Observable<string> {
 
-    // console.log('auth0clientService.handleCallback', url);
-
     return this.auth0Client$.pipe(
       mergeMap((client: Auth0Client) => {
 
@@ -97,7 +95,7 @@ export class Auth0ClientService {
 
       }),
       map((cbRes: any) => {
-        console.log('handled callback', cbRes);
+
         return cbRes.appState && cbRes.appState.target ? cbRes.appState.target : '/';
       })
     );
@@ -157,7 +155,6 @@ export class Auth0ClientService {
         return from(client.getTokenSilently());
       }),
       catchError(err => {
-        // console.log('getToken err', err);
         return of('');
       })
     );
@@ -169,7 +166,6 @@ export class Auth0ClientService {
         return from(client.getTokenSilently());
       }),
       catchError(err => {
-        console.log('getToken err', err);
         return of('');
       })
     );

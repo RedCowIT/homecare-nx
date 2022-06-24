@@ -50,7 +50,6 @@ const jobReducer = createReducer(
 
   on(addJobError, (state, action) => {
 
-    console.log('Job reducer add one error');
     return adapter.removeOne(action.appointmentId, {
       ...state
     });

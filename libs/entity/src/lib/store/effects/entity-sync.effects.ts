@@ -183,7 +183,7 @@ export class EntitySyncEffects {
         }
       }),
       catchError(error => {
-        console.log('Rethrowing sync error');
+
         return throwError(error);
       })
     )
@@ -195,7 +195,7 @@ export class EntitySyncEffects {
     return this.store.select(selectEntitySyncPayloadId).pipe(
       first(),
       map(lastPayloadId => {
-        console.log({lastPayloadId, payloadId});
+
         return lastPayloadId !== payloadId;
       })
     )

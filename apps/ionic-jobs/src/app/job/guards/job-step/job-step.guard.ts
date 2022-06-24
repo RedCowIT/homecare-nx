@@ -10,9 +10,6 @@ export class JobStepGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    console.log('route url', state.url);
-    console.log('can activate job step', route, state);
-
     return true;
   }
 

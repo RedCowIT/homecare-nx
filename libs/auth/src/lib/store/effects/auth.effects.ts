@@ -53,7 +53,7 @@ export class AuthEffects {
           );
         }),
         catchError(error => {
-          return of(loginError(error));
+          return of(loginError({error}));
         })
       );
 
@@ -79,7 +79,7 @@ export class AuthEffects {
         this.logger.error('Error handling logout', e);
       }
 
-      console.log('Last URL', lastItem(this.route.snapshot.url));
+
 
       await this.router.navigateByUrl('/login');
 

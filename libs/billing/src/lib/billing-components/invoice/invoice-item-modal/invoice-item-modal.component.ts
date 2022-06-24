@@ -7,7 +7,7 @@ import {
   InvoiceItemTypes,
   PlanTypes,
   ProductCategories,
-  ProductCategory,
+  ProductCategory, ProductCategoryCodes,
   selectEntity, selectEntityByKey,
   selectFirstEntityByKey,
   selectOrFetchEntity,
@@ -22,7 +22,7 @@ import {PlansService, PlanTypesService} from "@homecare/plan";
 import {catchError, first, map, mergeMap} from "rxjs/operators";
 import {InvoiceItemsService} from "../../../store/entity/services/invoice/invoice-items/invoice-items.service";
 import {CustomerPlansService} from "@homecare/customer";
-import {toTitleCase} from "@homecare/common";
+import {BooleanValue, toTitleCase} from "@homecare/common";
 import {InvoicesService} from "../../../store/entity/services/invoice/invoices/invoices.service";
 
 @Component({
@@ -86,8 +86,6 @@ export class InvoiceItemModalComponent implements OnInit {
 
   initFromType() {
 
-    console.log('initFromType', this.type);
-
     this.title = toTitleCase(this.type);
 
     this.invoiceItemType$ = this.invoiceItemTypesService.selectByDescription(invoiceItemMeta[this.type].description);
@@ -96,23 +94,15 @@ export class InvoiceItemModalComponent implements OnInit {
 
   initFromInvoiceItem() {
 
-    console.log('initFromInvoiceItem', {
-      invoiceId: this.invoiceId,
-      invoiceItemId: this.invoiceItemId
-    });
-
     // Get type from invoice item
     // Invoice Item > Product > Product Category
     // If Product Category === Service, then
     selectEntity(this.invoiceItemsService, this.invoiceItemId).pipe(
       mergeMap(invoiceItem => selectEntity(this.productsService, invoiceItem.productId)),
       mergeMap(product => {
-        console.log('Opening modal with product', product);
         return selectEntity(this.productCategoriesService, product.categoryId);
       }),
       mergeMap(productCategory => {
-
-        console.log('product category', productCategory);
 
         if (productCategory.description === ProductCategories.Service) {
           return of(InvoiceItemTypes.Service)
@@ -124,16 +114,12 @@ export class InvoiceItemModalComponent implements OnInit {
             first(),
             mergeMap(invoice => {
 
-              console.log('Selecting customer plan for invoice item', this.invoiceItemId);
-
               return selectEntityByKey(this.customerPlansService, 'customerId', invoice.customerId).pipe(
                 map(customerPlans => firstByKey(customerPlans, 'invoiceItemId', this.invoiceItemId))
               );
 
             }),
             mergeMap(customerPlan => {
-
-              console.log('customerPlan', customerPlan);
 
               return selectEntity(this.plansService, customerPlan.planId);
 
@@ -142,8 +128,6 @@ export class InvoiceItemModalComponent implements OnInit {
               return selectEntity(this.planTypesService, plan.planTypeId)
             }),
             map(planType => {
-
-              console.log('Opening InvoiceItemModal with planType', planType);
 
               switch (planType.description) {
                 case PlanTypes.ApplianceRepairPlan:
@@ -156,7 +140,11 @@ export class InvoiceItemModalComponent implements OnInit {
             }));
         }
 
-        return of(InvoiceItemTypes.Misc);
+        if (productCategory.code === ProductCategoryCodes.Misc){
+          return of(InvoiceItemTypes.Misc);
+        }
+
+        return of(InvoiceItemTypes.Other);
 
       }),
       catchError(error => {

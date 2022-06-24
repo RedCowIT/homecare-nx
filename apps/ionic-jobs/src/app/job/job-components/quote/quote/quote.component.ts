@@ -28,8 +28,6 @@ export class QuoteComponent implements OnInit {
     ).subscribe(quote => {
       if (!quote) {
 
-        console.log('QuoteCmp.', quote);
-
         this.currentJobService.appointment$.pipe(
           filter(appointment => !!appointment),
           first()
@@ -48,6 +46,6 @@ export class QuoteComponent implements OnInit {
   }
 
   redirectOnAccepted() {
-    console.log('redirectOnAccepted');
+
   }
 }

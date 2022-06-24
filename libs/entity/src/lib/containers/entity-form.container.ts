@@ -45,7 +45,7 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
 
     this.setEditMode(!!this.id);
 
-    console.log('EntityForm.onInit', {id: this.id});
+
 
     if (this.isEditMode()) {
       this.model$.pipe(
@@ -53,8 +53,6 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
         first(),
         takeUntil(this.destroyed$)
       ).subscribe(model => {
-
-        console.log('EntityForm.patchForm', model);
 
         this.patchForm(model);
       });
@@ -69,7 +67,6 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
 
     const dto = this.createDTO();
 
-    console.log('EntityForm.submit', {dto});
 
     if (this.formService.editMode) {
 
@@ -138,7 +135,7 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
   protected async doOperation(operation$, operationType: 'create' | 'update' | 'delete') {
     operation$.pipe(
       catchHttpValidationErrors((errors: ApiValidationErrors) => {
-        console.log('HTTP validation error', errors);
+
         if (errors?.errors?.length) {
           this.errors = errors.errors;
         } else if (errors.message) {

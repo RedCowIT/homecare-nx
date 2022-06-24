@@ -140,7 +140,6 @@ export class QuoteManagerService {
         });
       }),
       mergeMap((quoteItems: QuoteItem[]) => {
-        console.log('QuoteManager.loadAppointmentQuote', quoteItems);
         return combineLatest([of(quoteItems), this.quoteItemTypesService.entityMap$]);
       }),
       mergeMap(([quoteItems, quoteItemTypeMap]) => {
@@ -149,8 +148,6 @@ export class QuoteManagerService {
           return of(null);
         }
 
-        console.log('QuoteManager.loading quote item details');
-
         const quoteItemDetails = [];
         for (const quoteItem of quoteItems) {
 
@@ -158,7 +155,6 @@ export class QuoteManagerService {
           if (!quoteItemType) {
             throw new Error('Missing quote item type with id: ' + quoteItem.quoteItemTypeId);
           }
-          console.log('Found quoteItem', quoteItem, quoteItemType);
 
           switch (quoteItemType.description) {
             case QuoteItemTypes.Appliance:

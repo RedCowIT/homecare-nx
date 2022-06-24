@@ -38,7 +38,7 @@ export class GlobalPaymentsService {
 
     return this.httpClient.post(url, globalPaymentResponse).pipe(
       map((response: any) => {
-        console.log('globalPaymentResult', response);
+
         return response?.data as GlobalPaymentResult;
       })
     );

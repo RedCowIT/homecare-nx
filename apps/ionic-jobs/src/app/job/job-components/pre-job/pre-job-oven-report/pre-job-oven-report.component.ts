@@ -39,7 +39,6 @@ export class PreJobOvenReportComponent implements OnInit {
 
         if (this.ovenReportForm.validate()){
 
-          console.log('Oven report valid', this.ovenReportForm.formService.form);
 
           this.ovenReportForm.save().pipe(first()).subscribe(
             () => {

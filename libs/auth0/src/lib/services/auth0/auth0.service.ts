@@ -44,7 +44,6 @@ export class Auth0Service {
 
   isCallback(url?: string) {
     if (url){
-      console.log('SEARCH', new URL(url).search);
       return this.containsCallbackParams(new URL(url).search);
     } else {
       return this.containsCallbackParams(window.location.search);

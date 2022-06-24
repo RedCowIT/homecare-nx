@@ -11,7 +11,7 @@ export class EntityCacheService {
   constructor(private storage: StorageService,
               private cacheStoreService: CacheStoreService,
               @Inject(ENTITY_CACHE_ENABLED) private isEnabled) {
-    console.log('EntityCacheService()', this.isEnabled);
+
   }
 
   public static createEntityCacheItem(payloadId: string, entityData: Array<{ entityName: string, entities: unknown[] }>): EntityCacheItem {

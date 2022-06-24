@@ -20,7 +20,7 @@ export class DocumentUploadService {
 
     return this.httpClient.post(this.url(), formData).pipe(
       map((response: any) => {
-        console.log('Upload response', response);
+
         return response?.data as Document;
       }),
       tap(document => {

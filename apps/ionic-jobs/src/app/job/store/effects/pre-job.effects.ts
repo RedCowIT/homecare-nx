@@ -53,8 +53,6 @@ export class PreJobEffects {
         try {
           const job = {...jobMap[action.appointmentId]};
 
-          console.log('Completing prejob section', job);
-
           const sections = job.preJobSections.map(preJobSection => {
             return {...preJobSection};
           });
@@ -122,8 +120,6 @@ export class PreJobEffects {
             status: ChecklistItemStatus.Disabled
           }
         ];
-
-        console.log('creating pre job sections', callTypes);
 
         if (callTypes){
 

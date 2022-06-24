@@ -48,7 +48,6 @@ export class PreJobSignatureComponent implements OnInit, AfterViewInit {
             .pipe(first())
             .subscribe(appointmentVisit => {
 
-              console.log('Signature', appointmentVisit.preInspectionSignatureJSON);
 
               if (!appointmentVisit.preInspectionSignatureJSON) {
                 this.showError = true;
@@ -70,6 +69,7 @@ export class PreJobSignatureComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(){
     this.currentJobService.appointmentVisit$.pipe(first()).subscribe(
       appointmentVisit => {
+
         if (appointmentVisit.preInspectionSignatureJSON){
           this.signaturePadComponent.fromDataURL(appointmentVisit.preInspectionSignatureJSON);
         }
@@ -79,7 +79,6 @@ export class PreJobSignatureComponent implements OnInit, AfterViewInit {
 
   updateSignature(data) {
 
-    console.log('updateSignature', data);
 
     this.appointmentVisitsService.updateOneInCache({
       id: this.currentJobService.appointmentId,

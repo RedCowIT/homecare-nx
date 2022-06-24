@@ -14,8 +14,6 @@ export class JobsResolver implements Resolve<boolean> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 
-    console.log('jobs resolver');
-
     try {
       this.jobsLoaderService.loadAll();
     } catch (error){

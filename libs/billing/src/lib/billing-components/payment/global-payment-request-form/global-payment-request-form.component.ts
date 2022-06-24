@@ -102,14 +102,14 @@ export class GlobalPaymentRequestFormComponent extends SubscribedContainer imple
     this.formService.form.valueChanges.pipe(
       takeUntil(this.destroyed$)
     ).subscribe(formValue => {
-      console.log('Form value changes', formValue);
+
       this.syncBillingAddress(formValue);
     });
 
   }
 
   formatPhone(phone: string): string {
-    return '44|' + phone.replace(' ', '');
+    return '44|' + phone.replace(' ', '').replace('+44', '0');
   }
 
   syncBillingAddress(formValue: any) {

@@ -26,7 +26,6 @@ export class QuoteApplianceDetailModalComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log('QADMComponent', {quoteApplianceDetailId: this.quoteApplianceDetailId, applianceTypeId: this.applianceTypeId});;
     selectEntity(this.applianceTypesService, this.applianceTypeId).pipe(first()).subscribe(
       applianceType => {
         this.title = applianceType.description

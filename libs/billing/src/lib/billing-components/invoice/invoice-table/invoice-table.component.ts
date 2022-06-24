@@ -41,12 +41,10 @@ export class InvoiceTableComponent implements OnInit, AfterViewInit {
   }
 
   public load() {
-    console.log('InvoiceTable.load');
     this.invoiceTableService.load();
   }
 
   async select(item) {
-    console.log('select', item[0]);
     await this.openModal(item[0].id);
   }
 

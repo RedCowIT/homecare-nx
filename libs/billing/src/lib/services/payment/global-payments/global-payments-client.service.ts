@@ -50,7 +50,7 @@ export class GlobalPaymentsClientService {
       response
     }).pipe(
       catchError(error => {
-        console.log('processPaymentResponse error', error);
+
         return of(null);
       })
     );

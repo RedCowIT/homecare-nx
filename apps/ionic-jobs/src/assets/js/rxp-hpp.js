@@ -278,7 +278,7 @@ var RealexHpp = (function () {
       form.setAttribute("action", hppUrl);
       // form.setAttribute('target', 'realex');
 
-      console.log('createForm', form);
+
 
       var versionSet = false;
 
@@ -322,7 +322,7 @@ var RealexHpp = (function () {
 
     createIFrame: function (overlayElement, token) {
 
-      console.log('GP.createIFrame');
+
 
       //Create the spinner
       var spinner = internal.createSpinner();
@@ -390,10 +390,10 @@ var RealexHpp = (function () {
 
       var form = internal.createForm(document, token);
       if (iFrame.contentWindow.document.body) {
-        console.log('GP: appending form to iframe document body');
+
         iFrame.contentWindow.document.body.appendChild(form);
       } else {
-        console.log('GP: appending form global document body');
+
         iFrame.contentWindow.document.appendChild(form);
       }
 
@@ -636,13 +636,13 @@ var RealexHpp = (function () {
           var form = internal.createForm(document, token);
           if (iFrame) {
             if (iFrame.contentWindow.document.body) {
-              console.log('GP.embedded. appending form to iframe document body');
+
               iFrame.contentWindow.document.body.appendChild(form);
             } else {
-              console.log('GP.embedded. appending form to iframe document body');
+
               iFrame.contentWindow.document.appendChild(form);
             }
-            console.log('GP.embedded form.submit', form);
+
             form.submit();
             iFrame.style.display = "inherit";
           }

@@ -26,7 +26,7 @@ export class OvenReportFormComponent extends EntityFormContainer<AppointmentVisi
 
   ngOnInit() {
     super.ngOnInit();
-    console.log('OvenReportForm', this.formService.form.value);
+
     // this.patchForm({appointmentId: this.appointmentId});
   }
 
@@ -38,7 +38,7 @@ export class OvenReportFormComponent extends EntityFormContainer<AppointmentVisi
 
         const dto = this.createDTO();
 
-        console.log('Update appointmentVisit', appointmentVisit);
+
 
         return this.entityService.update({
           ...appointmentVisit,

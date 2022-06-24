@@ -33,7 +33,7 @@ export class VacuumReportFormComponent extends EntityFormContainer<AppointmentVi
   ngOnInit() {
     super.ngOnInit();
     // this.patchForm({appointmentId: this.appointmentId});
-    // console.log('patched form', this.formService.form);
+
   }
 
   save(): Observable<AppointmentVisit> {
@@ -43,8 +43,6 @@ export class VacuumReportFormComponent extends EntityFormContainer<AppointmentVi
       mergeMap(appointmentVisit => {
 
         const dto = this.createDTO();
-
-        console.log('Update appointmentVisit', appointmentVisit);
 
         return this.entityService.update({
           ...appointmentVisit,

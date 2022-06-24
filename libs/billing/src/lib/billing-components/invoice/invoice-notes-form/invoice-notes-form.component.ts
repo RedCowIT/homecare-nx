@@ -23,8 +23,6 @@ export class InvoiceNotesFormComponent extends EntityContainer<Invoice> implemen
 
     super.ngOnInit();
 
-    console.log('invoice notes form', this.id);
-
     this.model$.pipe(first()).subscribe(invoice => {
       this.formService.form.patchValue({
         notes: invoice.notes,

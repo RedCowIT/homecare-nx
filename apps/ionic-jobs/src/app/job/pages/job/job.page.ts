@@ -20,11 +20,8 @@ export class JobPage extends SubscribedContainer implements OnInit {
 
   ngOnInit() {
 
-    console.log('JobPage', this.route.snapshot.data['appointmentId']);
-
     this.route.paramMap.pipe(
       tap(paramMap => {
-        console.log('JobPage.addJob');
         this.jobService.addJob(parseInt(paramMap.get('id')));
         // this.jobService.setAppointmentId(parseInt(paramMap.get('id')))
       }),

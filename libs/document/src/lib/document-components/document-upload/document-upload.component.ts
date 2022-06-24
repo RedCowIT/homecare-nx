@@ -41,7 +41,7 @@ export class DocumentUploadComponent implements OnInit {
 
   onFileChange($event) {
 
-    console.log('onFilechange!');
+
 
     const formData = formDataFromFileList($event.target.files);
 
@@ -74,7 +74,7 @@ export class DocumentUploadComponent implements OnInit {
       resultType: CameraResultType.Uri
     });
 
-    console.log('Photo result', image);
+
     // image.webPath will contain a path that can be set as an image src.
     // You can access the original file using image.path, which can be
     // passed to the Filesystem API to read the raw data of the image,

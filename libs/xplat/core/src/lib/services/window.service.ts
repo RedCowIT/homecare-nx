@@ -34,7 +34,7 @@ export class WindowService {
     return new Promise((resolve, reject) => {
       const result: any = this._platformWindow.alert(msg);
       if (isObject(result) && result.then) {
-        // console.log('WindowService -- using result.then promise');
+        
         result.then(resolve, reject);
       } else {
         resolve();

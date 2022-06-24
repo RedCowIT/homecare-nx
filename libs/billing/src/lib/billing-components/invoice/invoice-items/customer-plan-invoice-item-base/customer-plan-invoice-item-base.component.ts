@@ -103,7 +103,7 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
 
       selectFirstEntityByKey(this.customerPlansService, 'invoiceItemId', this.invoiceItemId).pipe(first()).subscribe(
         customerPlan => {
-          console.log('Setting customer plan', customerPlan);
+
           if (customerPlan) {
             this.getFormService().form.patchValue({
               'customerPlan': customerPlan
@@ -127,7 +127,7 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
       mergeMap(planId => selectEntity(this.plansService, planId)),
       takeUntil(this.destroyed$)
     ).subscribe((plan: Plan) => {
-      console.log('plan id changed', plan);
+
       this.getForm().patchValue({'invoiceItem': {productId: plan.productId}});
     });
 
@@ -159,7 +159,7 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
   save() {
 
     if (!this.getForm().valid) {
-      console.log('invalid form', this.getFormService().createDTO());
+
       return;
     }
 
@@ -214,7 +214,7 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
         return this.createCustomerPlan();
       }),
       catchHttpValidationErrors(errors => {
-        console.log('errors', errors);
+
         this.errors = errors;
       }),
       first()
@@ -231,7 +231,7 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
         return this.customerPlansService.update(dto.customerPlan as CustomerPlan);
       }),
       catchHttpValidationErrors(errors => {
-        console.log('errors', errors);
+
         this.errors = errors;
       })
     ).subscribe(() => {

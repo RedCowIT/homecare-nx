@@ -43,7 +43,7 @@ export class DatatableComponent extends SubscribedContainer implements OnInit, A
       debounce(() => timer(1000)),
       takeUntil(this.destroyed$)
     ).subscribe(() => {
-      console.log('DISPATCH RESIZE');
+
     });
   }
 

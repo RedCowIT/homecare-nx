@@ -35,36 +35,44 @@
           </ion-item>
         </div>
 
+      </ion-card-content>
+    </ion-card>
 
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Customer Signature</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item class="ion-margin-top">
+          <ion-label position="stacked">Signature Name</ion-label>
+          <ion-input formControlName="signatureName"></ion-input>
+        </ion-item>
+        <div class="ion-margin-top">
+        <dd-signature-pad
+          (done)="updateSignature($event)"
+          [format]="'base64'"
+        ></dd-signature-pad>
+        </div>
       </ion-card-content>
     </ion-card>
 
     <div class="ion-padding">
 
-      <div class="title ion-margin-top">Customer Signature</div>
-
-      <div class="ion-margin-top">
-
-        <dd-signature-pad
-          (done)="updateSignature($event)"
-          [format]="'base64'"
-        ></dd-signature-pad>
-
-      </div>
-
       <div *ngIf="errors.length" class="ion-margin-top">
         <ion-item color="danger">
-
+          {{errors}}
         </ion-item>
       </div>
 
     </div>
 
   </div>
+
   <div class="detail-footer">
     <div  class="footer-wrap ion-padding">
       <div class="d-flex ion-justify-content-end">
-        <ion-button (click)="completeAppointment()">Complete Appointment</ion-button>
+        <ion-button (click)="completeAppointment()" [disabled]="!formService.form.valid">Complete Appointment</ion-button>
       </div>
     </div>
   </div>

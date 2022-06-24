@@ -25,7 +25,7 @@ export class ModalHeaderComponent implements OnInit {
   constructor(private modalCtrl: ModalController) { }
 
   ngOnInit(): void {
-    console.log('modal header', this.isDanger);
+
   }
 
   async closeModal(){

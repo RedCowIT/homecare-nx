@@ -26,7 +26,7 @@ export class InvoiceListTableComponent implements OnInit, AfterViewInit {
   }
 
   select(event){
-    console.log('select', event);
+
   }
 
 

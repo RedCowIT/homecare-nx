@@ -40,8 +40,7 @@ export class ApplianceFormComponent extends SubscribedContainer implements OnIni
   }
 
   ngOnInit() {
-
-    console.log('ApplianceFormCmp', this.form, this.groupName);
+    
     this.updateSelects();
 
     this.form.valueChanges.pipe(

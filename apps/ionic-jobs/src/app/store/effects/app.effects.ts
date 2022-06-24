@@ -110,8 +110,6 @@ export class AppEffects {
               private entityServices: EntityServices,
               private alertService: AlertService) {
 
-    console.log('APP EFFECTS CTOR');
-
 
   }
 

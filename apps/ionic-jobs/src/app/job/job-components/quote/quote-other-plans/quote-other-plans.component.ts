@@ -55,7 +55,6 @@ export class QuoteOtherPlansComponent implements OnInit {
             planType.description !== PlanTypes.Finance
         }).map(planType => {
 
-          console.log('quotePlanDetails', quotePlanDetails);
           let match = false;
 
           for (const quotePlanDetail of quotePlanDetails){

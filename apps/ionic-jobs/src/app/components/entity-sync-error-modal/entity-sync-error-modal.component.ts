@@ -19,7 +19,7 @@ export class EntitySyncErrorModalComponent implements OnInit {
   }
 
   async retry() {
-    console.log('retry');
+
     await this.modalCtrl.dismiss();
     this.entityService.init(CoreEntity.AppDataId);
   }

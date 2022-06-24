@@ -28,8 +28,6 @@ export class PreJobSideNavComponent implements OnInit {
 
     this.appointmentId = this.currentJobService.appointmentId;
 
-    // console.log('PrejobSideNav.init', this.appointmentId);
-
     this.items$ = this.jobsService.entityMap$.pipe(
       map(jobMap => jobMap[this.appointmentId]),
       filter(job => !!job),

@@ -102,7 +102,7 @@ const entitySyncReducer = createReducer(
 
   on(syncEntitiesError, (state, action) => {
 
-    console.log('syncEntities error', action.error);
+    
 
     return {
       ...state,

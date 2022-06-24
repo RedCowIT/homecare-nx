@@ -36,7 +36,6 @@ export class AppComponent {
 
   async initializeApp() {
 
-    // console.log('initializeApp');
     App.addListener('appUrlOpen', async (data: any) => {
       await this.zone.run(async () => {
         await this.handleUrlOpen(data);
@@ -63,8 +62,6 @@ export class AppComponent {
     });
 
     this.entitySyncService.isLoading$.subscribe(async isLoading => {
-
-      console.log('ENTITY LOAD CHANGE', isLoading, this.isLoading);
 
       if (isLoading) {
 
@@ -123,10 +120,9 @@ export class AppComponent {
     // await Browser.close();
 
     // if (this.auth0Service.isCallback(data.url)) {
-    //   console.log('Handling Auth0 Callback');
     //   this.auth0Service.handleCallback(data.url);
     // } else {
-    //   console.log('Not an Auth0 callback. Black hole.', data);
+
     // }
 
     // Example url: https://beerswift.app/tabs/tab2

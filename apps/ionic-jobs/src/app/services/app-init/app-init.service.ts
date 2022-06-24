@@ -48,8 +48,6 @@ export class AppInitService implements AppInitHandler {
       first()
     ).subscribe(([storage, platformReady]) => {
 
-      console.log('PLATFORM READY', storage, platformReady);
-
       if (this.platform.is('capacitor')){
 
       }

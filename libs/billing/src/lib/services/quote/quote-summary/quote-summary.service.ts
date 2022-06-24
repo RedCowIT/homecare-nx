@@ -20,7 +20,6 @@ export class QuoteSummaryService {
   init(quoteId: number) {
     this.quoteSummary$ = this.quoteItemsService.entitiesByQuoteId(quoteId).pipe(
       map(quoteItems => {
-console.log('calculating quote summary', quoteItems);
 
       if (!quoteItems || quoteItems.length === 0){
         return {

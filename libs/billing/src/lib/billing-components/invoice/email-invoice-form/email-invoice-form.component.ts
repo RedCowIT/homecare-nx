@@ -68,12 +68,12 @@ export class EmailInvoiceFormComponent extends EntityContainer<Invoice> implemen
   }
 
   sendEmail() {
-    console.log('sendEmail');
+
     const email = this.formService.form.value.toAddress;
     this.emailInvoiceService.send(this.id, email).pipe(
       first()
     ).subscribe(result => {
-      console.log('Invoice email sent');
+
       this.done.emit();
     });
   }

@@ -100,13 +100,11 @@ export class FinancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItem
 
   calculate() {
 
-    console.log(this.getFormService().createDTO(), {valid: this.formService.form.valid});
-
     const dto = this.formService.createDTO({groupName: 'financePlan'});
 
     this.financePlanService.calculate(dto).pipe(first()).subscribe(
       result => {
-        console.log("CALC RESULT", result);
+
         this.getForm().patchValue({
           'financePlan': {
             loan: result?.loan,
@@ -146,6 +144,9 @@ export class FinancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItem
       ).subscribe(financePlan => {
 
         if (financePlan) {
+
+          this.formService.editMode = true;
+
           this.getForm().patchValue({
             'financePlan': financePlan
           });
@@ -182,7 +183,7 @@ export class FinancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItem
         });
       }),
       catchHttpValidationErrors(errors => {
-        console.log('errors', errors);
+
         this.errors = errors;
       }),
       first()
@@ -205,7 +206,7 @@ export class FinancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItem
         return this.customerPlanFinanceService.update(dto.financePlan as CustomerPlanFinance);
       }),
       catchHttpValidationErrors(errors => {
-        console.log('errors', errors);
+
         this.errors = errors;
       })
     ).subscribe(() => {

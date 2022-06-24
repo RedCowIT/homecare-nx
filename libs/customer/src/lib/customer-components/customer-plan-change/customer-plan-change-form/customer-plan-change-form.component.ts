@@ -58,7 +58,7 @@ export class CustomerPlanChangeFormComponent implements OnInit {
   submit() {
 
     const dto = this.customerPlanChangesFormService.form.value.customerPlanChanges;
-    console.log('submit', dto);
+
     this.customerPlanChangesService.addAll(dto).pipe(
       first()
     ).subscribe(async response => {

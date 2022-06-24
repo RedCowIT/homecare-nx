@@ -80,11 +80,7 @@ export class QuoteApplianceCoverComponent implements OnInit {
       if (quoteApplianceDetails.length) {
         componentProps.quoteApplianceDetailId = firstItem(quoteApplianceDetails).id;
       }
-
-      console.log('openApplianceModel', {
-        applianceTypeId, quote, quoteApplianceDetails, componentProps
-      });
-
+       
       const modal = await this.modalCtrl.create({
         component: QuoteApplianceDetailModalComponent,
         componentProps

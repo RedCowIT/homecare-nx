@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {first, tap} from "rxjs/operators";
+import {first, mergeMap, tap} from "rxjs/operators";
 import {Appointment, findById, joinEntityLoading} from "@homecare/shared";
 import {CustomerAddressesService, CustomerPlansService, CustomersService} from "@homecare/customer";
 import {AppointmentCallTypesService, AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
@@ -70,17 +70,13 @@ export class JobsLoaderService {
 
   loadAll() {
 
-    console.log('Load all');
-
     this.appointmentsService.getAll().subscribe(appointments => {
-      console.log('APPOINTMENTS', appointments);
+
     });
 
     combineLatest([this.appointmentsService.entities$, this.appointmentsService.getAll()]).pipe(
       first(),
       tap(([currentAppointments, newAppointments]) => {
-
-        console.log('Load all result', newAppointments);
 
         // Remove any not present in current payload
         for (const currentAppointment of currentAppointments) {
@@ -102,9 +98,6 @@ export class JobsLoaderService {
   }
 
   loadAppointmentRelations(appointment: Appointment) {
-
-    console.log('loadAppointmentRelations', appointment);
-
     this.appointmentVisitsService.getWithQuery({
       appointmentId: `${appointment.id}`
     });
@@ -119,6 +112,23 @@ export class JobsLoaderService {
 
     this.appointmentCallTypesService.getWithQuery({
       appointmentId: `${appointment.id}`
+    }).pipe(
+      first()
+    ).subscribe(appointmentCallTypes => {
+
+      // Remove any not present in current payload
+      this.appointmentCallTypesService.entities$.pipe(first()).subscribe(currentCallTypes => {
+        for (const currentCallType of currentCallTypes) {
+          if (!findById(appointmentCallTypes, currentCallType.id)) {
+            this.appointmentCallTypesService.removeOneFromCache(currentCallType.id, {
+              mergeStrategy: MergeStrategy.IgnoreChanges
+            });
+          }
+        }
+      });
+
+
+
     });
 
     this.documentsService.getWithQuery({

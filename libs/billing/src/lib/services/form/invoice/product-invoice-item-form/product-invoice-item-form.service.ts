@@ -16,7 +16,7 @@ export class ProductInvoiceItemFormService extends EntityFormService {
       id: undefined,
       invoiceId: [null, Validators.required],
       productId: [null, Validators.required],
-      qty: [null, Validators.required],
+      qty: [null, [Validators.required, Validators.min(1)]],
       unitPrice: [null, Validators.required],
       invoiceItemTypeId: [null, Validators.required]
     });

@@ -129,8 +129,6 @@ export class QuoteTableService extends TableSourceService {
                                quoteApplianceDetails: QuoteApplianceDetail[],
                                applianceTypeMap: Dictionary<ApplianceType>): string {
 
-    console.log('getApplianceCoverDescription', quoteItemId, quoteApplianceDetails, applianceTypeMap);
-
     const details = firstByKey<QuoteApplianceDetail>(quoteApplianceDetails, 'quoteItemId', quoteItemId);
     if (!details) {
       return null;

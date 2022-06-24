@@ -14,7 +14,8 @@ export class AppointmentVisitCompleteFormService extends EntityFormService {
     this.form = this.fb.group({
       id: undefined,
       customerComments: [null],
-      engineerRating: [null, Validators.required]
+      engineerRating: [null],
+      signatureName: [null, Validators.required],
     });
   }
 

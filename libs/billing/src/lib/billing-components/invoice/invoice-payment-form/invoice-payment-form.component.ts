@@ -92,8 +92,6 @@ export class InvoicePaymentFormComponent extends EntityFormContainer<InvoicePaym
       first()
     ).subscribe((paymentType) => {
 
-      console.log('default invoice item type', paymentType);
-
       this.patchForm({
         invoiceId: this.invoiceId,
         paymentTypeId: paymentType.id
@@ -114,8 +112,6 @@ export class InvoicePaymentFormComponent extends EntityFormContainer<InvoicePaym
 
           const paymentType = firstByKey(paymentTypes, 'description', paymentTypeOption.value);
 
-          console.log('payment', paymentTypeOption.value, paymentType);
-
           return firstByKey(invoicePayments, 'paymentTypeId', paymentType.id) === null;
 
         });
@@ -135,7 +131,7 @@ export class InvoicePaymentFormComponent extends EntityFormContainer<InvoicePaym
         takeUntil(this.destroyed$)
       ).subscribe(
         paymentTypeOptions => {
-          console.log('PAYMENT TYPE OPTIONS', paymentTypeOptions);
+
           if (paymentTypeOptions.length) {
             this.showForm = true;
             this.setPaymentType(paymentTypeOptions[0].value);
@@ -189,8 +185,6 @@ export class InvoicePaymentFormComponent extends EntityFormContainer<InvoicePaym
   }
 
   addFullAmount() {
-
-    console.log('addFullAmount');
 
     selectEntity(this.invoicesService, this.invoiceId).pipe(
       first()

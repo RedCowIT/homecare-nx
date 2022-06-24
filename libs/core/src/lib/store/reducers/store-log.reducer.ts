@@ -56,8 +56,6 @@ const storeLogReducer = createReducer(
 
       const removeEntities = entities.splice(0, removeCount).map(storeLog => storeLog.id);
 
-      console.log('Culling store logs', removeEntities);
-
       return adapter.removeMany(removeEntities, {...state});
 
     } else {

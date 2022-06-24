@@ -1,4 +1,13 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {EntityFormContainer} from "@homecare/entity";
 import {asDateString, CustomerPlanFinanceDocument, nowAsDateString, selectEntity} from "@homecare/shared";
 import {CustomerPlanFinanceDocumentFormService} from "../../../services/form/customer-plan-finance-document-form/customer-plan-finance-document-form.service";
@@ -8,6 +17,7 @@ import {combineLatest, Observable} from "rxjs";
 import {filter, first, mergeMap, takeUntil} from "rxjs/operators";
 import {CustomerPlansService} from "../../../store/entity/services/customer-plans/customer-plans.service";
 import {CustomersService} from "../../../store/entity/services/customers/customers.service";
+import {SignaturePadComponent} from "../../../../../../ionic-common/src/lib/signature-pad/signature-pad.component";
 
 @Component({
   selector: 'hc-customer-plan-finance-document-form',
@@ -17,7 +27,7 @@ import {CustomersService} from "../../../store/entity/services/customers/custome
     CustomerPlanFinanceDocumentFormService
   ]
 })
-export class CustomerPlanFinanceDocumentFormComponent extends EntityFormContainer<CustomerPlanFinanceDocument> implements OnInit {
+export class CustomerPlanFinanceDocumentFormComponent extends EntityFormContainer<CustomerPlanFinanceDocument> implements OnInit, AfterViewInit {
 
   @Input()
   id: number;
@@ -31,9 +41,13 @@ export class CustomerPlanFinanceDocumentFormComponent extends EntityFormContaine
   @Output()
   delete = new EventEmitter<CustomerPlanFinanceDocument>();
 
+  @ViewChild(SignaturePadComponent)
+  signaturePadComponent: SignaturePadComponent;
+
   maxDate: string;
 
   showError = false;
+
 
   constructor(public formService: CustomerPlanFinanceDocumentFormService,
               public entityService: CustomerPlanFinanceDocumentsService,
@@ -50,9 +64,7 @@ export class CustomerPlanFinanceDocumentFormComponent extends EntityFormContaine
   ngOnInit(): void {
     super.ngOnInit();
 
-    console.log('customer-plan-finance-document-form init', this.isEditMode());
-
-    if (this.isEditMode()){
+    if (this.isEditMode()) {
       combineLatest([this.model$, this.customerPlansService.entityMap$, this.customersService.entityMap$]).pipe(
         filter(([model, customerPlanMap, customerMap]) => !!model && !!customerPlanMap[model.customerPlanId]),
         first(),
@@ -63,7 +75,7 @@ export class CustomerPlanFinanceDocumentFormComponent extends EntityFormContaine
         const customerPlan = customerPlanMap[model.customerPlanId];
         const customer = customerMap[customerPlan.customerId];
 
-        console.log('customer-plan-finance-document-form subscribe', customerPlan, customer);
+
 
         this.patchForm({
           email1: customer.email1,
@@ -75,9 +87,20 @@ export class CustomerPlanFinanceDocumentFormComponent extends EntityFormContaine
     }
   }
 
+  ngAfterViewInit() {
+    this.model$.pipe(first()).subscribe(
+      (doc: CustomerPlanFinanceDocument) => {
+
+        if (doc.signatureBase64) {
+          this.signaturePadComponent.fromDataURL(doc.signatureBase64);
+        }
+      }
+    )
+  }
+
   updateSignature(data) {
 
-    console.log('updateSignature', data);
+
 
     this.entityService.updateOneInCache({
       id: this.id,
@@ -108,12 +131,12 @@ export class CustomerPlanFinanceDocumentFormComponent extends EntityFormContaine
       first(),
       mergeMap(doc => {
 
-        if (model.dob){
+        if (model.dob) {
           model.dob = moment(model.dob).format('YYYY-MM-DD');
         }
 
         // Prefer false to null
-        if (!model.currentAddressLessThanThree){
+        if (!model.currentAddressLessThanThree) {
           model.currentAddressLessThanThree = false;
         }
 

@@ -55,7 +55,7 @@ export class CurrentJobService {
         if (!appointmentId){
           return null;
         }
-        // console.log('job$', appointmentId, jobMap);
+
         return jobMap[appointmentId];
       })
     );
@@ -63,7 +63,7 @@ export class CurrentJobService {
     this.appointment$ = combineLatest([this.appointmentId$, this.appointmentsService.entityMap$]).pipe(
       filter(([appointmentId, appointmentMap]) => !!appointmentId),
       map(([appointmentId, appointmentMap]) => {
-        // console.log('appointment$', appointmentId, appointmentMap);
+
         return appointmentMap[appointmentId];
       })
     );

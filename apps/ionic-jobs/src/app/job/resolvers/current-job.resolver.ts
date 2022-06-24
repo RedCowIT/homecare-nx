@@ -20,17 +20,15 @@ export class CurrentJobResolver implements Resolve<number> {
 
     const appointmentId = parseInt(route.params.id);
 
-    console.log('CurrentJobResolver', appointmentId);
-
     this.currentJobService.setAppointmentId(appointmentId);
 
     return this.currentJobService.job$.pipe(
       filter(job => {
-        console.log('CurrentJobResolver', job, job.loadState);
+
         return job.loadState === LoadingState.LOADED
       }),
       map(job => {
-        console.log('CurrentJobResolver.return job', job);
+
         return job.appointmentId;
       }),
       first(),

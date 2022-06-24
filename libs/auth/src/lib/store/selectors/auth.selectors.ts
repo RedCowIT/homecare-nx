@@ -12,7 +12,7 @@ export const isInitialized = createSelector(
 export const isAuthenticated = createSelector(
   selectAuthState,
   s1 => {
-    console.log('Select isAuthenticated', s1);
+
     return s1.isAuthenticated;
   }
 );
