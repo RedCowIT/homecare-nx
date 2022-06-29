@@ -5,7 +5,9 @@ export enum DocumentEntity {
 }
 
 export const documentEntityMetadata = {
-  [DocumentEntity.Document]: {},
+  [DocumentEntity.Document]: {
+
+  },
   [DocumentEntity.DocumentType]: {},
   [DocumentEntity.DocumentSubType]: {}
 }

@@ -60,6 +60,7 @@ export class InvoiceManagerService {
               this.planTypesService.entityMap$
 
             ]).pipe(
+              first(),
               mergeMap(([
                           invoiceItems,
                           invoiceItemTypeMap,
@@ -89,7 +90,7 @@ export class InvoiceManagerService {
 
                 }
                 if (planLoads.length) {
-                  return forkJoin(planLoads).pipe(map(() => true));
+                  return forkJoin(planLoads).pipe(first(), map(() => true));
                 } else {
                   return of(true);
                 }

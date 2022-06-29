@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {from, Observable} from "rxjs";
 import {DocumentsService} from "../../store/entity/services/documents/documents.service";
 import {first, map} from "rxjs/operators";
 import {Document, InvoicePaymentTypes} from "@homecare/shared";
@@ -28,28 +28,22 @@ export class DocumentGalleryComponent implements OnInit {
   documents$: Observable<Document[]>;
 
   constructor(public documentsService: DocumentsService,
-              public popoverCtrl: PopoverController) {
+              public popoverCtrl: PopoverController,
+              public cdRef: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
 
-    this.documents$ = this.documentsService.entities$.pipe(
-      map(documents => {
-        return documents.filter(document => {
+    this.documents$ = this.documentsService.select(this.parentId, this.subId, this.documentTypeId, this.documentSubTypeId);
 
+    this.documentsService.getWithQuery({
+      parentId: `${this.parentId}`,
+      subId: `${this.subId}`
+    });
 
-          const keep = document.parentId == this.parentId &&
-            document.subId == this.subId &&
-            document.documentTypeId == this.documentTypeId &&
-            document.documentSubTypeId == this.documentSubTypeId;
-
-
-          return keep;
-
-        });
-      })
-    );
-
+    // setTimeout(() => {
+    //   this.documentsService.clearCache();
+    // }, 2000);
   }
 
   async select($event, document: Document) {
@@ -65,19 +59,23 @@ export class DocumentGalleryComponent implements OnInit {
       event: $event
     });
 
-    popover.onWillDismiss().then(
-      (data: any) => {
-        
-        // this.openModal(data.data.option);
-
-        if (data?.data?.option?.value === 'delete') {
-          this.documentsService.delete({id: document.id} as Document).pipe(
-            first()
-          ).subscribe();
-        }
-
+    from(popover.onWillDismiss()).subscribe((data) => {
+      if (data?.data?.option?.value === 'delete') {
+        console.log('delete', document.id);
+        this.documentsService.delete(document.id);
       }
-    );
+    });
+
+    // popover.onWillDismiss().then(
+    //   (data: any) => {
+    //
+    //     // this.openModal(data.data.option);
+    //
+    //     if (data?.data?.option?.value === 'delete') {
+    //       this.documentsService.delete(document.id);
+    //     }
+    //   }
+    // );
 
     await popover.present();
   }

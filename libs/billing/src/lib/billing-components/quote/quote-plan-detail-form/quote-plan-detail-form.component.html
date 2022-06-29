@@ -20,7 +20,7 @@
 
       <ion-item>
         <ion-label position="stacked">Period Price</ion-label>
-        <ion-input formControlName="periodPrice"></ion-input>
+        <ion-input formControlName="periodPrice" type="number"></ion-input>
       </ion-item>
 
       <div *ngIf="planPaymentPeriodsService.entities$ | async as planPaymentPeriods">

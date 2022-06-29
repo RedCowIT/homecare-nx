@@ -24,15 +24,13 @@ export class CurrentJobResolver implements Resolve<number> {
 
     return this.currentJobService.job$.pipe(
       filter(job => {
-
         return job.loadState === LoadingState.LOADED
       }),
       map(job => {
-
         return job.appointmentId;
       }),
       first(),
-      timeout(15000),
+      timeout(20000),
       catchError(error => {
         this.loggerService.error('Failed to resolve job', error);
         this.router.navigateByUrl('/main/jobs');

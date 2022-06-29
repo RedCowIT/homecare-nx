@@ -17,7 +17,7 @@ export class SignOffComponent extends EntityFormContainer<AppointmentVisit> impl
 
   errors = [];
 
-  showError = false;
+  sigError = false;
 
   @ViewChild(SignaturePadComponent)
   signaturePadComponent: SignaturePadComponent;
@@ -55,14 +55,21 @@ export class SignOffComponent extends EntityFormContainer<AppointmentVisit> impl
 
   completeAppointment() {
 
-    this.showError = false;
+    this.sigError = false;
+
+    this.formService.form.markAllAsTouched();
 
     this.currentJobService.appointmentVisit$
       .pipe(first())
       .subscribe(appointmentVisit => {
 
         if (!appointmentVisit.signatureJSON) {
-          this.showError = true;
+          this.sigError = true;
+          return;
+        }
+
+        if (!this.formService.form.valid){
+          this.formService.form.markAllAsTouched();
           return;
         }
 

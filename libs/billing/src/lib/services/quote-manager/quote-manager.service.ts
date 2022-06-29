@@ -140,7 +140,7 @@ export class QuoteManagerService {
         });
       }),
       mergeMap((quoteItems: QuoteItem[]) => {
-        return combineLatest([of(quoteItems), this.quoteItemTypesService.entityMap$]);
+        return combineLatest([of(quoteItems), this.quoteItemTypesService.entityMap$]).pipe(first());
       }),
       mergeMap(([quoteItems, quoteItemTypeMap]) => {
 

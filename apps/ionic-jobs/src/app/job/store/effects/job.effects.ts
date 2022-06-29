@@ -8,7 +8,7 @@ import {
   reloadJobSections,
   setJobSections
 } from "../actions/job.actions";
-import {catchError, filter, first, map, mergeMap, withLatestFrom} from "rxjs/operators";
+import {catchError, filter, first, map, mergeMap, tap, withLatestFrom} from "rxjs/operators";
 import {
   Appointment,
   AppointmentVisit,
@@ -25,7 +25,7 @@ import {
 } from "@homecare/shared";
 import {JobService} from "../../services/job/job.service";
 import {ChecklistItemStatus} from "@homecare/common";
-import {combineLatest, Observable, of, throwError} from "rxjs";
+import {combineLatest, forkJoin, Observable, of, throwError} from "rxjs";
 import {getJobMap} from "../selectors/job.selectors";
 import {Store} from "@ngrx/store";
 import {AppointmentCallTypesService, AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
@@ -48,18 +48,66 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(addJob),
       mergeMap(action => {
+        return this.getAppointment(action.appointmentId)
+          .pipe(
+            mergeMap(appointment => {
+
+              const tasks = [
+                this.initAppointmentVisit(appointment),
+                this.initAppointmentCallTypes(appointment),
+                this.quoteManagerService.loadAppointmentQuote(appointment.id),
+                this.initCustomer(appointment),
+                this.initCustomerPlans(appointment),
+                this.initCustomerPlanChanges(appointment),
+                this.initCustomerDirectDebitDetails(appointment),
+                this.invoiceManagerService.loadAppointmentInvoice(appointment.id)
+              ];
+
+              return forkJoin(tasks).pipe(map(() => appointment));
+
+            }),
+            mergeMap(appointment => {
+              return this.createJobSections(appointment.id).pipe(
+                first(),
+                map(jobSections => {
+                  return addJobSuccess({appointmentId: appointment.id, jobSections});
+                })
+              );
+            }),
+            catchError(error => {
+              this.loggerService.error("Add job error", error);
+              this.currentJobService.addJobError(action.appointmentId);
+              return of(addJobError({appointmentId: action.appointmentId, error}));
+            })
+          )
+      })
+    );
+  });
+
+  getAppointment(appointmentId): Observable<Appointment> {
+    return selectOrFetchEntity(this.appointmentsService, appointmentId).pipe(first());
+  }
+
+  /*
+  addJob$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(addJob),
+      mergeMap(action => {
+
         return selectOrFetchEntity(this.appointmentsService, action.appointmentId)
           .pipe(
             mergeMap(appointment => {
               return this.initAppointmentVisit(appointment).pipe(
                 first(),
-                map(() => appointment)
+                map(() => appointment),
+                tap(() => {console.log('addJob.appointment')})
               );
             }),
             mergeMap(appointment => {
               return this.initAppointmentCallTypes(appointment).pipe(
                 first(),
-                map(() => appointment)
+                map(() => appointment),
+                tap(() => {console.log('addJob.appointmentCallTypes')})
               );
             }),
             mergeMap(appointment => {
@@ -117,6 +165,7 @@ export class JobEffects {
       })
     );
   });
+*/
 
   reloadJobSections$ = createEffect(() => {
     return this.actions$.pipe(
@@ -315,6 +364,7 @@ export class JobEffects {
   private initAppointmentVisit(appointment: Appointment): Observable<AppointmentVisit> {
 
     return selectEntity(this.appointmentVisitsService, appointment.id).pipe(
+      first(),
       mergeMap(appointmentVisit => {
         if (appointmentVisit) {
           return of(appointmentVisit);
@@ -329,34 +379,22 @@ export class JobEffects {
         );
       }),
       mergeMap(appointmentVisit => {
+
         if (!appointmentVisit) {
           return this.appointmentVisitsService.add({
             id: appointment.id,
           } as AppointmentVisit);
         }
+
         return of(appointmentVisit);
       }),
-      first()
     );
-    //
-    // return selectOrFetchEntity(this.appointmentVisitsService, appointment.id).pipe(
-    //   mergeMap(appointmentVisit => {
-    //     if (!appointmentVisit) {
-
-    //       return this.appointmentVisitsService.add({
-    //         id: appointment.id,
-    //       } as AppointmentVisit);
-    //     }
-
-    //     return of(appointmentVisit);
-    //   }),
-    //   first()
-    // )
   }
 
   private initAppointmentCallTypes(appointment: Appointment) {
 
     return this.appointmentCallTypesService.entities$.pipe(
+      first(),
       mergeMap(callTypes => {
         const appointmentCallTypes = findByKey(callTypes, 'appointmentId', appointment.id);
         if (appointmentCallTypes?.length > 0) {
@@ -400,7 +438,7 @@ export class JobEffects {
 
   private initCustomer(appointment: Appointment) {
 
-    return selectOrFetchEntity(this.customersService, appointment.customerId);
+    return selectOrFetchEntity(this.customersService, appointment.customerId).pipe(first());
 
   }
 

@@ -70,6 +70,8 @@ export class JobsLoaderService {
 
   loadAll() {
 
+    console.log('JobsLoader.loadAll');
+
     this.appointmentsService.getAll().subscribe(appointments => {
 
     });

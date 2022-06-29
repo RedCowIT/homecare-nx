@@ -5,6 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {ApiUrlService} from "@homecare/common";
 import {map, tap} from "rxjs/operators";
 import {DocumentsService} from "../../store/entity/services/documents/documents.service";
+import {MergeStrategy} from "@ngrx/data";
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class DocumentUploadService {
       }),
       tap(document => {
         if (document){
-          this.documentsService.addOneToCache(document);
+          this.documentsService.addOneToCache(document, {mergeStrategy: MergeStrategy.IgnoreChanges});
         }
       })
     );

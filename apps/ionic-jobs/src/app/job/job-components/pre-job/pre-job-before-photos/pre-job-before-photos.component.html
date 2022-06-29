@@ -19,12 +19,27 @@
                   [documentSubTypeId]="documentSubType.id"></hc-document-gallery>
               </div>
 
-              <hc-document-upload
-                [parentId]="appointment.customerId"
-                [subId]="appointment.id"
-                [documentTypeId]="documentSubType.documentTypeId"
-                [documentSubTypeId]="documentSubType.id"
-              ></hc-document-upload>
+              <ng-container *ngIf="documentsService.select(appointment.customerId,
+              appointment.id,
+              documentSubType.documentTypeId,
+              documentSubType.id) | async as documents">
+
+                <ng-container *ngIf="documents.length >= 2; else docUpload">
+                  Maximum uploads reached.
+                </ng-container>
+
+                <ng-template #docUpload>
+                  <hc-document-upload
+                    [parentId]="appointment.customerId"
+                    [subId]="appointment.id"
+                    [documentTypeId]="documentSubType.documentTypeId"
+                    [documentSubTypeId]="documentSubType.id"
+                  ></hc-document-upload>
+                </ng-template>
+
+              </ng-container>
+
+
 
             </div>
 
