@@ -9,10 +9,10 @@ import {InvoicesService} from "../../../../store/entity/services/invoice/invoice
 import {EntityFormService} from "@homecare/entity";
 import {first, mergeMap, tap} from "rxjs/operators";
 import {FinancePlanService} from "../../../../../../../plan/src/lib/services/finance/finance-plan/finance-plan.service";
-import {Observable} from "rxjs";
+import {EMPTY, Observable} from "rxjs";
 import {
   catchHttpValidationErrors, CustomerPlan,
-  CustomerPlanAppliance, CustomerPlanFinance, InvoiceItem,
+  CustomerPlanAppliance, CustomerPlanFinance, InvoiceItem, parseApiValidationErrors,
   Plan,
   PlanTypes,
   selectFirstEntityByKey,
@@ -184,7 +184,9 @@ export class FinancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItem
       }),
       catchHttpValidationErrors(errors => {
 
-        this.errors = errors;
+        this.errors = parseApiValidationErrors(errors);
+        return EMPTY;
+
       }),
       first()
     ).subscribe((c) => {
@@ -206,8 +208,8 @@ export class FinancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItem
         return this.customerPlanFinanceService.update(dto.financePlan as CustomerPlanFinance);
       }),
       catchHttpValidationErrors(errors => {
-
-        this.errors = errors;
+        this.errors = parseApiValidationErrors(errors);
+        return EMPTY;
       })
     ).subscribe(() => {
       this.done.emit();

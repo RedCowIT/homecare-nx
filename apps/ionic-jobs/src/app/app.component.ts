@@ -110,7 +110,7 @@ export class AppComponent {
     //   style: StatusBarStyle.Dark,
     // });
 
-    await this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.LANDSCAPE);
+    // await this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.LANDSCAPE);
 
     await SplashScreen.hide();
   }

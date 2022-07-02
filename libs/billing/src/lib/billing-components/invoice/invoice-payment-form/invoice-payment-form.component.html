@@ -12,17 +12,16 @@
         color="dark"
         (submitted)="submit()"
       ></dd-entity-form-submit>
-      <div *ngIf="errors && errors?.length">
-        <ion-item color="danger" class="ion-margin-top">{{errors}}</ion-item>
-      </div>
+
     </div>
   </div>
   <div *ngIf="!id" class="ion-margin-top">
     <a (click)="changePaymentType($event)">Change Method</a>
   </div>
 </div>
-
-
+<div *ngIf="errors && errors?.length">
+  <ion-item color="danger" class="ion-margin-top">{{errors}}</ion-item>
+</div>
 <ng-template #noOptions>
   <ion-note color="danger">All payment methods in use, please amend an existing payment.</ion-note>
 </ng-template>

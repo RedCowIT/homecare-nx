@@ -6,6 +6,7 @@ import {createFooterNextButton} from "../../support/footer-button-factory";
 import {DirectDebitDetailsFormComponent} from "../../../../../../../libs/customer/src/lib/customer-components/direct-debit-details-form/direct-debit-details-form.component";
 import {Router} from "@angular/router";
 import {AlertService} from "../../../../../../../libs/core/src/lib/services/alert/alert.service";
+import {JobSection} from "@homecare/shared";
 
 @Component({
   selector: 'hc-job-direct-debit',
@@ -55,7 +56,7 @@ export class JobDirectDebitComponent implements OnInit {
   }
 
   async next() {
-    await this.router.navigateByUrl(`/job/${this.currentJobService.appointmentId}/sign-off`);
+    this.currentJobService.completeJobSection(JobSection.DD);
   }
 
 }

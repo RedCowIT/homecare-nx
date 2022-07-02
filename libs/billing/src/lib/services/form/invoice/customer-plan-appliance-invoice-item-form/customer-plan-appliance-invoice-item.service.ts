@@ -23,6 +23,7 @@ export class CustomerPlanApplianceInvoiceItemService extends EntityFormService {
       customerPlan: this.fb.group({
         id: undefined,
         customerId: [null],
+        appointmentId: [null],
         planId: [null, Validators.required],
         invoiceId: [null, Validators.required],
         invoiceItemId: [null],

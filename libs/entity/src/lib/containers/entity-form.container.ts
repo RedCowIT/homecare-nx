@@ -1,7 +1,12 @@
 import {EMPTY, Observable} from "rxjs";
-import {filter, first, takeUntil, tap} from "rxjs/operators";
+import {catchError, filter, first, takeUntil, tap} from "rxjs/operators";
 import {EntityCollectionServiceBase} from "@ngrx/data";
-import {ApiValidationErrors, catchHttpValidationErrors, EntityContainer} from "@homecare/shared";
+import {
+  ApiValidationErrors,
+  catchHttpValidationErrors,
+  EntityContainer,
+  parseApiValidationErrors
+} from "@homecare/shared";
 import {EntityFormService} from "@homecare/entity";
 import {EventEmitter, Input, OnInit, Output} from "@angular/core";
 
@@ -136,18 +141,13 @@ export abstract class EntityFormContainer<T> extends EntityContainer<T> implemen
     operation$.pipe(
       catchHttpValidationErrors((errors: ApiValidationErrors) => {
 
-        if (errors?.errors?.length) {
-          this.errors = errors.errors;
-        } else if (errors.message) {
-          try{
-            const jsonError = JSON.parse(errors.message);
-            this.errors = [jsonError.message];
-          } catch (e){
-            this.errors = [errors.message];
-          }
-        }
+        this.errors = parseApiValidationErrors(errors);
 
         return EMPTY;
+      }),
+      catchError(e => {
+        console.error(e);
+        return null;
       }),
       first()
     ).subscribe(entity => {

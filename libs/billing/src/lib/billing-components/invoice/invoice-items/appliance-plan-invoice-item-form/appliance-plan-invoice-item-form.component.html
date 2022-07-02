@@ -22,6 +22,10 @@
 
   </div>
 
+  <div *ngIf="errors && errors.length">
+    <ion-item color="danger">{{errors}}</ion-item>
+  </div>
+
   <div class="action-footer">
     <ion-button *ngIf="invoiceItemId" color="danger" (click)="delete()" class="mr-auto" [disabled]="deleting">Remove</ion-button>
     <ion-button (click)="calculate()" [fill]="formService.form.valid ? 'outline' : 'solid'">Calculate</ion-button>

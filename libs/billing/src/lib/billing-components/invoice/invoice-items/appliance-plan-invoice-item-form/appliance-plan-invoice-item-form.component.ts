@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
   catchHttpValidationErrors, CustomerPlan,
-  CustomerPlanAppliance, InvoiceItem,
+  CustomerPlanAppliance, InvoiceItem, parseApiValidationErrors,
   Plan,
   PlanTypes,
   selectFirstEntityByKey, selectOrFetchFirstEntityByKey
 } from "@homecare/shared";
-import {combineLatest, Observable} from "rxjs";
+import {combineLatest, EMPTY, Observable} from "rxjs";
 import {ApplianceRepairPlanService, PlanPaymentPeriodsService, PlansService, PlanTypesService} from "@homecare/plan";
 import {CustomerPlanAppliancesService, CustomerPlansService} from "@homecare/customer";
 import {InvoiceItemsService} from "../../../../store/entity/services/invoice/invoice-items/invoice-items.service";
@@ -132,17 +132,29 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
 
   calculate() {
 
-
+    this.errors = [];
 
     const dto = this.formService.createDTO({groupName: 'appliancePlan'});
 
-    this.applianceRepairPlanService.calculatePeriodPrice(dto).pipe(first()).subscribe(
-      result => {
-        this.getForm().patchValue({
-          'customerPlan': {
-            periodPrice: result?.periodPrice
-          }
-        }, {emitEvent: false});
+    this.applianceRepairPlanService.calculatePeriodPrice(dto).pipe(
+      catchHttpValidationErrors(errors => {
+
+        this.errors = parseApiValidationErrors(errors);
+
+        return EMPTY;
+
+      }),
+      first()
+      ).subscribe(
+      (result: any) => {
+        if (result){
+          this.getForm().patchValue({
+            'customerPlan': {
+              periodPrice: result?.periodPrice
+            }
+          }, {emitEvent: false});
+        }
+
       }
     );
 
@@ -200,7 +212,9 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
       }),
       catchHttpValidationErrors(errors => {
 
-        this.errors = errors;
+        this.errors = parseApiValidationErrors(errors);
+        return EMPTY;
+
       }),
       first()
     ).subscribe((c) => {
@@ -219,8 +233,8 @@ export class AppliancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceIt
         return this.customerPlanAppliancesService.update(dto.appliancePlan as CustomerPlanAppliance);
       }),
       catchHttpValidationErrors(errors => {
-
-        this.errors = errors;
+        this.errors = parseApiValidationErrors(errors);
+        return EMPTY;
       })
     ).subscribe(() => {
       this.done.emit();

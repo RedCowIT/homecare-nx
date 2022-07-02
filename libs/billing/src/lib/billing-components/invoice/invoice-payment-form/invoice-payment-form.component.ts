@@ -106,7 +106,7 @@ export class InvoicePaymentFormComponent extends EntityFormContainer<InvoicePaym
     ]).pipe(
       map(([paymentTypes, invoicePayments]) => {
 
-        invoicePayments = invoicePayments.filter(invoicePayment => invoicePayment.invoiceId);
+        invoicePayments = invoicePayments.filter(invoicePayment => invoicePayment.invoiceId === this.invoiceId);
 
         return this.paymentTypeOptions.filter(paymentTypeOption => {
 

@@ -4,6 +4,7 @@ import {map} from "rxjs/operators";
 import {TableSourceService} from "@homecare/common";
 import {InvoicesService} from "../../../store/entity/services/invoice/invoices/invoices.service";
 import {InvoiceStatusesService} from "../../../store/entity/services/invoice/invoice-statuses/invoice-statuses.service";
+import * as moment from "moment";
 
 @Injectable()
 export class InvoiceListTableService extends TableSourceService {
@@ -46,7 +47,7 @@ export class InvoiceListTableService extends TableSourceService {
             id: invoice.id,
             invoiceNumber: invoice.invoiceNumber,
             status: invoiceStatusMap[invoice.invoiceStatusId].description,
-            invoiceDate: invoice.invoiceDate,
+            invoiceDate: moment(invoice.invoiceDate).format('DD-MM-YYYY'),
             grossAmount: invoice.grossAmount
           };
 

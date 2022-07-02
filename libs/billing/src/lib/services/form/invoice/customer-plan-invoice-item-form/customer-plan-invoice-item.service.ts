@@ -14,6 +14,7 @@ export class CustomerPlanInvoiceItemService extends EntityFormService {
     this.form = this.fb.group({
       invoiceItem: this.fb.group({
         id: undefined,
+        invoiceItemTypeId: [null, Validators.required],
         invoiceId: [null, Validators.required],
         productId: [null, Validators.required],
         qty: [null, Validators.required],

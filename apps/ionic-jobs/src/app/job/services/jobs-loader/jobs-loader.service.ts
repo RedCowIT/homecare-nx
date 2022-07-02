@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {first, mergeMap, tap} from "rxjs/operators";
-import {Appointment, findById, joinEntityLoading} from "@homecare/shared";
+import {Appointment, findById, joinEntityLoading, removeMissingFromCache} from "@homecare/shared";
 import {CustomerAddressesService, CustomerPlansService, CustomersService} from "@homecare/customer";
 import {AppointmentCallTypesService, AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
 import {combineLatest, Observable} from "rxjs";
@@ -110,6 +110,12 @@ export class JobsLoaderService {
 
     this.customerPlansService.getWithQuery({
       customerId: `${appointment.customerId}`
+    }).pipe(
+      first()
+    ).subscribe(customerPlans => {
+
+      removeMissingFromCache(this.customerPlansService, customerPlans);
+
     });
 
     this.appointmentCallTypesService.getWithQuery({
@@ -119,17 +125,7 @@ export class JobsLoaderService {
     ).subscribe(appointmentCallTypes => {
 
       // Remove any not present in current payload
-      this.appointmentCallTypesService.entities$.pipe(first()).subscribe(currentCallTypes => {
-        for (const currentCallType of currentCallTypes) {
-          if (!findById(appointmentCallTypes, currentCallType.id)) {
-            this.appointmentCallTypesService.removeOneFromCache(currentCallType.id, {
-              mergeStrategy: MergeStrategy.IgnoreChanges
-            });
-          }
-        }
-      });
-
-
+      removeMissingFromCache(this.appointmentCallTypesService, appointmentCallTypes);
 
     });
 

@@ -1,8 +1,8 @@
 import {Dictionary} from "@ngrx/entity";
-import {EntityCollectionServiceBase} from "@ngrx/data";
+import {EntityCollectionServiceBase, MergeStrategy} from "@ngrx/data";
 import {combineLatest, Observable, of} from "rxjs";
-import {map, mergeMap, tap} from "rxjs/operators";
-import {findByKey, firstItem} from "./array-utils";
+import {first, map, mergeMap, tap} from "rxjs/operators";
+import {findById, findByKey, firstItem} from "./array-utils";
 
 export function entityMapValues<T>(dictionary: Dictionary<T>, keys: any[]) {
 
@@ -76,4 +76,17 @@ export function joinEntityLoading(entityServices: EntityCollectionServiceBase<an
       return false;
     })
   );
+}
+
+export function removeMissingFromCache<T>(entityService: EntityCollectionServiceBase<T>, entities: T[]) {
+  entityService.entities$.pipe(first()).subscribe(currentEntities => {
+    for (const currentEntity of currentEntities) {
+      const currentEntityId = (currentEntity as any).id;
+      if (!findById(entities, currentEntityId)) {
+        entityService.removeOneFromCache(currentEntityId, {
+          mergeStrategy: MergeStrategy.IgnoreChanges
+        });
+      }
+    }
+  });
 }

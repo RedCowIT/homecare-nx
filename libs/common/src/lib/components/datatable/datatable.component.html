@@ -1,5 +1,5 @@
-<div *ngIf="source.rows$ | async as rows">
-  <ngx-datatable *ngIf="rows"
+<div *ngIf="source.rows$ | async as rows" #tableWrapper>
+  <ngx-datatable #dataTable *ngIf="rows"
     class="material"
     [headerHeight]="headerHeight"
     [footerHeight]="footerHeight"

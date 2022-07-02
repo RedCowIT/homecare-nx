@@ -2,12 +2,12 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
   catchHttpValidationErrors,
   CustomerPlan,
-  InvoiceItem,
+  InvoiceItem, parseApiValidationErrors,
   Plan,
   selectEntity, selectFirstEntityByKey,
   SubscribedContainer
 } from "@homecare/shared";
-import {combineLatest, Observable} from "rxjs";
+import {combineLatest, EMPTY, Observable} from "rxjs";
 import {PlansService} from "@homecare/plan";
 import {CustomerPlansService} from "@homecare/customer";
 import {InvoiceItemsService} from "../../../../store/entity/services/invoice/invoice-items/invoice-items.service";
@@ -81,9 +81,12 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
     });
 
     selectEntity(this.invoicesService, this.invoiceId).pipe(first()).subscribe((invoice) => {
+
       this.getFormService().form.patchValue({
         'customerPlan': {appointmentId: invoice.appointmentId},
       });
+
+      console.log('set appointment id on form', invoice, this.getFormService().form.value);
     });
 
     if (this.invoiceItemId) {
@@ -148,6 +151,8 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
     this.plans$ = this.plansService.entities$.pipe(map(plans => {
       return plans.filter(plan => {
         return this.planTypes.includes(plan.planTypeId);
+      }).sort((a, b) => {
+        return a.description.localeCompare(b.description);
       })
     }));
 
@@ -215,7 +220,8 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
       }),
       catchHttpValidationErrors(errors => {
 
-        this.errors = errors;
+        this.errors = parseApiValidationErrors(errors);
+        return EMPTY;
       }),
       first()
     ).subscribe((c) => {
@@ -232,7 +238,8 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
       }),
       catchHttpValidationErrors(errors => {
 
-        this.errors = errors;
+        this.errors = parseApiValidationErrors(errors);
+        return EMPTY;
       })
     ).subscribe(() => {
       this.done.emit();

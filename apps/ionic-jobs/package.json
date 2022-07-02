@@ -1,6 +1,6 @@
 {
   "name": "jobs",
-  "license": "SEE LICENSE IN <your-license-filename>",
+  "license": "",
   "version": "0.0.0",
   "scripts": {
     "cap.add.ios": "npx ionic capacitor add ios",
@@ -9,7 +9,8 @@
     "cap.android": "npx ionic capacitor open android",
     "cap.copy": "npx ionic capacitor copy",
     "cap.update": "npx ionic capacitor update",
-    "build.staging": "ng build --configuration=staging;npx cap copy;"
+    "build.staging": "NODE_ENV=staging; ng build --configuration=staging;npx cap copy;",
+    "build.production": "NODE_ENV=production; ng build --configuration=production;npx cap copy;"
   },
   "config": {
     "ionic_generate_source_map": "true"

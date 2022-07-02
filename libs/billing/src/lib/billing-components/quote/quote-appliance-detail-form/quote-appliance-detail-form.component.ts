@@ -37,6 +37,8 @@ export class QuoteApplianceDetailFormComponent extends EntityFormContainer<Quote
   @Output()
   delete = new EventEmitter<QuoteApplianceDetail>();
 
+
+
   constructor(public formService: QuoteApplianceDetailFormService,
               public entityService: QuoteApplianceDetailsService,
               public appliancePriceRangesService: AppliancePriceRangesService,

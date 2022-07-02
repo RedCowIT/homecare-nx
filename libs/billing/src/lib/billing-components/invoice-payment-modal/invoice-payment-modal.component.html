@@ -3,7 +3,7 @@
   <ion-content>
     <div class="content-with-action-footer">
       <div class="content ion-padding">
-        <hc-invoice-payment-form [id]="id" [invoiceId]="invoiceId" [hideSubmit]="true"></hc-invoice-payment-form>
+        <hc-invoice-payment-form [id]="id" [invoiceId]="invoiceId" [hideSubmit]="true" (create)="close()" (update)="close()" (delete)="close()"></hc-invoice-payment-form>
       </div>
       <div class="action-footer">
         <ion-button color="danger" (click)="delete()" class="mr-auto">Remove</ion-button>

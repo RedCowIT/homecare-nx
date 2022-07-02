@@ -27,11 +27,13 @@ export class InvoicePaymentModalComponent implements OnInit {
 
   async delete() {
     await this.invoicePaymentForm.deleteEntity();
-    await this.modalCtrl.dismiss();
   }
 
   async save() {
     await this.invoicePaymentForm.submit();
+  }
+
+  async close(){
     await this.modalCtrl.dismiss();
   }
 }

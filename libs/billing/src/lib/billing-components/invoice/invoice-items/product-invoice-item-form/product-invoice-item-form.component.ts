@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
   ApiValidationErrors,
   catchHttpValidationErrors, firstItem,
-  InvoiceItem,
+  InvoiceItem, parseApiValidationErrors,
   Product,
   ProductCategory, ProductStock,
   selectEntity, selectEntityByKey, selectOrFetchFirstEntityByKey,
@@ -189,9 +189,12 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
   }
 
   createInvoiceItem() {
+
     this.invoiceItemsService.add(this.formService.createDTO<InvoiceItem>() as InvoiceItem).pipe(
       catchHttpValidationErrors((errors: ApiValidationErrors) => {
-        this.errors = errors.errors;
+
+        this.errors = parseApiValidationErrors(errors);
+
         return EMPTY;
       }),
       first()
@@ -203,7 +206,9 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
   updateInvoiceItem() {
     this.invoiceItemsService.update(this.formService.createDTO<InvoiceItem>() as InvoiceItem).pipe(
       catchHttpValidationErrors((errors: ApiValidationErrors) => {
-        this.errors = errors.errors;
+
+        this.errors = parseApiValidationErrors(errors);
+
         return EMPTY;
       }),
       first()
