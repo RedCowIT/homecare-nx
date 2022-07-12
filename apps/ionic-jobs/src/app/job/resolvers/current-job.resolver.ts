@@ -30,7 +30,7 @@ export class CurrentJobResolver implements Resolve<number> {
         return job.appointmentId;
       }),
       first(),
-      timeout(20000),
+      timeout(60000),
       catchError(error => {
         this.loggerService.error('Failed to resolve job', error);
         this.router.navigateByUrl('/main/jobs');

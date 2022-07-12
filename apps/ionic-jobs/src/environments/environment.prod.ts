@@ -7,7 +7,7 @@ export const environment = {
   api: {
     domain: 'laravel.homecareservicecentre.co.uk',
     baseUrl: 'https://laravel.homecareservicecentre.co.uk',
-    timeout: 10000
+    timeout: 90000
   },
   auth: {
     domain: 'homecaresc-dev.eu.auth0.com',
@@ -46,7 +46,7 @@ export const environment = {
     enabled: true,
     dsn: 'https://7d6b1fedfda549b4b64a094875ad50c3@o1181554.ingest.sentry.io/6295140',
     environment: 'production',
-    release: 'hc-ionic@1.0.0'
+    release: 'hc-ionic@1.0.1'
   }
 };
 
