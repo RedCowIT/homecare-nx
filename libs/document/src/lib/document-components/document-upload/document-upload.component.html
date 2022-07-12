@@ -3,9 +3,5 @@
        [ngClass]="{hidden: hidden}"
        type="file"
        capture="environment" accept="image/*"
-       (change)="onFileChange($event)"/>
-
-<!--<div class="ion-margin-top">-->
-<!--  <ion-button (click)="takePicture()" color="dark">Add Photo</ion-button>-->
-<!--</div>-->
-
+       ddImageFileResize
+       (imageResize)="onImageResize($event)"/>

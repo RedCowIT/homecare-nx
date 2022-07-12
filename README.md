@@ -9,9 +9,13 @@ Use global capacitor-cli
 Update Sentry release in environment.staging and environment.production 
 <pre>
 cd apps/ionic-jobs
-ng build --configuration=staging
-npx cap sync
+npm run build.staging (or npm run build.production)
+npx cap open android
 </pre>
+
+Change Build Variant to stagingDebug or productionDebug
+Clean build
+Build APK
 
 ## Generate a page
 
