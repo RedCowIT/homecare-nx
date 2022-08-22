@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {combineLatest, forkJoin, Observable, of, throwError} from "rxjs";
 import {
-  CustomerPlanFinanceDocument,
+  CustomerPlanFinanceDocument, findById, findByKey,
   firstByKey,
   InvoiceItem,
   InvoiceItemTypes,
-  PlanTypes,
+  PlanTypes, removeMissingFromCache,
   selectOrFetchFirstEntityByKey
 } from "@homecare/shared";
-import {catchError, first, map, mergeMap} from "rxjs/operators";
+import {catchError, first, map, mergeMap, tap} from "rxjs/operators";
 import {InvoiceItemsService} from "../../../store/entity/services/invoice/invoice-items/invoice-items.service";
 import {InvoiceItemTypesService} from "../../../store/entity/services/invoice/invoice-item-types/invoice-item-types.service";
 import {CustomerPlansService} from "@homecare/customer";
@@ -41,6 +41,8 @@ export class InvoiceManagerService {
         first(),
         mergeMap(invoice => {
 
+            console.log('Loading appointment invoice relations', invoice);
+
             if (!invoice) {
               return of(false);
             }
@@ -53,7 +55,11 @@ export class InvoiceManagerService {
 
               this.invoiceItemTypesService.entityMap$,
 
-              this.customerPlansService.entities$,
+              this.customerPlansService.getWithQuery({
+                customerId: `${invoice.customerId}`
+              }),
+
+              this.customerPlanFinanceDocumentsService.entities$,
 
               this.plansService.entityMap$,
 
@@ -65,17 +71,26 @@ export class InvoiceManagerService {
                           invoiceItems,
                           invoiceItemTypeMap,
                           customerPlans,
+                          customerPlanFinanceDocuments,
                           planMap,
                           planTypeMap
                         ]) => {
 
                 const planLoads = [];
 
+                console.log('Remove missing invoice items', invoiceItems);
+
+                removeMissingFromCache(this.invoiceItemsService, invoiceItems, {key: 'invoiceId', value: invoice.id});
+
+                const appointmentCustomerPlans = [];
+
                 for (const invoiceItem of invoiceItems) {
 
                   const customerPlan = firstByKey(customerPlans, 'invoiceItemId', invoiceItem.id);
 
                   if (customerPlan) {
+
+                    appointmentCustomerPlans.push(customerPlan);
 
                     const plan = planMap[customerPlan.planId];
                     const planType = planTypeMap[plan.planTypeId];
@@ -89,11 +104,32 @@ export class InvoiceManagerService {
                   }
 
                 }
+
+                // TODO: ADD AFTER TESTING!
+                if (appointmentCustomerPlans.length) {
+                  removeMissingFromCache(this.customerPlansService, customerPlans, {key: 'invoiceId', value: invoice.id});
+                }
+
+                // Remove cached finance documents that are not part of this invoice
+                const removeDocs = customerPlanFinanceDocuments.filter(financeDoc => {
+                  return !findById(customerPlans, financeDoc.customerPlanId);
+                });
+
+                console.log('Clean up customer plan finance docs', {customerPlanFinanceDocuments, removeDocs})
+
+                if (removeDocs.length) {
+                  this.customerPlanFinanceDocumentsService.removeManyFromCache(removeDocs);
+                }
+
                 if (planLoads.length) {
                   return forkJoin(planLoads).pipe(first(), map(() => true));
                 } else {
                   return of(true);
                 }
+              }),
+              tap(() => {
+                // TODO: Remove plans that don't belong to invoice
+
               }),
               catchError(error => {
                 console.error('Failed to load appointmentinvoice', error);

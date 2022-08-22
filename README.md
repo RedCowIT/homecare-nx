@@ -6,7 +6,10 @@ Installing local capacitor-cli via npm for ionic-jobs causes rxjs incompatibilit
 Use global capacitor-cli
 
 ##Build
-Update Sentry release in environment.staging and environment.production 
+
+- Update Sentry release in environment.staging and environment.production
+- Increment version code and set version string in android/app/build.gradle
+
 <pre>
 cd apps/ionic-jobs
 npm run build.staging (or npm run build.production)

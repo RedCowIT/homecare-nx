@@ -11,7 +11,7 @@ import {
 import {catchError, filter, first, map, mergeMap, tap, withLatestFrom} from "rxjs/operators";
 import {
   Appointment,
-  AppointmentVisit,
+  AppointmentVisit, CustomerPlan,
   CustomerPlanChange,
   findById,
   findByKey,
@@ -19,7 +19,7 @@ import {
   firstByKey,
   JobSection,
   JobSectionStatus,
-  jobSectionStatusComparer,
+  jobSectionStatusComparer, removeMissingFromCache,
   selectEntity,
   selectOrFetchEntity
 } from "@homecare/shared";
@@ -403,6 +403,9 @@ export class JobEffects {
           return this.appointmentCallTypesService.getWithQuery({
             appointmentId: `${appointment.id}`
           }).pipe(
+            tap(customerPlans => {
+              removeMissingFromCache(this.appointmentCallTypesService, appointmentCallTypes, {key: 'appointmentId', value: appointment.id});
+            }),
             catchError(error => throwError(error))
           );
         }
@@ -410,11 +413,13 @@ export class JobEffects {
     )
   }
 
-  private initCustomerPlans(appointment: Appointment) {
+  private initCustomerPlans(appointment: Appointment): Observable<CustomerPlan[]> {
 
     return this.customerPlansService.getWithQuery({
       customerId: `${appointment.customerId}`
-    });
+    }).pipe(tap(customerPlans => {
+      removeMissingFromCache(this.customerPlansService, customerPlans, {key: 'customerId', value: appointment.customerId});
+    }));
 
   }
 

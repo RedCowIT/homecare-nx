@@ -6,7 +6,8 @@
       <div *ngIf="plans$ | async as plans">
         <ion-item *ngIf="plans">
           <ion-label position="stacked">Plan*</ion-label>
-          <ion-select formControlName="planId" placeholder="Select one" interface="popover">
+          <ion-select formControlName="planId" placeholder="Select one" interface="popover"
+                      [interfaceOptions]="{'cssClass': 'wider-popover'}">
             <ion-select-option *ngFor="let plan of plans"
                                [value]="plan.id">{{plan.description}}</ion-select-option>
           </ion-select>
@@ -15,7 +16,7 @@
 
       <ion-item>
         <ion-label position="stacked">Start Date*</ion-label>
-        <ion-datetime formControlName="startDate" displayFormat="MMMM YYYY"></ion-datetime>
+        <ion-datetime formControlName="startDate"></ion-datetime>
       </ion-item>
 
       <ion-item>

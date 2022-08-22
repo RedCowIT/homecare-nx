@@ -22,7 +22,11 @@
   </div>
 
   <div class="action-footer">
-    <ion-button color="dark" class="mr-auto" (click)="skip()">Skip</ion-button>
+    <div *ngIf="emails$ | async as emails" class="mr-auto">
+      <ion-button *ngIf="emails?.length" color="dark" class="mr-auto" (click)="skip()">Skip</ion-button>
+      <ion-button *ngIf="emails?.length == 0" color="dark" class="mr-auto" (click)="sendPost()">Send to Post
+      </ion-button>
+    </div>
     <ion-button size="default" (click)="sendEmail()" [disabled]="disabled">
       Email Invoice
     </ion-button>

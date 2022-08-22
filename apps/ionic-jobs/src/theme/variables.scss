@@ -154,6 +154,12 @@
   }
 }
 
+ion-select.large-width::ng-deep
+{
+  --width: 400px;
+  --max-width: 400px;
+}
+
 .ion-color-primary-subtle {
   --ion-color-base: var(--ion-color-primary-subtle) !important;
   --ion-color-base-rgb: var(--ion-color-primary-subtle-rgb) !important;
@@ -207,4 +213,9 @@ ion-modal.fullscreen {
     font-size:1.2rem;
     border-radius: 8px;
   }
+}
+
+.wider-popover .popover-content
+{
+  --width: 425px;
 }

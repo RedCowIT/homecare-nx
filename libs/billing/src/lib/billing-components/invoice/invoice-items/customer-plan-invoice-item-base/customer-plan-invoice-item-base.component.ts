@@ -83,7 +83,7 @@ export class CustomerPlanInvoiceItemBaseComponent extends SubscribedContainer im
     selectEntity(this.invoicesService, this.invoiceId).pipe(first()).subscribe((invoice) => {
 
       this.getFormService().form.patchValue({
-        'customerPlan': {appointmentId: invoice.appointmentId},
+        'customerPlan': {appointmentId: invoice.appointmentId, customerId: invoice.customerId},
       });
 
       console.log('set appointment id on form', invoice, this.getFormService().form.value);

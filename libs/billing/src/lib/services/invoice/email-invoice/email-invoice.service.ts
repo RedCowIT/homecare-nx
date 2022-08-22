@@ -25,8 +25,20 @@ export class EmailInvoiceService {
 
   }
 
+  post(invoiceId: number): Observable<boolean> {
+    return this.httpClient.post(this.postUrl(invoiceId), {}).pipe(
+      map((response: any) => {
+        return true;
+      })
+    );
+  }
+
   url(invoiceId: number): string {
     return this.apiUrlService.url('invoices/' + invoiceId + '/sendEmail');
+  }
+
+  postUrl(invoiceId: number): string {
+    return this.apiUrlService.url('invoices/' + invoiceId + '/sendPost');
   }
 
 }

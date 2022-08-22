@@ -67,7 +67,6 @@ export class FinancePlanInvoiceItemFormComponent extends CustomerPlanInvoiceItem
     super.ngOnInit();
 
     // select monthly
-
     this.planPaymentPeriodsService.selectMonthly().pipe(
       first()
     ).subscribe(planPaymentPeriod => {

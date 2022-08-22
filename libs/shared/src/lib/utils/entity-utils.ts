@@ -50,15 +50,20 @@ export function selectOrFetchFirstEntityByKey<T>(entityService: EntityCollection
       if (entity) {
         return of(entity);
       }
-      const query: any = {};
-      query[`${key}`] = `${value}`;
 
-      return entityService.getWithQuery(query).pipe(
-        map(entities => firstItem(entities))
-      );
+      return fetchFirstEntityByKey(entityService, key, value);
     })
   )
 
+}
+
+export function fetchFirstEntityByKey<T>(entityService: EntityCollectionServiceBase<T>, key: string, value: any): Observable<T> {
+  const query: any = {};
+  query[`${key}`] = `${value}`;
+
+  return entityService.getWithQuery(query).pipe(
+    map(entities => firstItem(entities))
+  );
 }
 
 export function joinEntityLoading(entityServices: EntityCollectionServiceBase<any>[]): Observable<boolean> {
@@ -78,9 +83,24 @@ export function joinEntityLoading(entityServices: EntityCollectionServiceBase<an
   );
 }
 
-export function removeMissingFromCache<T>(entityService: EntityCollectionServiceBase<T>, entities: T[]) {
+/**
+ * Remove entities that are missing from cache.
+ *
+ * Optional filter allows you to remove entities only if they have a specific property set. This allows you to
+ * do things like remove entities missing from cache that belong to invoice_id = 512
+ *
+ * @param entityService
+ * @param entities
+ * @param filter
+ */
+export function removeMissingFromCache<T>(entityService: EntityCollectionServiceBase<T>, entities: T[], filter?: { key: string, value: string | number }) {
   entityService.entities$.pipe(first()).subscribe(currentEntities => {
     for (const currentEntity of currentEntities) {
+      if (filter) {
+        if (currentEntity[filter.key] !== filter.value) {
+          continue;
+        }
+      }
       const currentEntityId = (currentEntity as any).id;
       if (!findById(entities, currentEntityId)) {
         entityService.removeOneFromCache(currentEntityId, {

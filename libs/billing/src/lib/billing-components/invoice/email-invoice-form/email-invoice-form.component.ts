@@ -81,4 +81,12 @@ export class EmailInvoiceFormComponent extends EntityContainer<Invoice> implemen
   skip() {
     this.done.emit();
   }
+
+  sendPost(){
+    this.emailInvoiceService.post(this.id).pipe(
+      first()
+    ).subscribe(result => {
+      this.done.emit();
+    });
+  }
 }

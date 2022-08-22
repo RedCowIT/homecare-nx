@@ -15,15 +15,16 @@ import {
   servicePlanTypes
 } from "@homecare/shared";
 import {InvoiceItemTypesService} from "../../../store/entity/services/invoice/invoice-item-types/invoice-item-types.service";
-import {Observable, of} from "rxjs";
+import {EMPTY, forkJoin, Observable, of} from "rxjs";
 import {ProductCategoriesService, ProductsService} from "@homecare/product";
 import {ModalController} from "@ionic/angular";
 import {PlansService, PlanTypesService} from "@homecare/plan";
-import {catchError, first, map, mergeMap} from "rxjs/operators";
+import {catchError, first, map, mergeMap, switchMap} from "rxjs/operators";
 import {InvoiceItemsService} from "../../../store/entity/services/invoice/invoice-items/invoice-items.service";
 import {CustomerPlansService} from "@homecare/customer";
 import {BooleanValue, toTitleCase} from "@homecare/common";
 import {InvoicesService} from "../../../store/entity/services/invoice/invoices/invoices.service";
+import {InvoiceManagerService} from "../../../services/invoice/invoice-manager/invoice-manager.service";
 
 @Component({
   selector: 'hc-invoice-item-modal',
@@ -58,6 +59,7 @@ export class InvoiceItemModalComponent implements OnInit {
               public plansService: PlansService,
               public customerPlansService: CustomerPlansService,
               public invoicesService: InvoicesService,
+              public invoiceManagerService: InvoiceManagerService,
               public modalCtrl: ModalController) {
 
     this.serviceProductCategory$ = this.productCategoriesService.selectByDescription(ProductCategories.Service);
@@ -114,14 +116,24 @@ export class InvoiceItemModalComponent implements OnInit {
             first(),
             mergeMap(invoice => {
 
-              return selectEntityByKey(this.customerPlansService, 'customerId', invoice.customerId).pipe(
-                map(customerPlans => firstByKey(customerPlans, 'invoiceItemId', this.invoiceItemId))
-              );
+              return forkJoin([
+                of(invoice),
+                selectEntityByKey(this.customerPlansService, 'customerId', invoice.customerId).pipe(first())
+              ]);
 
             }),
-            mergeMap(customerPlan => {
+            mergeMap(([invoice, customerPlans]) => {
 
-              return selectEntity(this.plansService, customerPlan.planId);
+              const customerPlan = firstByKey(customerPlans, 'invoiceItemId', this.invoiceItemId);
+
+              if (!customerPlan){
+                return this.customerPlansService.getWithQuery({customerId: `${invoice.customerId}`}).pipe(
+                  mergeMap(customerPlans => of(firstByKey(customerPlans, 'invoiceItemId', this.invoiceItemId))),
+                  mergeMap(foundCustomerPlan => selectEntity(this.plansService, foundCustomerPlan.planId))
+                );
+              } else {
+                return selectEntity(this.plansService, customerPlan.planId);
+              }
 
             }),
             mergeMap(plan => {
@@ -161,6 +173,15 @@ export class InvoiceItemModalComponent implements OnInit {
   }
 
   async close() {
+
+    console.log('invoiceItemModal.close');
+
+    selectEntity(this.invoicesService, this.invoiceId).pipe(first()).subscribe(invoice => {
+      if (invoice){
+        this.invoiceManagerService.loadAppointmentInvoice(invoice.appointmentId).pipe(first()).subscribe();
+      }
+    });
+
     await this.modalCtrl.dismiss();
   }
 

@@ -1,46 +1,61 @@
 import {Component, OnInit} from '@angular/core';
-import {BehaviorSubject, of, throwError} from "rxjs";
+import {BehaviorSubject, combineLatest, of, throwError} from "rxjs";
 import {ButtonConfig} from "@homecare/common";
 import {CurrentJobService} from "../../../services/current-job/current-job.service";
 import {createFooterBackButton, createFooterNextButton} from "../../../support/footer-button-factory";
-import {QuoteSection} from "@homecare/shared";
-import {QuotesService} from "@homecare/billing";
-import {catchError, first, mergeMap} from "rxjs/operators";
+import {findByKey, QuoteSection, SubscribedContainer} from "@homecare/shared";
+import {QuoteItemsService, QuotesService} from "@homecare/billing";
+import {catchError, first, mergeMap, takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'hc-quote-complete',
   templateUrl: './quote-complete.component.html',
   styleUrls: ['./quote-complete.component.scss']
 })
-export class QuoteCompleteComponent implements OnInit {
+export class QuoteCompleteComponent extends SubscribedContainer implements OnInit {
 
   footerButtons$ = new BehaviorSubject<ButtonConfig[]>([]);
 
   constructor(public currentJobService: CurrentJobService,
-              public quotesService: QuotesService) {
+              public quotesService: QuotesService,
+              public quoteItemsService: QuoteItemsService) {
+    super()
   }
 
   ngOnInit(): void {
-    this.footerButtons$.next([
-      createFooterBackButton(async () => {
 
-        this.currentJobService.navToPrevQuoteSection(QuoteSection.CompleteQuote);
+    combineLatest([this.currentJobService.quote$, this.quoteItemsService.entities$]).pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe(([quote, quoteItems]) => {
 
-      }),
-      {
-        slot: 'start',
-        label: 'Defer',
-        color: 'dark',
-        callback: () => {
-          this.deferQuote();
-        }
-      },
-      createFooterNextButton(async () => {
+      this.quoteItemsService.entitiesByQuoteId(quote.id).pipe(
+        first()
+      ).subscribe(quoteItems => {
 
-        this.acceptQuote();
+        const acceptLabel = quoteItems.length ? 'Accept' : 'Next';
 
-      }, 'Accept')
-    ])
+        this.footerButtons$.next([
+          createFooterBackButton(async () => {
+
+            this.currentJobService.navToPrevQuoteSection(QuoteSection.CompleteQuote);
+
+          }),
+          createFooterNextButton(async () => {
+
+            this.acceptQuote();
+
+          }, acceptLabel)
+        ]);
+
+      });
+
+
+
+
+
+    });
+
+
   }
 
   deferQuote() {

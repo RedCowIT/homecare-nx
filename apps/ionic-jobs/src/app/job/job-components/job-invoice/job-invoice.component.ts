@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {CurrentJobService} from "../../services/current-job/current-job.service";
 import {filter, first, map, mergeMap} from "rxjs/operators";
 import {
+  fetchFirstEntityByKey,
   Invoice,
   JobSection,
   selectEntityByKey,
@@ -115,7 +116,9 @@ export class JobInvoiceComponent extends SubscribedContainer implements OnInit {
 
     if (this.invoiceNotesForm.validate()) {
 
-      this.currentJobService.invoice$.pipe(
+      const invoice$ = fetchFirstEntityByKey(this.invoicesService, 'appointmentId', this.currentJobService.appointmentId);
+
+      invoice$.pipe(
         mergeMap(invoice => {
           return combineLatest(
             [

@@ -28,6 +28,7 @@ export class InvoiceTableComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    console.log('Initialising invoice table service', this.invoiceId);
     this.invoiceTableService.init(this.invoiceId, {value: this.valueTmpl});
     this.invoiceSummaryService.init(this.invoiceId);
     this.load();
@@ -41,6 +42,7 @@ export class InvoiceTableComponent implements OnInit, AfterViewInit {
   }
 
   public load() {
+    console.log('invoiceTableService.load');
     this.invoiceTableService.load();
   }
 
@@ -59,6 +61,7 @@ export class InvoiceTableComponent implements OnInit, AfterViewInit {
 
     modal.onWillDismiss().then(
       (data: any) => {
+        console.log('invoiceTable.willDismiss.load');
         this.load();
       }
     );

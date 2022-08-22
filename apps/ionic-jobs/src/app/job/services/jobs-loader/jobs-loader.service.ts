@@ -114,7 +114,7 @@ export class JobsLoaderService {
       first()
     ).subscribe(customerPlans => {
 
-      removeMissingFromCache(this.customerPlansService, customerPlans);
+      removeMissingFromCache(this.customerPlansService, customerPlans, {key: 'customerId', value: appointment.customerId});
 
     });
 
@@ -124,8 +124,7 @@ export class JobsLoaderService {
       first()
     ).subscribe(appointmentCallTypes => {
 
-      // Remove any not present in current payload
-      removeMissingFromCache(this.appointmentCallTypesService, appointmentCallTypes);
+      removeMissingFromCache(this.appointmentCallTypesService, appointmentCallTypes, {key: 'appointmentId', value: appointment.id});
 
     });
 
@@ -140,6 +139,8 @@ export class JobsLoaderService {
       for (const invoice of invoices) {
         this.invoiceItemsService.getWithQuery({
           'invoiceId': `${invoice.id}`
+        }).pipe(first()).subscribe(invoiceItems => {
+          removeMissingFromCache(this.invoiceItemsService, invoiceItems, {key: 'invoiceId', value: invoice.id});
         });
       }
     });
