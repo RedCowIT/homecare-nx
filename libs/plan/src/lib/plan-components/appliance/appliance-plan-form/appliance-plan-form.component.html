@@ -14,6 +14,35 @@
     <dd-entity-select
       [formGroup]="formGroup"
       [formGroupNameKey]="formGroupNameKey"
+      entityName="ApplianceInstallType"
+      fieldName="installTypeId"
+    ></dd-entity-select>
+
+    <ng-container *ngIf="showFuelType$ | async as showFuelType">
+      <ng-container *ngIf="showFuelType?.value === true">
+        <dd-entity-select
+          [formGroup]="formGroup"
+          [formGroupNameKey]="formGroupNameKey"
+          entityName="ApplianceFuelType"
+          fieldName="fuelTypeId"
+        ></dd-entity-select>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="showTumbleDryerType$ | async as showTumbleDryerType">
+      <ng-container *ngIf="showTumbleDryerType?.value === true">
+        <dd-entity-select
+          [formGroup]="formGroup"
+          [formGroupNameKey]="formGroupNameKey"
+          entityName="ApplianceTumbleDryerType"
+          fieldName="tumbleDryerTypeId"
+        ></dd-entity-select>
+      </ng-container>
+    </ng-container>
+
+    <dd-entity-select
+      [formGroup]="formGroup"
+      [formGroupNameKey]="formGroupNameKey"
       entityName="ApplianceBrand"
       fieldName="brandId"
     ></dd-entity-select>

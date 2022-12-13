@@ -1,5 +1,5 @@
 import {Injectable, TemplateRef, ViewChild} from '@angular/core';
-import {combineLatest} from "rxjs";
+import {combineLatest, Observable} from "rxjs";
 import {map} from "rxjs/operators";
 import {InvoiceItemsService} from "../../../store/entity/services/invoice/invoice-items/invoice-items.service";
 import {TableSourceService} from "@homecare/common";
@@ -47,6 +47,7 @@ export class InvoiceTableService extends TableSourceService {
 
       })
     );
+
 
     this.hasInitialized = true;
   }

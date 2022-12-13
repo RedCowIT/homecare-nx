@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
+import {PlatformService} from "@homecare/core";
 
 @Component({
   selector: 'hc-logout-button',
@@ -8,7 +9,7 @@ import {Router} from "@angular/router";
 })
 export class LogoutButtonComponent implements OnInit {
 
-  constructor(public router: Router) { }
+  constructor(public router: Router, public platformService: PlatformService) { }
 
   ngOnInit(): void {
   }

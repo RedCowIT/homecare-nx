@@ -4,6 +4,7 @@ import {Job, LoadingState} from "@homecare/shared";
 import {addJob, addJobError, addJobSuccess, setJobSections} from "../actions/job.actions";
 import {setPreJobSections} from "../actions/pre-job.actions";
 import {setQuoteSections} from "../actions/quote.actions";
+import {invoiceLoaded} from "../../../../../../../libs/billing/src/lib/store/actions/billing.actions";
 
 
 export const FEATURE_KEY = 'jobs';
@@ -100,6 +101,19 @@ const jobReducer = createReducer(
     });
 
   }),
+
+  on (invoiceLoaded, (state, action) => {
+    const job: Update<Job> = {
+      id: action.appointmentId,
+      changes: {
+        requireDirectDebit: action.hasPlans
+      }
+    };
+
+    return adapter.updateOne(job, {
+      ...state
+    });
+  })
 
 );
 

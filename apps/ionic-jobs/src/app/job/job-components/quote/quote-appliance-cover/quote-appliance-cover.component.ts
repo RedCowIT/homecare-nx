@@ -10,6 +10,7 @@ import {QuoteManagerService} from "../../../../../../../../libs/billing/src/lib/
 import {ButtonConfig} from "@homecare/common";
 import {Router} from "@angular/router";
 import {createFooterNextButton} from "../../../support/footer-button-factory";
+import {PlatformService} from "@homecare/core";
 
 @Component({
   selector: 'hc-quote-appliance-cover',
@@ -26,6 +27,7 @@ export class QuoteApplianceCoverComponent implements OnInit {
               public currentJobService: CurrentJobService,
               public quoteManagerService: QuoteManagerService,
               public modalCtrl: ModalController,
+              public platformService: PlatformService,
               public router: Router) {
   }
 
@@ -80,7 +82,7 @@ export class QuoteApplianceCoverComponent implements OnInit {
       if (quoteApplianceDetails.length) {
         componentProps.quoteApplianceDetailId = firstItem(quoteApplianceDetails).id;
       }
-       
+
       const modal = await this.modalCtrl.create({
         component: QuoteApplianceDetailModalComponent,
         componentProps

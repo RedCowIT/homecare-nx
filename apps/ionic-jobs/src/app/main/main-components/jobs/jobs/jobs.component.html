@@ -1,21 +1,58 @@
-<div *ngIf="appointments$ | async as appointments">
-  <div *ngIf="appointments">
+<ion-segment [(ngModel)]="day">
+  <ion-segment-button value="today">
+    <ion-label>Today
 
-    <div *ngIf="platform.isMobile; else tablet">
-      <hc-job-list></hc-job-list>
+    </ion-label>
+
+
+  </ion-segment-button>
+  <ion-segment-button value="tomorrow">
+    <ion-label>Tomorrow</ion-label>
+  </ion-segment-button>
+</ion-segment>
+
+<div [ngSwitch]="day">
+
+
+  <div *ngSwitchCase="'today'">
+
+    <div *ngIf="todaysAppointments$ | async as appointments">
+      <div *ngIf="appointments">
+        <div *ngIf="appointments.length === 0; else hasAppointments" class="ion-padding">
+          <ion-item color="light" lines="full">
+            No appointments for today.
+          </ion-item>
+        </div>
+
+        <ng-template #hasAppointments>
+          <hc-job-card-list [appointments]="appointments"></hc-job-card-list>
+        </ng-template>
+      </div>
     </div>
 
-    <ng-template #tablet>
+  </div>
 
-      <div *ngIf="appointments.length === 0; else hasAppointments" class="ion-padding">
-        <ion-item color="light" lines="full">
-          No appointments for today.
-        </ion-item>
+  <div *ngSwitchCase="'tomorrow'">
+
+    <div *ngIf="tomorrowsAppointments$ | async as appointments">
+      <div *ngIf="appointments">
+        <div *ngIf="appointments.length === 0; else hasAppointments" class="ion-padding">
+          <ion-item color="light" lines="full">
+            No appointments for tomorrow, check back after 7pm.
+          </ion-item>
+        </div>
+
+        <ng-template #hasAppointments>
+          <hc-job-card-list [appointments]="appointments"></hc-job-card-list>
+        </ng-template>
       </div>
+    </div>
 
-      <ng-template #hasAppointments>
-        <hc-job-card-list [appointments]="appointments"></hc-job-card-list>
-      </ng-template>
+  </div>
+
+  <div *ngIf="appointments$ | async as appointments">
+    <div *ngIf="appointments">
+
 
       <div class="ion-padding ion-text-center">
         <ion-button color="medium" (click)="refresh()">
@@ -25,37 +62,27 @@
       </div>
 
       <div *ngIf="jobLoaderService.loading$ | async as isLoading" class="ion-padding ion-text-center">
-        <div *ngIf="isLoading else notLoading">
+        <div *ngIf="isLoading">
           <dd-spinner [show]="true"></dd-spinner>
         </div>
-        <ng-template #notLoading>
-          <div *ngIf="!appointments?.length">
-            <div>
-              <ion-item color="dark">
-                There are currently no appointments scheduled for today. Tap Refresh to check for updates.
-              </ion-item>
-            </div>
-          </div>
-        </ng-template>
       </div>
-    </ng-template>
 
+    </div>
   </div>
-</div>
 
-<div>
-  <div *ngIf="currentJobService.job$ | async as job">
-    <div *ngIf="job.loadState === 'LOADING'">
-      <div class="overlay loading gray-1-bg">
-        <div class="overlay-inner">
-          <ion-card>
-            <ion-card-content>
-              <div class="label">Loading job...</div>
-              <dd-spinner [show]="true"></dd-spinner>
-            </ion-card-content>
-          </ion-card>
+  <div>
+    <div *ngIf="currentJobService.job$ | async as job">
+      <div *ngIf="job.loadState === 'LOADING'">
+        <div class="overlay loading gray-1-bg">
+          <div class="overlay-inner">
+            <ion-card>
+              <ion-card-content>
+                <div class="label">Loading job...</div>
+                <dd-spinner [show]="true"></dd-spinner>
+              </ion-card-content>
+            </ion-card>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>

@@ -20,6 +20,11 @@ ion-item ion-icon {
   margin-right: 10px;
 }
 
-ion-item.item-disabled {
-  opacity: 1;
+ion-item.status-disabled {
+  opacity: 0.4;
+}
+
+ion-item {
+  --inner-padding-bottom: 10px;
+  --inner-padding-top: 10px;
 }

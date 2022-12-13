@@ -1,0 +1,12 @@
+<input type="text"
+       class="date-range-picker"
+       ngxDaterangepickerMd
+       [(ngModel)]="dateRange"
+       [showCustomRangeLabel]="true"
+       [alwaysShowCalendars]="true"
+       [ranges]="ranges"
+       [linkedCalendars]="true"
+       [opens]="'left'"
+       [locale]="{applyLabel: 'Ok', displayFormat: 'DD-MM-YYYY'}"
+       (change)="dateChange()"
+       placeholder="Select dates"/>

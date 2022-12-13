@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {EntityFormService} from "@homecare/entity";
 import {FormBuilder, Validators} from "@angular/forms";
 import {nowAsDateString} from "../../../../../../../shared/src/lib/utils/date-utils";
+import {ApplianceTypesService} from "@homecare/product";
+import {combineLatest} from "rxjs";
 
 @Injectable()
 export class CustomerPlanApplianceInvoiceItemService extends EntityFormService {
@@ -41,9 +43,13 @@ export class CustomerPlanApplianceInvoiceItemService extends EntityFormService {
         model: [null, Validators.required],
         serialNo: [null],
         datePurchased: [null, Validators.required],
-        priceRangeId: [null, Validators.required]
+        priceRangeId: [null, Validators.required],
+        installTypeId: [null, Validators.required],
+        fuelTypeId: [null],
+        tumbleDryerTypeId: [null]
       })
     });
+
   }
 
 }

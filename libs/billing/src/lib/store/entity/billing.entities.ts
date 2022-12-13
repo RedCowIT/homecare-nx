@@ -11,7 +11,8 @@ export enum BillingEntity {
   InvoiceItemType = 'InvoiceItemType',
   InvoicePayment = 'InvoicePayment',
   InvoicePaymentType = 'InvoicePaymentType',
-  InvoiceStatus = 'InvoiceStatus'
+  InvoiceStatus = 'InvoiceStatus',
+  PendingPayment = 'PendingPayment'
 }
 
 export const billingEntityMetadata = {
@@ -27,5 +28,6 @@ export const billingEntityMetadata = {
   [BillingEntity.InvoiceItemType]: {},
   [BillingEntity.InvoicePayment]: {},
   [BillingEntity.InvoicePaymentType]: {},
-  [BillingEntity.InvoiceStatus]: {}
+  [BillingEntity.InvoiceStatus]: {},
+  [BillingEntity.PendingPayment]: {}
 }

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {EntityCollectionServiceBase, EntityCollectionServiceElementsFactory} from '@ngrx/data';
-import {PlanType} from "@homecare/shared";
+import {PlanType, PlanTypes, selectFirstEntityByKey} from "@homecare/shared";
 import {PlanEntity} from "../../plan.entities";
 import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
@@ -26,6 +26,10 @@ export class PlanTypesService
         return planTypes.filter(planType => planType.commercial)
       })
     );
+  }
+
+  public getApplianceRepairPlanType(): Observable<PlanType> {
+    return selectFirstEntityByKey(this, 'description', PlanTypes.ApplianceRepairPlan);
   }
 
 }

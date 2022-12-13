@@ -43,10 +43,10 @@ export class QuoteTableService extends TableSourceService {
     this.quoteId = quoteId;
 
     this.columns = [
-      {prop: 'description', flexGrow: 4},
-      {prop: 'quantity', flexGrow: 1},
+      {prop: 'description', flexGrow: 3},
+      {prop: 'quantity', flexGrow: 1.5},
       {
-        prop: 'quote', name: 'Cost', flexGrow: 1, headerClass: "ion-text-end", cellClass: 'ion-text-end',
+        prop: 'quote', name: 'Cost', flexGrow: 1.5, headerClass: "ion-text-end", cellClass: 'ion-text-end',
         cellTemplate: cellTemplates['value']
       }
     ];

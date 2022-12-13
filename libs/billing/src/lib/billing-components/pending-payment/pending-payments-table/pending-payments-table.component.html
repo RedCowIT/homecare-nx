@@ -1,0 +1,49 @@
+<ng-container *ngIf="tableSource.summary$ | async as summary">
+  <div *ngIf="summary" class="summary d-flex">
+
+    <div class="summary-item" *ngIf="summary.pendingCard.amount > 0">
+      <div>
+        <ion-icon name="card-outline"></ion-icon>
+        <ion-label>Card</ion-label>
+        <ion-badge color="danger">{{summary.pendingCard.count}}</ion-badge>
+        <ion-label>{{summary.pendingCard.amount | currency: 'GBP' }}</ion-label>
+      </div>
+    </div>
+
+    <div class="summary-item" *ngIf="summary.pendingCash.amount > 0">
+      <div>
+        <ion-icon name="cash-outline"></ion-icon>
+        <ion-label>Cash</ion-label>
+        <ion-badge color="danger">{{summary.pendingCash.count}}</ion-badge>
+        <ion-label>{{summary.pendingCash.amount | currency: 'GBP' }}</ion-label>
+      </div>
+    </div>
+
+    <div class="summary-item" *ngIf="summary.pendingCheque.amount > 0">
+      <div>
+        <ion-icon name="wallet-outline"></ion-icon>
+        <ion-label>Cheque</ion-label>
+        <ion-badge color="danger">{{summary.pendingCheque.count}}</ion-badge>
+        <ion-label>{{summary.pendingCheque.amount | currency: 'GBP' }}</ion-label>
+      </div>
+    </div>
+
+    <div class="summary-item">
+      <div>
+        <ion-label>Total</ion-label>
+        <ion-badge color="danger">{{summary.total.count}}</ion-badge>
+        <ion-label>{{summary.total.amount | currency: 'GBP' }}</ion-label>
+      </div>
+    </div>
+
+  </div>
+</ng-container>
+
+<dd-datatable
+  class="small-header"
+  [source]="tableSource"
+  [footerHeight]="0"></dd-datatable>
+
+<ng-template #currencyTemplate let-value="value" let-row="row">
+  {{value | currency: 'GBP'}}
+</ng-template>

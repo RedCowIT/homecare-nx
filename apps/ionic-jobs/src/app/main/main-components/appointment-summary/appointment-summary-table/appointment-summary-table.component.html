@@ -1,0 +1,88 @@
+<ng-container *ngIf="tableSource.totalSummary$ | async as summary">
+  <div *ngIf="summary" class="summary">
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div class="summary-item">
+            <div>
+              <ion-label>Appointments</ion-label>
+              <ion-label class="ion-margin-start bolder">{{summary.appointmentCount}}</ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="summary-item">
+            <div>
+              <ion-label>Jobs</ion-label>
+              <ion-label class="ion-margin-start bolder">{{summary.jobCount | currency: 'GBP'}}</ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="summary-item">
+            <div>
+              <ion-label>Quoted</ion-label>
+              <ion-label class="ion-margin-start bolder">{{summary.quoted | currency: 'GBP'}}</ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="summary-item">
+            <div>
+              <ion-label>Sales</ion-label>
+              <ion-label class="ion-margin-start bolder">{{summary.sales | currency: 'GBP'}}</ion-label>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div class="summary-item">
+            <div>
+              <ion-label>Plan</ion-label>
+              <ion-label class="ion-margin-start bolder">{{summary.plan | currency: 'GBP'}}</ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="summary-item">
+            <div>
+              <ion-label>Total</ion-label>
+              <ion-label class="ion-margin-start bolder">{{summary.total | currency: 'GBP'}}</ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="summary-item">
+            <div>
+              <ion-label>Upsell</ion-label>
+              <ion-label class="ion-margin-start bolder">{{summary.upsell | currency: 'GBP'}}</ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="summary-item">
+            <div>
+              <ion-label>Plans</ion-label>
+              <ion-label class="ion-margin-start bolder">{{summary.planCount}}</ion-label>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ng-container>
+
+<dd-datatable
+  class="small-header"
+  [source]="tableSource"
+  columnMode="force"
+  [footerHeight]="0"
+  [scrollbarH]="true"
+></dd-datatable>
+
+
+<ng-template #callTypeTemplate let-value="value" let-row="row">
+  <hc-appointment-call-type-list [id]="value" [style]="'basic'" [fetch]="true"></hc-appointment-call-type-list>
+</ng-template>

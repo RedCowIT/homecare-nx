@@ -1,0 +1,16 @@
+<ion-content>
+  <div class="ion-padding d-flex ion-align-items-center">
+    <div>
+      <h1 class="heading">My Week</h1>
+    </div>
+    <div class="ion-text-right flex-1 ion-padding-bottom">
+      <dd-date-range-picker [defaultDateRange]="defaultDateRange" (valueChange)="dateChange($event)"></dd-date-range-picker>
+    </div>
+  </div>
+
+  <div class="ion-padding-start ion-padding-end">
+    <div class="table-wrap">
+      <hc-appointment-summary-table [query]="dateQuery"></hc-appointment-summary-table>
+    </div>
+  </div>
+</ion-content>

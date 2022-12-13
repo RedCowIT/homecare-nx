@@ -1,6 +1,9 @@
 <div *ngIf="appointment$ | async as appointment" [ngClass]="{rebooked: appointment.rebooked, invoiced: appointment.invoiced}">
   <ion-card *ngIf="appointment">
     <ion-card-header>
+      <div *ngIf="appointment.partsRequired" class="ion-margin-bottom">
+        <ion-note color="danger">PARTS REQUIRED</ion-note>
+      </div>
       <hc-job-date-header [date]="appointment.bookingDateTime"></hc-job-date-header>
     </ion-card-header>
     <ion-card-content>

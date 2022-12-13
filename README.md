@@ -16,6 +16,7 @@ npm run build.staging (or npm run build.production)
 npx cap open android
 </pre>
 
+Update version in gradle
 Change Build Variant to stagingDebug or productionDebug
 Clean build
 Build APK

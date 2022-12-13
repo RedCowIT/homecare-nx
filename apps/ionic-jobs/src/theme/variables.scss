@@ -95,9 +95,9 @@
   --ion-card-color: var(--ion-color-dark);
   --ion-item-color: var(--ion-color-dark);
 
-  --master-width: 160px;
+  --master-width: 200px;
   --detail-width: calc(100vw - var(--master-width));
-  --detail-footer-height: 80px;
+  --detail-footer-height: 100px;
 
   --background: #F8F8F8;
   --border-color: rgba(0, 0, 0, 0.12);
@@ -109,6 +109,8 @@
   --xl-text-size: 2rem;
   --bold-font-weight: 600;
   --bolder-font-weight: 800;
+
+
 
   ion-content {
     --background: var(--background);
@@ -151,6 +153,10 @@
     --highlight-border-color: var(--ion-color-primary);
     --highlight-color: white;
     --padding: 10px;
+  }
+
+  .modal-wrapper.sc-ion-modal-md, .modal-wrapper.sc-ion-modal-ios {
+    --max-width: 80%;
   }
 }
 
@@ -219,3 +225,5 @@ ion-modal.fullscreen {
 {
   --width: 425px;
 }
+
+

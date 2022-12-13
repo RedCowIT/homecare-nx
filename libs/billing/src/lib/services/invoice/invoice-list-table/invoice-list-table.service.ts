@@ -1,7 +1,7 @@
 import {Injectable, TemplateRef} from '@angular/core';
-import {combineLatest} from "rxjs";
+import {BehaviorSubject, combineLatest} from "rxjs";
 import {map} from "rxjs/operators";
-import {TableSourceService} from "@homecare/common";
+import {TableSourceService, toDateRange, withinDateRange} from "@homecare/common";
 import {InvoicesService} from "../../../store/entity/services/invoice/invoices/invoices.service";
 import {InvoiceStatusesService} from "../../../store/entity/services/invoice/invoice-statuses/invoice-statuses.service";
 import * as moment from "moment";
@@ -12,6 +12,8 @@ export class InvoiceListTableService extends TableSourceService {
   appointmentId: number;
 
   hasInitialized: boolean;
+
+  rangeQuery$ = new BehaviorSubject<{ startDate: string, endDate: string } | undefined>(undefined);
 
   constructor(private invoicesService: InvoicesService,
               private invoiceStatusesService: InvoiceStatusesService) {
@@ -32,16 +34,26 @@ export class InvoiceListTableService extends TableSourceService {
 
     this.rows$ = combineLatest([
       this.invoicesService.entities$,
-      this.invoiceStatusesService.entityMap$
+      this.invoiceStatusesService.entityMap$,
+      this.rangeQuery$
     ]).pipe(map(([
-                   invoices, invoiceStatusMap]) => {
+                   invoices, invoiceStatusMap, rangeQuery]) => {
 
         if (this.appointmentId) {
           invoices = invoices.filter(invoice => invoice.appointmentId === this.appointmentId);
         }
 
-        return invoices.map(invoice => {
+        if (rangeQuery){
+          invoices = invoices.filter(invoice => {
 
+            const date = moment(invoice.invoiceDate);
+
+            return withinDateRange(date, toDateRange(rangeQuery.startDate, rangeQuery.endDate));
+
+          });
+        }
+
+        return invoices.map(invoice => {
 
           return {
             id: invoice.id,
@@ -59,10 +71,15 @@ export class InvoiceListTableService extends TableSourceService {
     this.hasInitialized = true;
   }
 
-  load() {
-    // this.invoicesService.getAll(
-    //   {
-    //     tag: 'InvoiceListTable'
-    //   });
+  load(rangeQuery?: { startDate: string, endDate: string }) {
+
+    if (rangeQuery){
+      this.rangeQuery$.next(rangeQuery);
+
+      this.invoicesService.getWithQuery(
+        {
+          fromDate: rangeQuery.startDate, endDate: rangeQuery.endDate
+        });
+    }
   }
 }

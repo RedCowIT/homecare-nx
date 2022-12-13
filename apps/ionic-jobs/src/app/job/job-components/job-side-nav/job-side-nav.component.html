@@ -3,16 +3,16 @@
     <ion-list *ngIf="menuItems" class="ion-no-padding" lines="none">
       <ion-item color="mid-dark"
                 *ngFor="let item of menuItems"
-                [routerLink]="item.route" routerLinkActive="active">
+                [routerLink]="item.route" routerLinkActive="active" [detail]="!platformService.isPortrait" [disabled]="item.status === 'disabled'">
         <ion-icon [name]="item.icon" ></ion-icon>
-        <span class="label">{{ item.label }}</span>
+        <span *ngIf="!platformService.isPortrait" class="label">{{ item.label }}</span>
       </ion-item>
     </ion-list>
   </div>
-  <div class="mt-auto ion-padding ion-text-center">
+  <div class="mt-auto back-wrap ion-text-center">
     <ion-button fill="outline" color="light" routerLink="/main/jobs">
       <ion-icon slot="start" name="chevron-back"></ion-icon>
-      Back
+      <span *ngIf="!platformService.isPortrait">Back</span>
     </ion-button>
   </div>
 </div>

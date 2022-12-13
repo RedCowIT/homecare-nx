@@ -1,7 +1,9 @@
 export enum DocumentEntity {
   Document = 'Document',
   DocumentType = 'DocumentType',
-  DocumentSubType = 'DocumentSubType'
+  DocumentSubType = 'DocumentSubType',
+  Reference = 'Reference',
+  ReferenceSection = 'ReferenceSection'
 }
 
 export const documentEntityMetadata = {
@@ -9,5 +11,7 @@ export const documentEntityMetadata = {
 
   },
   [DocumentEntity.DocumentType]: {},
-  [DocumentEntity.DocumentSubType]: {}
+  [DocumentEntity.DocumentSubType]: {},
+  [DocumentEntity.Reference]: {},
+  [DocumentEntity.ReferenceSection]: {},
 }

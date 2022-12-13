@@ -106,7 +106,7 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
                 selectEntity(this.invoiceItemsService, this.invoiceItemId),
                 this.productsService.entityMap$]).pipe(
                 map(([invoiceItem, productMap]) => {
-                  if (invoiceItem){
+                  if (invoiceItem) {
                     return [productMap[invoiceItem.productId]];
                   }
                   return [];
@@ -144,6 +144,8 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
             this.formService.setStockQuantity(this.productStock.qty);
           }
         )
+      } else {
+        this.formService.setStockQuantity(undefined);
       }
 
       // this.productStockService.getWithQuery({
@@ -218,7 +220,7 @@ export class ProductInvoiceItemFormComponent extends SubscribedContainer impleme
   }
 
   productSearch(term: string, item: any): boolean {
-    if (!term){
+    if (!term) {
       return false;
     }
     const termLower = term.toLowerCase();

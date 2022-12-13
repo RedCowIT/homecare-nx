@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {ButtonConfig} from "@homecare/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CurrentJobService} from "../../../services/current-job/current-job.service";
+import {PreJobSection} from "@homecare/shared";
 
 @Component({
   selector: 'hc-pre-job-work-summary',
@@ -25,7 +26,7 @@ export class PreJobWorkSummaryComponent implements OnInit {
         slot: 'end',
         label: 'Next',
         callback: async () => {
-          await this.router.navigateByUrl(`/job/${this.currentJobService.appointmentId}/pre-job/appliances`);
+          this.currentJobService.completePreJobSection(PreJobSection.WorkSummary);
         }
       }
     ])

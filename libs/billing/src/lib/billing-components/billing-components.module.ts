@@ -34,6 +34,8 @@ import { EmailInvoiceModalComponent } from './invoice/email-invoice-modal/email-
 import { EmailInvoiceFormComponent } from './invoice/email-invoice-form/email-invoice-form.component';
 import { GlobalPaymentEmbedComponent } from './payment/global-payment-embed/global-payment-embed.component';
 import { CardPaymentListComponent } from './card-payment/card-payment-list/card-payment-list.component';
+import { PendingPaymentsTableComponent } from './pending-payment/pending-payments-table/pending-payments-table.component';
+import { PendingPaymentSummaryComponent } from './pending-payment/pending-payment-summary/pending-payment-summary.component';
 
 
 @NgModule({
@@ -63,7 +65,9 @@ import { CardPaymentListComponent } from './card-payment/card-payment-list/card-
     EmailInvoiceModalComponent,
     EmailInvoiceFormComponent,
     GlobalPaymentEmbedComponent,
-    CardPaymentListComponent
+    CardPaymentListComponent,
+    PendingPaymentsTableComponent,
+    PendingPaymentSummaryComponent
   ],
   imports: [
     CommonModule,
@@ -88,7 +92,8 @@ import { CardPaymentListComponent } from './card-payment/card-payment-list/card-
     InvoicePaymentItemListComponent,
     GlobalPaymentRequestFormComponent,
     EmailInvoiceModalComponent,
-    CardPaymentListComponent
+    CardPaymentListComponent,
+    PendingPaymentsTableComponent
   ]
 })
 export class BillingComponentsModule {

@@ -11,4 +11,5 @@ export interface Appointment {
   priceAgreed: number;
   rebooked: boolean;
   invoiced: boolean;
+  partsRequired: boolean;
 }

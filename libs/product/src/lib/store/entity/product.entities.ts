@@ -5,6 +5,9 @@ export enum ProductEntity {
   ApplianceModel = 'ApplianceModel',
   AppliancePriceRange = 'AppliancePriceRange',
   ApplianceType = 'ApplianceType',
+  ApplianceInstallType = 'ApplianceInstallType',
+  ApplianceFuelType = 'ApplianceFuelType',
+  ApplianceTumbleDryerType = 'ApplianceTumbleDryerType',
   ApplianceBrand = 'ApplianceBrand',
   CommercialProduct = 'CommercialProduct',
   Manufacturer = 'Manufacturer',
@@ -23,6 +26,15 @@ export const productEntityMetadata = {
   },
   [ProductEntity.AppliancePriceRange]: {},
   [ProductEntity.ApplianceType]: {
+    sortComparer: createStringKeyComparer('description')
+  },
+  [ProductEntity.ApplianceInstallType]: {
+    sortComparer: createStringKeyComparer('description')
+  },
+  [ProductEntity.ApplianceFuelType]: {
+    sortComparer: createStringKeyComparer('description')
+  },
+  [ProductEntity.ApplianceTumbleDryerType]: {
     sortComparer: createStringKeyComparer('description')
   },
   [ProductEntity.ApplianceBrand]: {

@@ -3,6 +3,7 @@ export * from './appointment-no-answer-reason';
 export * from './appointment-call-type';
 export * from './appointment-no-answer';
 export * from './appointment-status';
+export * from './appointment-summary';
 export * from './appointment-type';
 export * from './appointment-visit';
 export * from './call-type-class';

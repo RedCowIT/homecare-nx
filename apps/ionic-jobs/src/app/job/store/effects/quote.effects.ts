@@ -101,7 +101,7 @@ export class QuoteEffects {
 
   private createQuoteSections(appointmentId: number):
     Observable<QuoteSectionStatus[]> {
-
+    console.log('createQuoteSections');
     const sections = [
       {
         id: QuoteSection.ApplianceCover,

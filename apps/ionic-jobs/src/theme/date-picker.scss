@@ -1,0 +1,16 @@
+.md-drppicker .ranges ul li button.active {
+  background-color: var(--ion-color-primary) !important;
+}
+
+.md-drppicker td.active, .md-drppicker td.active:hover {
+  background-color: var(--ion-color-primary) !important;
+}
+
+.md-drppicker .btn, .md-drppicker .btn:focus, .md-drppicker .btn:hover {
+  background-color: var(--ion-color-primary) !important;
+  box-shadow: none !important;
+}
+
+.md-drppicker td.off, .md-drppicker td.off.end-date, .md-drppicker td.off.in-range, .md-drppicker td.off.start-date {
+  color: white !important;
+}

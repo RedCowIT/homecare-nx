@@ -14,6 +14,9 @@ export class ChecklistMenuComponent implements OnInit {
   @Input()
   color: string;
 
+  @Input()
+  showIcons: boolean;
+
   constructor() { }
 
   ngOnInit(): void {

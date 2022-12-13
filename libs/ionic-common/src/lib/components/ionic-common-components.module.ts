@@ -11,9 +11,11 @@ import {IconTileComponent} from './icon-tile/icon-tile.component';
 import {PopoverSelectComponent} from './popover-select/popover-select.component';
 import { PopoverSelectButtonComponent } from './popover-select-button/popover-select-button.component';
 import { EntitySelectComponent } from './entity-select/entity-select.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { AccordionComponent } from './accordion/accordion/accordion.component';
 import { AccordionItemComponent } from './accordion/accordion-item/accordion-item.component';
+import {DateRangePickerComponent} from "./date-range-picker/date-range-picker.component";
+import {NgxDaterangepickerMd} from "ngx-daterangepicker-material";
 
 @NgModule({
   declarations: [
@@ -28,12 +30,15 @@ import { AccordionItemComponent } from './accordion/accordion-item/accordion-ite
     EntitySelectComponent,
     AccordionComponent,
     AccordionItemComponent,
+    DateRangePickerComponent
   ],
   imports: [
     IonicModule,
     CommonModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
+    NgxDaterangepickerMd.forRoot(),
   ],
   exports: [
     ModalHeaderComponent,
@@ -45,7 +50,8 @@ import { AccordionItemComponent } from './accordion/accordion-item/accordion-ite
     PopoverSelectComponent,
     EntitySelectComponent,
     AccordionComponent,
-    AccordionItemComponent
+    AccordionItemComponent,
+    DateRangePickerComponent
   ]
 })
 export class IonicCommonComponentsModule {}

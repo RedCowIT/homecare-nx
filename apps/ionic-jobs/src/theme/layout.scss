@@ -41,6 +41,8 @@
     .detail-footer {
       height: var(--detail-footer-height);
       background: var(--footer-background-color);
+      display: flex;
+      align-items: center;
     }
   }
 }

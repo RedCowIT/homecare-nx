@@ -6,6 +6,7 @@ import {JobService} from "../../../services/job/job.service";
 import {filter, map} from "rxjs/operators";
 import {JobSectionMeta, PreJobSectionMeta} from "@homecare/shared";
 import {CurrentJobService} from "../../../services/current-job/current-job.service";
+import {PlatformService} from "@homecare/core";
 
 @Component({
   selector: 'hc-pre-job-side-nav',
@@ -21,7 +22,8 @@ export class PreJobSideNavComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               public jobsService: JobService,
-              public currentJobService: CurrentJobService) {
+              public currentJobService: CurrentJobService,
+              public platformService: PlatformService) {
   }
 
   ngOnInit(): void {
@@ -42,6 +44,7 @@ export class PreJobSideNavComponent implements OnInit {
           return {
             id: jobSection.id,
             label: PreJobSectionMeta[jobSection.id].label,
+            icon: PreJobSectionMeta[jobSection.id].icon,
             route: this.createRoute(jobSection.id),
             status: jobSection.status
           };

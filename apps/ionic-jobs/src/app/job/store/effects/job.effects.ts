@@ -39,6 +39,7 @@ import {CustomerPlanManagerService} from "../../../../../../../libs/customer/src
 import {DirectDebitDetailsService} from "../../../../../../../libs/customer/src/lib/store/entity/services/direct-debit-details/direct-debit-details.service";
 import {CustomerPlanChangesService} from "../../../../../../../libs/customer/src/lib/store/entity/services/customer-plan-changes/customer-plan-changes.service";
 import {CurrentJobService} from "../../services/current-job/current-job.service";
+import {invoiceLoaded} from "../../../../../../../libs/billing/src/lib/store/actions/billing.actions";
 
 
 @Injectable()
@@ -88,84 +89,6 @@ export class JobEffects {
     return selectOrFetchEntity(this.appointmentsService, appointmentId).pipe(first());
   }
 
-  /*
-  addJob$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(addJob),
-      mergeMap(action => {
-
-        return selectOrFetchEntity(this.appointmentsService, action.appointmentId)
-          .pipe(
-            mergeMap(appointment => {
-              return this.initAppointmentVisit(appointment).pipe(
-                first(),
-                map(() => appointment),
-                tap(() => {console.log('addJob.appointment')})
-              );
-            }),
-            mergeMap(appointment => {
-              return this.initAppointmentCallTypes(appointment).pipe(
-                first(),
-                map(() => appointment),
-                tap(() => {console.log('addJob.appointmentCallTypes')})
-              );
-            }),
-            mergeMap(appointment => {
-              return this.quoteManagerService.loadAppointmentQuote(appointment.id).pipe(
-                first(),
-                map(() => appointment)
-              );
-            }),
-            mergeMap(appointment => {
-              return this.initCustomer(appointment).pipe(
-                first(),
-                map(() => appointment)
-              );
-            }),
-            mergeMap(appointment => {
-              return this.initCustomerPlans(appointment).pipe(
-                first(),
-                map(() => appointment)
-              );
-            }),
-            mergeMap(appointment => {
-              return this.initCustomerDirectDebitDetails(appointment).pipe(
-                first(),
-                map(() => appointment),
-                mergeMap(appointment => {
-
-                  return this.initCustomerPlanChanges(appointment).pipe(
-                    first(),
-                    map(() => appointment),
-                    catchError(error => throwError(error))
-                  );
-                }),
-              );
-            }),
-            mergeMap(appointment => {
-              return this.invoiceManagerService.loadAppointmentInvoice(appointment.id).pipe(
-                first(),
-                map(() => appointment)
-              );
-            }),
-            mergeMap(appointment => {
-              return this.createJobSections(appointment.id).pipe(
-                first(),
-                map(jobSections => {
-                  return addJobSuccess({appointmentId: appointment.id, jobSections});
-                })
-              );
-            }),
-            catchError(error => {
-              this.loggerService.error("Add job error", error);
-              this.currentJobService.addJobError(action.appointmentId);
-              return of(addJobError({appointmentId: action.appointmentId, error}));
-            })
-          )
-      })
-    );
-  });
-*/
 
   reloadJobSections$ = createEffect(() => {
     return this.actions$.pipe(
@@ -226,32 +149,9 @@ export class JobEffects {
         }
 
 
-      }),
-      // map(([action, jobMap]) => {
-      //
-      //   const job = {...jobMap[action.appointmentId]};
-      //
-      //   const sections = job.jobSections.map(jobSection => {
-      //     return {...jobSection};
-      //   });
-      //
-      //   const index = findIndexWithId(sections, action.sectionId);
-      //
-      //   const section = findById(sections, action.sectionId);
-      //   section.status = ChecklistItemStatus.Complete;
-      //
-      //   if (index < sections.length - 1) {
-      //     if (sections[index + 1].status == ChecklistItemStatus.Disabled) {
-      //       sections[index + 1].status = ChecklistItemStatus.Enabled;
-      //     }
-      //   }
-      //
-      //   return setJobSections({appointmentId: action.appointmentId, jobSections: sections});
-      //
-      // })
+      })
     );
   });
-
 
   constructor(private store$: Store,
               private actions$: Actions,
@@ -302,6 +202,8 @@ export class JobEffects {
             status: ChecklistItemStatus.Enabled
           }
         ];
+
+        console.log('Calculating sections', {isNCOOnly});
 
         if (!isNCOOnly) {
           sections.push({

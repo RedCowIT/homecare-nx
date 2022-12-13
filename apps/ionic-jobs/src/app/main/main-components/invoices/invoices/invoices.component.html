@@ -1,0 +1,16 @@
+<ion-content>
+  <div class="ion-padding d-flex ion-align-items-center">
+    <div>
+      <h1 class="heading">Invoices</h1>
+    </div>
+    <div class="ion-text-right flex-1 ion-padding-bottom">
+      <dd-date-range-picker [defaultDateRange]="defaultDateRange" (valueChange)="dateChange($event)"></dd-date-range-picker>
+    </div>
+  </div>
+
+  <div class="ion-padding">
+    <div class="table-wrap">
+      <hc-invoice-list-table [query]="dateQuery"></hc-invoice-list-table>
+    </div>
+  </div>
+</ion-content>

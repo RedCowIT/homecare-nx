@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {ModalController} from "@ionic/angular";
 import {StoreLogsComponent} from "../store-logs/store-logs.component";
+import {PlatformService} from "@homecare/core";
 
 @Component({
   selector: 'hc-main-side-nav',
@@ -17,18 +18,40 @@ export class MainSideNavComponent implements OnInit {
       route: '/main/jobs'
     },
     {
-      icon: 'document-text',
+      icon: 'construct',
+      label: 'My Stock',
+      route: '/main/stock'
+    },
+    {
+      icon: 'calendar',
+      label: 'My Week',
+      route: '/main/appointment-summary'
+    },
+    {
+      icon: 'card',
+      label: 'Payments',
+      route: '/main/payments'
+    },
+    {
+      icon: 'newspaper-outline',
+      label: 'Invoices',
+      route: '/main/invoices'
+    },
+    {
+      icon: 'help-circle',
       label: 'Docs',
       route: '/main/docs'
     },
-    {
-      icon: 'chatbubble-ellipses',
-      label: 'Messages',
-      route: '/main/messages'
-    }
+    // {
+    //   icon: 'chatbubble-ellipses',
+    //   label: 'Messages',
+    //   route: '/main/messages'
+    // }
   ]
 
-  constructor(private router: Router, public modalCtrl: ModalController) { }
+  constructor(private router: Router,
+              public modalCtrl: ModalController,
+              public platformService: PlatformService) { }
 
   ngOnInit(): void {
   }

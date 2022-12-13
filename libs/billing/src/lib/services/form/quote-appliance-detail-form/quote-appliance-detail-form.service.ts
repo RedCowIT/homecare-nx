@@ -19,7 +19,10 @@ export class QuoteApplianceDetailFormService extends EntityFormService {
         model: [null, Validators.required],
         serialNo: [null],
         priceRangeId: [null, Validators.required],
-        datePurchased: [null, Validators.required]
+        datePurchased: [null, Validators.required],
+        installTypeId: [null, Validators.required],
+        fuelTypeId: [null],
+        tumbleDryerTypeId: [null]
       })
     });
   }

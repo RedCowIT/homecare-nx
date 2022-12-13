@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {combineLatest, forkJoin, Observable, of, throwError} from "rxjs";
 import {
   CustomerPlanFinanceDocument, findById, findByKey,
-  firstByKey,
+  firstByKey, Invoice,
   InvoiceItem,
   InvoiceItemTypes,
   PlanTypes, removeMissingFromCache,
@@ -15,6 +15,8 @@ import {CustomerPlansService} from "@homecare/customer";
 import {InvoicesService} from "../../../store/entity";
 import {CustomerPlanFinanceDocumentsService} from "../../../../../../customer/src/lib/store/entity/services/customer-plan-finance-documents/customer-plan-finance-documents.service";
 import {PlansService, PlanTypesService} from "@homecare/plan";
+import {Store} from "@ngrx/store";
+import {invoiceLoaded} from "../../../store/actions/billing.actions";
 
 /**
  * Helper class to load invoices and related items, plans, finance docs, etc.
@@ -24,7 +26,8 @@ import {PlansService, PlanTypesService} from "@homecare/plan";
 })
 export class InvoiceManagerService {
 
-  constructor(private invoicesService: InvoicesService,
+  constructor(private store: Store,
+              private invoicesService: InvoicesService,
               private invoiceItemsService: InvoiceItemsService,
               private invoiceItemTypesService: InvoiceItemTypesService,
               private customerPlanFinanceDocumentsService: CustomerPlanFinanceDocumentsService,
@@ -105,9 +108,10 @@ export class InvoiceManagerService {
 
                 }
 
-                // TODO: ADD AFTER TESTING!
                 if (appointmentCustomerPlans.length) {
+
                   removeMissingFromCache(this.customerPlansService, customerPlans, {key: 'invoiceId', value: invoice.id});
+
                 }
 
                 // Remove cached finance documents that are not part of this invoice
@@ -120,6 +124,8 @@ export class InvoiceManagerService {
                 if (removeDocs.length) {
                   this.customerPlanFinanceDocumentsService.removeManyFromCache(removeDocs);
                 }
+
+                this.dispatchInvoiceLoaded(invoice, appointmentCustomerPlans.length > 0);
 
                 if (planLoads.length) {
                   return forkJoin(planLoads).pipe(first(), map(() => true));
@@ -144,5 +150,9 @@ export class InvoiceManagerService {
 
   loadInvoiceItem(invoiceItem: InvoiceItem) {
 
+  }
+
+  dispatchInvoiceLoaded(invoice: Invoice, hasPlans: boolean) {
+    this.store.dispatch(invoiceLoaded({appointmentId: invoice.appointmentId, invoiceId: invoice.id, hasPlans}));
   }
 }

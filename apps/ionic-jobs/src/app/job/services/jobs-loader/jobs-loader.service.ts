@@ -1,7 +1,19 @@
 import {Injectable} from "@angular/core";
-import {first, mergeMap, tap} from "rxjs/operators";
-import {Appointment, findById, joinEntityLoading, removeMissingFromCache} from "@homecare/shared";
-import {CustomerAddressesService, CustomerPlansService, CustomersService} from "@homecare/customer";
+import {filter, first, mergeMap, tap} from "rxjs/operators";
+import {
+  Appointment,
+  asDateString, CustomerPlan,
+  findById,
+  joinEntityLoading,
+  nowAsDateString,
+  removeMissingFromCache
+} from "@homecare/shared";
+import {
+  CustomerAddressesService,
+  CustomerPlanAppliancesService,
+  CustomerPlansService,
+  CustomersService
+} from "@homecare/customer";
 import {AppointmentCallTypesService, AppointmentsService, AppointmentVisitsService} from "@homecare/appointment";
 import {combineLatest, Observable} from "rxjs";
 import {DocumentsService} from "@homecare-nx/document";
@@ -18,6 +30,8 @@ import {
 import {PolicyService} from "@homecare/core";
 import {QuoteManagerService} from "../../../../../../../libs/billing/src/lib/services/quote-manager/quote-manager.service";
 import {MergeStrategy} from "@ngrx/data";
+import * as moment from "moment";
+import {PlansService, PlanTypesService} from "@homecare/plan";
 
 
 /**
@@ -34,6 +48,7 @@ export class JobsLoaderService {
               private customersService: CustomersService,
               private customerAddressesService: CustomerAddressesService,
               private customerPlansService: CustomerPlansService,
+              private customerPlanAppliancesService: CustomerPlanAppliancesService,
               private appointmentCallTypesService: AppointmentCallTypesService,
               private appointmentVisitsService: AppointmentVisitsService,
               private documentsService: DocumentsService,
@@ -46,7 +61,9 @@ export class JobsLoaderService {
               private quoteApplianceDetailsService: QuoteApplianceDetailsService,
               private quoteProductDetailsService: QuoteProductDetailsService,
               private quotePlanDetailsService: QuotePlanDetailsService,
-              private quoteManagerService: QuoteManagerService
+              private quoteManagerService: QuoteManagerService,
+              private planTypesService: PlanTypesService,
+              private plansService: PlansService
   ) {
     this.loading$ = joinEntityLoading([
       this.appointmentsService,
@@ -54,6 +71,7 @@ export class JobsLoaderService {
       this.customersService,
       this.customerAddressesService,
       this.customerPlansService,
+      this.customerPlanAppliancesService,
       this.appointmentCallTypesService,
       this.documentsService,
       this.invoicesService,
@@ -70,10 +88,12 @@ export class JobsLoaderService {
 
   loadAll() {
 
-    console.log('JobsLoader.loadAll');
+    const fromDate = nowAsDateString();
+    const toDate = asDateString(moment().add(1, "day"));
 
-    this.appointmentsService.getAll().subscribe(appointments => {
-
+    this.appointmentsService.getWithQuery({
+      fromDate, toDate
+    }).subscribe(appointments => {
     });
 
     combineLatest([this.appointmentsService.entities$, this.appointmentsService.getAll()]).pipe(
@@ -116,6 +136,8 @@ export class JobsLoaderService {
 
       removeMissingFromCache(this.customerPlansService, customerPlans, {key: 'customerId', value: appointment.customerId});
 
+      this.loadCustomerPlanRelations(customerPlans);
+
     });
 
     this.appointmentCallTypesService.getWithQuery({
@@ -146,6 +168,40 @@ export class JobsLoaderService {
     });
 
     this.quoteManagerService.loadAppointmentQuote(appointment.id).pipe(first()).subscribe();
+
+
+  }
+
+  loadCustomerPlanRelations(customerPlans: CustomerPlan[]){
+    if (!customerPlans?.length){
+      return;
+    }
+
+    combineLatest([
+      this.plansService.entityMap$,
+      this.planTypesService.getApplianceRepairPlanType()
+    ]).pipe(
+      filter(([planMap, repairPlanType]) => {
+        return !!repairPlanType;
+      }),
+      first()
+    ).subscribe(([planMap, repairPlanType]) => {
+
+      const appliancePlans = customerPlans.filter(customerPlan => {
+        const plan = planMap[customerPlan.planId];
+        return plan.planTypeId === repairPlanType.id
+      });
+
+      for (const appliancePlan of appliancePlans){
+        this.customerPlanAppliancesService.getWithQuery({
+          customerPlanId: `${appliancePlan.id}`
+        });
+      }
+
+      console.log('APPLIANCE PLANS', appliancePlans);
+
+    })
+
 
 
   }

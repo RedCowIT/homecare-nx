@@ -1,1 +1,4 @@
-<ion-button color="light" fill="outline" (click)="logout()">Log out</ion-button>
+<ion-button color="light" fill="outline" (click)="logout()">
+  <ion-icon *ngIf="platformService.isPortrait" name="log-out-outline" [slot]="'icon-only'"></ion-icon>
+  <span *ngIf="!platformService.isPortrait">Log out</span>
+</ion-button>

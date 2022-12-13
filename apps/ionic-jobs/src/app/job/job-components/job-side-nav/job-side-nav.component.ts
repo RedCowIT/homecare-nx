@@ -6,6 +6,7 @@ import {JobSectionMeta} from "@homecare/shared";
 import {filter, map} from "rxjs/operators";
 import {ChecklistMenuItem} from "@homecare/common";
 import {CurrentJobService} from "../../services/current-job/current-job.service";
+import {PlatformService} from "@homecare/core";
 
 @Component({
   selector: 'hc-job-side-nav',
@@ -21,7 +22,8 @@ export class JobSideNavComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               public jobsService: JobService,
-              public currentJobService: CurrentJobService) {
+              public currentJobService: CurrentJobService,
+              public platformService: PlatformService) {
   }
 
   ngOnInit(): void {

@@ -3,7 +3,7 @@
     <div *ngIf="iconTiles$ | async as iconTiles">
       <ion-grid>
         <ion-row>
-          <ion-col *ngFor="let iconTile of iconTiles" size="3">
+          <ion-col *ngFor="let iconTile of iconTiles" [size]="platformService.isPortrait ? 4 : 3">
             <dd-icon-tile
               [label]="iconTile.label"
               [icon]="iconTile.icon"

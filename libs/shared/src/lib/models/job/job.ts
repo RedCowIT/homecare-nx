@@ -9,4 +9,5 @@ export interface Job {
   jobSections?: Array<JobSectionStatus>;
   preJobSections?: Array<PreJobSectionStatus>;
   quoteSections?: Array<QuoteSectionStatus>;
+  requireDirectDebit?: boolean;
 }

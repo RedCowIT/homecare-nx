@@ -6,6 +6,7 @@ import {createFooterBackButton, createFooterNextButton} from "../../../support/f
 import {findByKey, QuoteSection, SubscribedContainer} from "@homecare/shared";
 import {QuoteItemsService, QuotesService} from "@homecare/billing";
 import {catchError, first, mergeMap, takeUntil} from "rxjs/operators";
+import {mergeEffects} from "@ngrx/effects";
 
 @Component({
   selector: 'hc-quote-complete',
@@ -40,6 +41,14 @@ export class QuoteCompleteComponent extends SubscribedContainer implements OnIni
             this.currentJobService.navToPrevQuoteSection(QuoteSection.CompleteQuote);
 
           }),
+          {
+            label: 'Defer',
+            color: 'dark',
+            slot: 'end',
+            callback: () => {
+              this.deferQuote();
+            }
+          },
           createFooterNextButton(async () => {
 
             this.acceptQuote();
@@ -50,16 +59,13 @@ export class QuoteCompleteComponent extends SubscribedContainer implements OnIni
       });
 
 
-
-
-
     });
 
 
   }
 
   deferQuote() {
-    this.currentJobService.completeQuoteSection(QuoteSection.CompleteQuote);
+    this.completeSection();
   }
 
   acceptQuote() {
@@ -67,23 +73,36 @@ export class QuoteCompleteComponent extends SubscribedContainer implements OnIni
     this.currentJobService.quote$.pipe(
       mergeMap(quote => {
 
-        if (quote.accepted){
+        if (quote.accepted) {
           return of(quote);
         } else {
-          return this.quotesService.update({
-            ...quote,
-            accepted: true
-          }).pipe(
-            catchError(error => {
-              return throwError(error);
-            })
-          )
-        }
 
+          return this.quoteItemsService.entitiesByQuoteId(quote.id).pipe(
+            mergeMap(quoteItems => {
+
+              if (quoteItems.length) {
+                return this.quotesService.update({
+                  ...quote,
+                  accepted: true
+                }).pipe(
+                  catchError(error => {
+                    return throwError(error);
+                  })
+                )
+              } else {
+                return of(quote);
+              }
+            }));
+        }
       }),
       first()
     ).subscribe(quote => {
-      this.currentJobService.completeQuoteSection(QuoteSection.CompleteQuote);
+      this.completeSection();
     });
   }
+
+  completeSection(){
+    this.currentJobService.completeQuoteSection(QuoteSection.CompleteQuote);
+  }
+
 }

@@ -1,0 +1,19 @@
+<ion-content>
+
+  <div class="ion-padding-start ion-padding-end">
+    <ng-container *ngIf="referenceSectionsService.entities$ | async as referenceSections">
+      <ion-segment [(ngModel)]="referenceSectionId" (ionChange)="segmentChange()">
+        <ion-segment-button *ngFor="let referenceSection of referenceSections"
+                            [value]="referenceSection.id">{{referenceSection.name}}</ion-segment-button>
+      </ion-segment>
+    </ng-container>
+    <div *ngIf="references$ | async as references" class="reference-list-wrap">
+      <ion-list *ngIf="references">
+          <ion-item *ngFor="let reference of references" detail (click)="openReference(reference)">
+            <ion-icon name="document-outline" slot="start"></ion-icon>
+            {{reference.description}}
+          </ion-item>
+      </ion-list>
+    </div>
+  </div>
+</ion-content>

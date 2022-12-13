@@ -54,6 +54,9 @@ export class EntityInitService implements AppInitHandler {
     PlanEntity.Plan,
     ProductEntity.AppliancePriceRange,
     ProductEntity.ApplianceType,
+    ProductEntity.ApplianceInstallType,
+    ProductEntity.ApplianceFuelType,
+    ProductEntity.ApplianceTumbleDryerType,
     ProductEntity.ApplianceBrand,
     ProductEntity.CommercialProduct,
     ProductEntity.Product,
@@ -61,7 +64,9 @@ export class EntityInitService implements AppInitHandler {
     ProductEntity.ApplianceModel,
     ProductEntity.ProductCategory,
     DocumentEntity.DocumentType,
-    DocumentEntity.DocumentSubType
+    DocumentEntity.DocumentSubType,
+    DocumentEntity.ReferenceSection,
+    DocumentEntity.Reference
   ];
 
   constructor(private entityDefinitionService: EntityDefinitionService,

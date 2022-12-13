@@ -1,0 +1,67 @@
+:root {
+
+  ion-app.portrait {
+
+    --master-width: 80px;
+
+    hc-main-side-nav  {
+
+      ion-list {
+        .label {
+          display: none;
+        }
+        ion-item {
+          --inner-padding-top: 40px;
+          --inner-padding-bottom: 40px;
+        }
+        ion-icon {
+          font-size: 40px;
+        }
+      }
+
+      .logout {
+        padding: 0;
+        padding-bottom: 5px;
+      }
+
+      .logout ion-button {
+        --padding-start: 10px;
+        --padding-end: 10px;
+      }
+
+    }
+
+    hc-job-side-nav, dd-checklist-menu {
+
+
+      ion-list {
+        .label {
+          display: none;
+        }
+        ion-item {
+          --inner-padding-top: 20px;
+          --inner-padding-bottom: 20px;
+        }
+        ion-icon {
+          font-size: 40px;
+          margin: 0;
+        }
+      }
+
+      .back-wrap {
+        padding: 0;
+        padding-bottom: 28px;
+        ion-button {
+          --padding-end: 5px;
+        }
+      }
+
+    }
+
+    dd-checklist-menu ion-list ion-item {
+      --inner-padding-top: 30px;
+      --inner-padding-bottom: 30px;
+    }
+
+  }
+}

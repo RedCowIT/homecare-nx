@@ -1,12 +1,12 @@
 <ion-list class="ion-no-padding" lines="none">
   <ion-item color="secondary"
             *ngFor="let item of items"
-            [routerLink]="item.route" routerLinkActive="active">
-    <ion-icon [name]="item.icon" ></ion-icon>
-    <span class="label">{{ item.label }}</span>
+            [routerLink]="item.route" routerLinkActive="active" [detail]="!platformService.isPortrait">
+    <ion-icon [name]="item.icon" [slot]="'start'"></ion-icon>
+    <span *ngIf="!platformService.isPortrait" class="label">{{ item.label }}</span>
   </ion-item>
 </ion-list>
-<div class="logout mt-auto ion-padding ion-text-center">
+<div class="logout mt-auto ion-text-center">
 
   <div class="store-log-button">
 <!--    <ion-button color="dark" fill="outline" (click)="openStoreLogs()">Logs</ion-button>-->

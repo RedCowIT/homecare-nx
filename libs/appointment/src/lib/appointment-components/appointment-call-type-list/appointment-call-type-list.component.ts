@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {AppointmentBaseComponent} from "../appointment-base/appointment-base.component";
 import {AppointmentsService} from "../../store/entity/services/appointments/appointments.service";
 import {AppointmentCallTypesService} from "../../store/entity/services/appointment-call-types/appointment-call-types.service";
@@ -12,7 +12,16 @@ import {map} from "rxjs/operators";
   templateUrl: './appointment-call-type-list.component.html',
   styleUrls: ['./appointment-call-type-list.component.scss']
 })
-export class AppointmentCallTypeListComponent extends AppointmentBaseComponent implements OnInit {
+export class AppointmentCallTypeListComponent implements OnChanges {
+
+  @Input()
+  style: 'grid' | 'basic' = 'grid';
+
+  @Input()
+  id: number;
+
+  @Input()
+  fetch: boolean;
 
   callTypes$: Observable<CallType[]>;
   items$: Observable<Array<{ label: string, cost: number }>>;
@@ -20,11 +29,10 @@ export class AppointmentCallTypeListComponent extends AppointmentBaseComponent i
   constructor(public appointmentsService: AppointmentsService,
               public appointmentCallTypesService: AppointmentCallTypesService,
               public callTypesService: CallTypesService) {
-    super(appointmentsService);
+
   }
 
-  ngOnInit(): void {
-    super.ngOnInit();
+  ngOnChanges(changes: SimpleChanges): void {
 
     this.items$ = combineLatest([
       selectEntityByKey(this.appointmentCallTypesService, 'appointmentId', this.id),
@@ -40,6 +48,12 @@ export class AppointmentCallTypeListComponent extends AppointmentBaseComponent i
         });
       })
     );
+
+    if (this.fetch){
+      this.appointmentCallTypesService.getWithQuery({
+        appointmentId: `${this.id}`
+      });
+    }
 
   }
 

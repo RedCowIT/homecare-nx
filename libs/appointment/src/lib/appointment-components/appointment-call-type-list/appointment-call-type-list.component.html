@@ -1,8 +1,19 @@
-<div *ngIf="items$ | async as items">
-  <ion-grid *ngIf="items">
-    <ion-row *ngFor="let item of items">
-      <ion-col>{{item.label}}</ion-col>
-      <ion-col class="ion-text-right">{{item.cost | currency: 'GBP'}}</ion-col>
-    </ion-row>
-  </ion-grid>
-</div>
+
+<ng-container *ngIf="items$ | async as items">
+
+  <ng-container *ngIf="items">
+
+    <ion-grid *ngIf="style === 'grid'">
+      <ion-row *ngFor="let item of items">
+        <ion-col>{{item.label}}</ion-col>
+        <ion-col class="ion-text-right">{{item.cost | currency: 'GBP'}}</ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </ng-container>
+
+  <ng-container *ngIf="style === 'basic'">
+    <div *ngFor="let item of items">{{item.label}} ({{item.cost | currency: 'GBP'}})</div>
+  </ng-container>
+
+</ng-container>

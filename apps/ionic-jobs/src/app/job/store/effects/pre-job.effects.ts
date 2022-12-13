@@ -28,7 +28,7 @@ export class PreJobEffects {
 
   addJob$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(addJobSuccess),
+      ofType(addJob),
       switchMap(action => {
         return this.createPreJobSections(action.appointmentId).pipe(
           map(preJobSections => {
@@ -102,7 +102,7 @@ export class PreJobEffects {
 
   private createPreJobSections(appointmentId: number):
     Observable<PreJobSectionStatus[]> {
-
+console.log('createPreJobSections');
     return this.jobsService.selectAppointmentCallTypes(appointmentId).pipe(
       map(callTypes => {
 

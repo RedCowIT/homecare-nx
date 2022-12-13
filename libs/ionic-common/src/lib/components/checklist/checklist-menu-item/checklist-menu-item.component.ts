@@ -13,4 +13,7 @@ export class ChecklistMenuItemComponent {
 
   @Input()
   color: string;
+
+  @Input()
+  showIcon: boolean;
 }

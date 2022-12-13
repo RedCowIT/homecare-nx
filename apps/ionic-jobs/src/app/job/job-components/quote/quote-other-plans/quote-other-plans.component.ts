@@ -10,6 +10,7 @@ import {QuoteManagerService} from "../../../../../../../../libs/billing/src/lib/
 import {QuoteApplianceDetailModalComponent} from "../../../../../../../../libs/billing/src/lib/billing-components/quote/quote-appliance-detail-modal/quote-appliance-detail-modal.component";
 import {ModalController} from "@ionic/angular";
 import {QuotePlanDetailModalComponent} from "../../../../../../../../libs/billing/src/lib/billing-components/quote/quote-plan-detail-modal/quote-plan-detail-modal.component";
+import {PlatformService} from "@homecare/core";
 
 @Component({
   selector: 'hc-quote-other-plans',
@@ -26,6 +27,7 @@ export class QuoteOtherPlansComponent implements OnInit {
               public planTypesService: PlanTypesService,
               public quoteManagerService: QuoteManagerService,
               public plansService: PlansService,
+              public platformService: PlatformService,
               public modalCtrl: ModalController) {
   }
 

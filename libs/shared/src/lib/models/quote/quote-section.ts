@@ -10,15 +10,19 @@ export enum QuoteSection {
 export const QuoteSectionMeta = {
   [QuoteSection.ApplianceCover]: {
     label: 'Appliance Cover',
+    icon: 'cube-outline'
   },
   [QuoteSection.Products]: {
     label: 'Products',
+    icon: 'pricetag-outline'
   },
   [QuoteSection.OtherPlans]: {
     label: 'Other Plans',
+    icon: 'sparkles-outline'
   },
   [QuoteSection.CompleteQuote]: {
     label: 'Complete Quote',
+    icon: 'checkmark-outline'
   }
 }
 

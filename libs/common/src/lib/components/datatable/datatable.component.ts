@@ -44,6 +44,9 @@ export class DatatableComponent extends SubscribedContainer implements OnInit, A
   @Input()
   columnMode = ColumnMode.flex;
 
+  @Input()
+  scrollbarH = false;
+
   @Output()
   selectRow = new EventEmitter<unknown>();
 
