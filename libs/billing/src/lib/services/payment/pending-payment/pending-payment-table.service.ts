@@ -84,7 +84,7 @@ export class PendingPaymentTableService extends TableSourceService {
 
 
     this.summary$ = this.rows$.pipe(map(
-      (rows: Array<{id: number, type: string, amount: string}>) => {
+      (rows: Array<{ id: number, type: string, amount: string }>) => {
         const summary = {
           pendingCard: {
             count: 0,
@@ -104,8 +104,8 @@ export class PendingPaymentTableService extends TableSourceService {
           }
         };
 
-        for (const row of rows){
-          switch (row.type){
+        for (const row of rows) {
+          switch (row.type) {
             case InvoicePaymentTypes.PendingCard:
               summary.pendingCard.count++;
               summary.pendingCard.amount += parseFloat(row.amount)
@@ -138,8 +138,7 @@ export class PendingPaymentTableService extends TableSourceService {
       {
         startDate: rangeQuery.startDate, endDate: rangeQuery.endDate
       }).pipe(first()).subscribe(pendingPayments => {
-        removeMissingFromCache(this.pendingPaymentsService, pendingPayments);
-        return null;
+      removeMissingFromCache(this.pendingPaymentsService, pendingPayments);
     });
   }
 

@@ -2,6 +2,7 @@ import {ErrorHandler, Injectable} from '@angular/core';
 import {LoggerService} from "@homecare/core";
 import * as Sentry from "@sentry/angular";
 import {environment} from "../../../environments/environment";
+import {DataServiceError} from "@ngrx/data";
 
 /**
  * Handle client errors
@@ -21,7 +22,11 @@ export class AppErrorService extends ErrorHandler {
   handleError(err: any): void {
 
     try {
-      console.error('ErrorService.handleError', typeof err, err);
+
+      if (err && err instanceof DataServiceError){
+        // data service errors are handled in app-data-error.service
+        return;
+      }
 
       this.reportError('Unhandled error', err);
 

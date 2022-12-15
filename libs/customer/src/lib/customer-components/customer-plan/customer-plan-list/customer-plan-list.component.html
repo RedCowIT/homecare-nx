@@ -1,7 +1,7 @@
 <div *ngIf="items$ | async as items">
   <ion-grid *ngIf="items">
     <ion-row *ngFor="let item of items">
-      <ion-col>{{item.label}}</ion-col>
+      <ion-col size="9">{{item.label}}</ion-col>
       <ion-col class="ion-text-right">{{item.cost | currency: 'GBP'}}</ion-col>
     </ion-row>
   </ion-grid>
